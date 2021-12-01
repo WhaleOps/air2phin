@@ -1,11 +1,10 @@
-import ast
+import libcst as cst
 
-from airtolphin.core.transfer_visitor import TransferVisitor
+from airtolphin.core.transformer import CSTTransformer
 
 with open("./airflow/tutorial.py") as f:
     data = f.read()
 
-    ast_parser = ast.parse(data)
-    TransferVisitor().visit(ast_parser)
-
-    print(ast.unparse(ast_parser))
+    parse_cst = cst.parse_module(data)
+    # print(parse_cst)
+    print(parse_cst.visit(CSTTransformer()).code)
