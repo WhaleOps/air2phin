@@ -4,8 +4,12 @@ import libcst as cst
 class Operators:
     """Covert Airflow Operator to DolphinScheduler Task."""
 
-    attr_keep_old = (
+    cst_attr_keep = (
         "whitespace_before_args",
+    )
+
+    call_attr_keep = (
+        "dag",
     )
 
     def __init__(self, node: cst.Assign) -> None:
@@ -27,8 +31,10 @@ class Operators:
                         call_args.append(arg.with_changes(keyword=cst.Name("name")))
                     elif arg_keyword == "bash_command":
                         call_args.append(arg.with_changes(keyword=cst.Name("command")))
+                    elif arg_keyword in self.call_attr_keep:
+                        call_args.append(arg)
                 call_kwargs["args"] = call_args
-                for attr in self.attr_keep_old:
+                for attr in self.cst_attr_keep:
                     call_kwargs[attr] = getattr(call, attr)
                 return self.node.with_changes(value=cst.Call(**call_kwargs))
             # covert `airflow.operators.dummy` assign, dolphinscheduler without dummy operator so we use bash
@@ -46,8 +52,10 @@ class Operators:
                                 value=cst.SimpleString("\"echo 'airflow dummy operator'\""),
                             )
                         )
+                    elif arg_keyword in self.call_attr_keep:
+                        call_args.append(arg)
                 call_kwargs["args"] = call_args
-                for attr in self.attr_keep_old:
+                for attr in self.cst_attr_keep:
                     call_kwargs[attr] = getattr(call, attr)
                 return self.node.with_changes(value=cst.Call(**call_kwargs))
             # covert `SparkSqlOperator` assign
@@ -61,8 +69,10 @@ class Operators:
                         call_args.append(arg.with_changes(keyword=cst.Name("datasource_name")))
                     elif arg_keyword == "sql":
                         call_args.append(arg)
+                    elif arg_keyword in self.call_attr_keep:
+                        call_args.append(arg)
                 call_kwargs["args"] = call_args
-                for attr in self.attr_keep_old:
+                for attr in self.cst_attr_keep:
                     call_kwargs[attr] = getattr(call, attr)
                 return self.node.with_changes(value=cst.Call(**call_kwargs))
         return self.node
