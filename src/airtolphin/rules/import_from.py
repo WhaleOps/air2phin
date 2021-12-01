@@ -10,8 +10,10 @@ class From:
     def run(self) -> cst.ImportFrom:
         module = self.node.module
         if isinstance(module, cst.Attribute):
-            # covert `airflow.operators.bash`
-            if module.attr.value == "bash" and module.value.attr.value == "operators":
+            # covert `airflow.operators.bash` or `airflow.operators.(dummy_operator|dummy)`,
+            # we here covert dummy operator to bash operator with command `echo 'airflow dummy operator'`
+            # cause dolphinscheduler do not support Task like dummy operator.
+            if module.attr.value in ("bash", "dummy_operator", "dummy") and module.value.attr.value == "operators":
                 self.node = self.node.with_changes(
                     module=cst.Attribute(
                         cst.Attribute(
@@ -39,8 +41,8 @@ class From:
                 self.node = self.node.with_changes(
                     names=(cst.ImportAlias(cst.Name("ProcessDefinition")),)
                 )
-            # covert `BashOperator`
-            if import_alias.name.value == "BashOperator":
+            # covert `BashOperator` and `DummyOperator`
+            if import_alias.name.value in ("BashOperator", "DummyOperator"):
                 self.node = self.node.with_changes(
                     names=(cst.ImportAlias(cst.Name("Shell")),)
                 )
