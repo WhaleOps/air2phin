@@ -67,5 +67,6 @@ setup(
     ],
     install_requires=[
         # Core
+        'libcst',
     ],
 )
