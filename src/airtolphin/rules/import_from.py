@@ -23,7 +23,18 @@ class From:
                         cst.Name("shell"),
                     )
                 )
-        if isinstance(module, cst.Name):
+            # covert `airflow.operators.spark_sql_operator`
+            if module.attr.value == "spark_sql_operator" and module.value.attr.value == "operators":
+                self.node = self.node.with_changes(
+                    module=cst.Attribute(
+                        cst.Attribute(
+                            cst.Name("pydolphinscheduler"),
+                            cst.Name("tasks"),
+                        ),
+                        cst.Name("sql"),
+                    )
+                )
+        elif isinstance(module, cst.Name):
             # covert `airflow`
             if module.value == "airflow":
                 self.node = self.node.with_changes(
@@ -45,5 +56,9 @@ class From:
             if import_alias.name.value in ("BashOperator", "DummyOperator"):
                 self.node = self.node.with_changes(
                     names=(cst.ImportAlias(cst.Name("Shell")),)
+                )
+            elif import_alias.name.value == "SparkSqlOperator":
+                self.node = self.node.with_changes(
+                    names=(cst.ImportAlias(cst.Name("Sql")),)
                 )
         return self.node
