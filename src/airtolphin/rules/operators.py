@@ -75,4 +75,20 @@ class Operators:
                 for attr in self.cst_attr_keep:
                     call_kwargs[attr] = getattr(call, attr)
                 return self.node.with_changes(value=cst.Call(**call_kwargs))
+            # TODO latest python operator had change to decorator
+            # covert `PythonOperator` assign
+            elif cst.ensure_type(call.func, cst.Name).value == "PythonOperator":
+                call_kwargs["func"] = cst.Name("Python")
+                for arg in call.args:
+                    arg_keyword = cst.ensure_type(arg.keyword, cst.Name).value
+                    if arg_keyword == "task_id":
+                        call_args.append(arg.with_changes(keyword=cst.Name("name")))
+                    elif arg_keyword == "python_callable":
+                        call_args.append(arg.with_changes(keyword=cst.Name("definition")))
+                    elif arg_keyword in self.call_attr_keep:
+                        call_args.append(arg)
+                call_kwargs["args"] = call_args
+                for attr in self.cst_attr_keep:
+                    call_kwargs[attr] = getattr(call, attr)
+                return self.node.with_changes(value=cst.Call(**call_kwargs))
         return self.node

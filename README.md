@@ -55,3 +55,10 @@ For now, we support following conversion from Airflow's DAG files
 | ----- | ----- |
 | `from airflow.operators.spark_sql_operator import SparkSqlOperator` | `from pydolphinscheduler.tasks.sql import Sql` |
 | `spark = SparkSqlOperator(...)` | `spark = Sql(...)` |
+
+#### Python Operator
+
+| Before Conversion                                              | After Conversion                                     |
+|----------------------------------------------------------------|------------------------------------------------------|
+| `from airflow.operators.python_operator import PythonOperator` | `from pydolphinscheduler.tasks.python import Python` |
+| `python = PythonOperator(...)`                                 | `python = Python(...)`                               |
