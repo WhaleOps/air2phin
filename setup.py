@@ -28,9 +28,9 @@ setup(
     long_description=read("README.md"),
     # Make sure pypi is expecting markdown!
     long_description_content_type="text/markdown",
-    author="Jiajie Zhong",
+    author="Jay Chung",
     author_email="zhongjiajie955@gmail.com",
-    url="https://github.com/zhongjaijie/airtolphin",
+    url="https://github.com/WhaleOps/airtolphin",
     python_requires=">=3.9",
     keywords=[
         "transfer",
@@ -40,8 +40,8 @@ setup(
         "dolphinscheduler",
     ],
     project_urls={
-        "Source": "https://github.com/zhongjaijie/airtolphin",
-        "Issue Tracker": "https://github.com/zhongjiajie/airtolphin/issues",
+        "Source": "https://github.com/WhaleOps/airtolphin",
+        "Issue Tracker": "https://github.com/WhaleOps/airtolphin/issues",
     },
     packages=find_packages(where="src"),
     package_dir={"": "src"},
