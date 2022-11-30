@@ -56,6 +56,12 @@ first to test whether the package is correct.
 After you check the package in TestPyPi is correct, you can directly tag the commit and push it to GitHub, then
 GitHub Actions will automatically release to PyPi based on the tag event. You can see more detail in [pypi-workflow.yml](.github/workflows/pypi.yaml).
 
+```shell
+tag_val=0.0.1
+git tag -a "${tag_val}" -m "Release v${tag_val}"
+git push --tags
+```
+
 ### Manually
 
 1. Create an account in [PyPI](https://pypi.org/account/register/).
