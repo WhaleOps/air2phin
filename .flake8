@@ -14,3 +14,26 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
+[flake8]
+max-line-length = 110
+exclude =
+    .git,
+    __pycache__,
+    .pytest_cache,
+    *.egg-info,
+    build,
+    dist,
+    .tox,
+    examples,
+ignore = 
+    # D107: Don't require docstrings on __init__
+    D107,
+    # D105: Missing docstring in magic method
+    D105,
+    # D104: Missing docstring in public package
+    D104,
+    # D100: Missing docstring in public module
+    D100,
+    # W503: Line breaks before binary operators
+    W503,

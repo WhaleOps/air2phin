@@ -1,9 +1,20 @@
-# cache
-__pycache__/
+# Editor
 .idea/
+.vscode/
 
-# build
-*.egg-info/
+# Cache
+__pycache__/
+.tox/
+.pytest_cache/
+
+# Build
+build/
+*egg-info/
+
+# Test coverage
+.coverage
+coverage.xml
+htmlcov/
 
 # Git patch
 *.patch

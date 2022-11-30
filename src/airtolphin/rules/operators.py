@@ -1,21 +1,38 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
 import libcst as cst
 
 
 class Operators:
-    """Covert Airflow Operator to DolphinScheduler Task."""
+    """Covert Airflow Operator to DolphinScheduler Task.
 
-    cst_attr_keep = (
-        "whitespace_before_args",
-    )
+    :param node: The cst.Assign to be converted.
+    """
 
-    call_attr_keep = (
-        "dag",
-    )
+    cst_attr_keep = ("whitespace_before_args",)
+
+    call_attr_keep = ("dag",)
 
     def __init__(self, node: cst.Assign) -> None:
         self.node = node
 
     def run(self) -> cst.Assign:
+        """Convert the cst.Assign statement."""
         # keep all cst.Call attribute which have to change
         call_kwargs = {}
         call_args = []
@@ -49,7 +66,9 @@ class Operators:
                         call_args.append(
                             cst.Arg(
                                 keyword=cst.Name("command"),
-                                value=cst.SimpleString("\"echo 'airflow dummy operator'\""),
+                                value=cst.SimpleString(
+                                    "\"echo 'airflow dummy operator'\""
+                                ),
                             )
                         )
                     elif arg_keyword in self.call_attr_keep:
@@ -66,7 +85,9 @@ class Operators:
                     if arg_keyword == "task_id":
                         call_args.append(arg.with_changes(keyword=cst.Name("name")))
                     elif arg_keyword == "conn_id":
-                        call_args.append(arg.with_changes(keyword=cst.Name("datasource_name")))
+                        call_args.append(
+                            arg.with_changes(keyword=cst.Name("datasource_name"))
+                        )
                     elif arg_keyword == "sql":
                         call_args.append(arg)
                     elif arg_keyword in self.call_attr_keep:
@@ -84,7 +105,9 @@ class Operators:
                     if arg_keyword == "task_id":
                         call_args.append(arg.with_changes(keyword=cst.Name("name")))
                     elif arg_keyword == "python_callable":
-                        call_args.append(arg.with_changes(keyword=cst.Name("definition")))
+                        call_args.append(
+                            arg.with_changes(keyword=cst.Name("definition"))
+                        )
                     elif arg_keyword in self.call_attr_keep:
                         call_args.append(arg)
                 call_kwargs["args"] = call_args

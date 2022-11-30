@@ -1,5 +1,15 @@
 # airtolphin
 
+[![PyPi Version](https://img.shields.io/pypi/v/airtolphin.svg?style=flat-square&logo=PyPi)](https://pypi.org/project/airtolphin/)
+[![PyPi Python Versions](https://img.shields.io/pypi/pyversions/airtolphin.svg?style=flat-square&logo=python)](https://pypi.org/project/airtolphin/)
+[![PyPi License](https://img.shields.io/:license-Apache%202-blue.svg?style=flat-square)](https://raw.githubusercontent.com/WhaleOps/airtolphin/main/LICENSE)
+[![PyPi Status](https://img.shields.io/pypi/status/airtolphin.svg?style=flat-square)](https://pypi.org/project/airtolphin/)
+[![Downloads](https://pepy.tech/badge/airtolphin/month)](https://pepy.tech/project/airtolphin)
+[![Coverage Status](https://img.shields.io/codecov/c/github/WhaleOps/airtolphin/main.svg?style=flat-square)](https://codecov.io/github/WhaleOps/airtolphin?branch=main)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
+[![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat-square&labelColor=ef8336)](https://pycqa.github.io/isort)
+[![CI](https://github.com/WhaleOps/airtolphin/actions/workflows/ci.yaml/badge.svg)](https://github.com/WhaleOps/airtolphin/actions/workflows/ci.yaml)
+
 Airflow to DolphinScheduler migration tool.
 
 ## Installation
@@ -8,17 +18,17 @@ For now, it just for test and without publish to pypi but will be adding in the 
 You could still install locally by yourself.
 
 ```shell
-pip install -e .
+python pip install --upgrade airtolphin
 ```
 
 ## Quick Start
 
-We have an example told you how it works in `./example/transfer_tutorial.py`, it migrates
-Airflow's tutorial in path `./example/airflow/tutorial.py` to DolphinScheduler's Python
+We have an example told you how it works in `./examples/transfer_tutorial.py`, it migrates
+Airflow's tutorial in path `./examples/airflow/tutorial.py` to DolphinScheduler's Python
 API. You could run it by
 
 ```shell
-python ./example/transfer_tutorial.py
+python ./examples/transfer_tutorial.py
 ```
 
 ## Support Statement

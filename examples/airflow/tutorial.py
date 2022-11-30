@@ -1,4 +1,3 @@
-#
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -15,6 +14,7 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
 
 """
 ### Tutorial Documentation
@@ -38,13 +38,13 @@ from airflow.operators.bash import BashOperator
 # These args will get passed on to each operator
 # You can override them on a per-task basis during operator initialization
 default_args = {
-    'owner': 'airflow',
-    'depends_on_past': False,
-    'email': ['airflow@example.com'],
-    'email_on_failure': False,
-    'email_on_retry': False,
-    'retries': 1,
-    'retry_delay': timedelta(minutes=5),
+    "owner": "airflow",
+    "depends_on_past": False,
+    "email": ["airflow@examples.com"],
+    "email_on_failure": False,
+    "email_on_retry": False,
+    "retries": 1,
+    "retry_delay": timedelta(minutes=5),
     # 'queue': 'bash_queue',
     # 'pool': 'backfill',
     # 'priority_weight': 10,
@@ -63,27 +63,27 @@ default_args = {
 
 # [START instantiate_dag]
 with DAG(
-    'tutorial',
+    "tutorial",
     default_args=default_args,
-    description='A simple tutorial DAG',
+    description="A simple tutorial DAG",
     schedule_interval=timedelta(days=1),
     start_date=datetime(2021, 1, 1),
     catchup=False,
-    tags=['example'],
+    tags=["examples"],
 ) as dag:
     # [END instantiate_dag]
 
     # t1, t2 and t3 are examples of tasks created by instantiating operators
     # [START basic_task]
     t1 = BashOperator(
-        task_id='print_date',
-        bash_command='date',
+        task_id="print_date",
+        bash_command="date",
     )
 
     t2 = BashOperator(
-        task_id='sleep',
+        task_id="sleep",
         depends_on_past=False,
-        bash_command='sleep 5',
+        bash_command="sleep 5",
         retries=3,
     )
     # [END basic_task]
@@ -99,7 +99,9 @@ with DAG(
     """
     )
 
-    dag.doc_md = __doc__  # providing that you have a docstring at the beginning of the DAG
+    dag.doc_md = (
+        __doc__  # providing that you have a docstring at the beginning of the DAG
+    )
     dag.doc_md = """
     This is a documentation placed anywhere
     """  # otherwise, type it like this
@@ -117,10 +119,10 @@ with DAG(
     )
 
     t3 = BashOperator(
-        task_id='templated',
+        task_id="templated",
         depends_on_past=False,
         bash_command=templated_command,
-        params={'my_param': 'Parameter I passed in'},
+        params={"my_param": "Parameter I passed in"},
     )
     # [END jinja_template]
 
