@@ -17,11 +17,12 @@
 
 import libcst as cst
 
-from airtolphin.core.transformer import CSTTransformer
+from airtolphin.core.transformer.route import Transformer
 
-with open("./airflow/tutorial.py") as f:
+with open("./airflow/python.py") as f:
     data = f.read()
 
     parse_cst = cst.parse_module(data)
+    wrapper = cst.MetadataWrapper(parse_cst)
     # print(parse_cst)
-    print(parse_cst.visit(CSTTransformer()).code)
+    print(wrapper.visit(Transformer()).code)

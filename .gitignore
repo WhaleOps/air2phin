@@ -9,6 +9,7 @@ __pycache__/
 
 # Build
 build/
+dist/
 *egg-info/
 
 # Test coverage

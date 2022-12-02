@@ -38,7 +38,7 @@ package is correct, and then [release to PyPi](#release-to-pypi).
 TestPyPi is a test environment of PyPi, you could release to it to test whether the package is work or not.
 
 1. Create an account in [TestPyPi](https://test.pypi.org/account/register/).
-2. Clean unrelated files in `dist` directory, and build package `python3 setup.py pre_clean`.
+2. Clean unrelated files in `dist` directory, and build package `python3 setup.py clean`.
 3. Build package `python3 -m build`, and you will see two new files in `dist` directory, with extension
    `.tar.gz` and `.whl`.
 4. Upload to TestPyPi `python3 -m twine upload --repository testpypi dist/*`.
@@ -65,7 +65,7 @@ git push --tags
 ### Manually
 
 1. Create an account in [PyPI](https://pypi.org/account/register/).
-2. Clean unrelated files in `dist` directory, and build package `python3 setup.py pre_clean`.
+2. Clean unrelated files in `dist` directory, and build package `python3 setup.py clean`.
 3. Build package `python3 -m build`, and you will see two new files in `dist` directory, with extension
    `.tar.gz` and `.whl`.
 4. Upload to TestPyPi `python3 -m twine upload dist/*`.

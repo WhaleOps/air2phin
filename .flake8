@@ -26,6 +26,7 @@ exclude =
     dist,
     .tox,
     examples,
+    tests,
 ignore = 
     # D107: Don't require docstrings on __init__
     D107,

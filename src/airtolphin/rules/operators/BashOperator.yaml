@@ -1,0 +1,14 @@
+name: BashOperator
+description: The configuration for converting Airflow BashOperator to DolphinScheduler Shell task.
+
+migration:
+  module:
+    src: 
+      - airflow.operators.bash.BashOperator
+      - airflow.operators.bash_operator.BashOperator
+    dest: pydolphinschsduler.tasks.shell.Shell
+  parameter:
+    - src: task_id
+      dest: name
+    - src: bash_command
+      dest: command

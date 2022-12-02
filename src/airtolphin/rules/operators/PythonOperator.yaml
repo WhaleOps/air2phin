@@ -1,0 +1,12 @@
+name: PythonOperator
+description: The configuration for converting Airflow PythonOperator to DolphinScheduler Python task.
+
+migration:
+  module:
+    src: airflow.operators.python_operator.PythonOperator
+    dest: pydolphinschsduler.tasks.python.Python
+  parameter:
+    - src: task_id
+      dest: name
+    - src: python_callable
+      dest: definition

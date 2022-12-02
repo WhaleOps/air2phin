@@ -16,8 +16,11 @@
 # under the License.
 
 """The script for setting up airtolphin."""
-
+import logging
+import os
 import sys
+from distutils.dir_util import remove_tree
+from typing import List
 
 if sys.version_info.major < 3 or (
     sys.version_info.major == 3 and sys.version_info.minor < 7
@@ -26,13 +29,16 @@ if sys.version_info.major < 3 or (
 
 from os.path import dirname, join
 
-from setuptools import find_packages, setup
+from setuptools import Command, find_packages, setup
 
-version = "0.0.1"
+version = "0.0.2-dev"
+
+logger = logging.getLogger(__name__)
 
 # Start package required
 prod = [
     "libcst",
+    "PyYaml",
 ]
 
 style = [
@@ -43,7 +49,11 @@ style = [
     "autoflake>=1.4",
 ]
 
-dev = style
+test = [
+    "pytest>=6.2",
+]
+
+dev = style + test + prod
 
 
 def read(*names, **kwargs):
@@ -51,6 +61,37 @@ def read(*names, **kwargs):
     return open(
         join(dirname(__file__), *names), encoding=kwargs.get("encoding", "utf8")
     ).read()
+
+
+class CleanCommand(Command):
+    """Command to clean up python api before setup by running `python setup.py pre_clean`."""
+
+    description = "Clean up project root"
+    user_options: List[str] = []
+    clean_list = [
+        "build",
+        "htmlcov",
+        "dist",
+        ".pytest_cache",
+        ".coverage",
+    ]
+
+    def initialize_options(self) -> None:
+        """Set default values for options."""
+
+    def finalize_options(self) -> None:
+        """Set final values for options."""
+
+    def run(self) -> None:
+        """Run and remove temporary files."""
+        for cl in self.clean_list:
+            if not os.path.exists(cl):
+                logger.info("Path %s do not exists.", cl)
+            elif os.path.isdir(cl):
+                remove_tree(cl)
+            else:
+                os.remove(cl)
+        logger.info("Finish pre_clean process.")
 
 
 setup(
@@ -79,6 +120,9 @@ setup(
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     include_package_data=True,
+    package_data={
+        "airtolphin": ["airtolphin/rules/**/*.yaml"],
+    },
     platforms=["any"],
     classifiers=[
         # complete classifier list: http://pypi.python.org/pypi?%3Aaction=list_classifiers
@@ -103,5 +147,13 @@ setup(
     install_requires=prod,
     extras_require={
         "dev": dev,
+    },
+    cmdclass={
+        "clean": CleanCommand,
+    },
+    entry_points={
+        "console_scripts": [
+            "airtolphin = airtolphin.cli.command:main",
+        ],
     },
 )

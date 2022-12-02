@@ -1,0 +1,14 @@
+name: DAG-Context
+description: The configuration for converting airflow.DAG context to pydolphinscheduler workflow context.
+
+migration:
+  module:
+    src: airflow.DAG
+    dest: pydolphinscheduler.core.process_definition.ProcessDefinition
+  parameter:
+    - src: description
+      dest: description
+    - src: start_date
+      dest: start_time
+    - src: schedule_interval
+      dest: schedule
