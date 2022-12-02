@@ -31,7 +31,7 @@ from os.path import dirname, join
 
 from setuptools import Command, find_packages, setup
 
-version = "0.0.2-dev"
+version = "0.0.2"
 
 logger = logging.getLogger(__name__)
 
