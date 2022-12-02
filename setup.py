@@ -121,7 +121,7 @@ setup(
     package_dir={"": "src"},
     include_package_data=True,
     package_data={
-        "airtolphin": ["airtolphin/rules/**/*.yaml"],
+        "airtolphin": ["rules/**/*.yaml"],
     },
     platforms=["any"],
     classifiers=[

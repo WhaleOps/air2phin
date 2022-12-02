@@ -23,12 +23,16 @@ python pip install --upgrade airtolphin
 
 ## Quick Start
 
-We have an example told you how it works in `./examples/transfer_tutorial.py`, it migrates
-Airflow's tutorial in path `./examples/airflow/tutorial.py` to DolphinScheduler's Python
-API. You could run it by
+Get example airflow DAG file via terminal:
 
 ```shell
-python ./examples/transfer_tutorial.py
+wget https://raw.githubusercontent.com/WhaleOps/airtolphin/main/examples/airflow/tutorial.py
+```
+
+Convert it to Apache DolphinScheduler Python API define:
+
+```shell
+airtolphin tutorial.py
 ```
 
 ## Support Statement

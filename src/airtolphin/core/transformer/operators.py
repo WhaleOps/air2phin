@@ -29,10 +29,10 @@ class OpTransformer(cst.CSTTransformer):
         return False
 
     def matcher_param_name(self, node: cst.Arg) -> bool:
-        covert_names = self.cov_map.param.keys()
+        convert_names = self.cov_map.param.keys()
         return m.matches(
             node,
-            m.Arg(keyword=m.Name(m.MatchIfTrue(lambda name: name in covert_names))),
+            m.Arg(keyword=m.Name(m.MatchIfTrue(lambda name: name in convert_names))),
         )
 
     def leave_ImportFrom(

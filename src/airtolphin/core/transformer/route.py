@@ -77,5 +77,5 @@ class Transformer(m.MatcherDecoratableTransformer):
     ) -> Union[
         cst.BaseSmallStatement, FlattenSentinel[cst.BaseSmallStatement], RemovalSentinel
     ]:
-        """Covert from import statement."""
+        """Convert from import statement."""
         return updated_node.visit(ImportTransformer())

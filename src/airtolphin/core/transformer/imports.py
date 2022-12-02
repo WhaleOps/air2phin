@@ -63,7 +63,7 @@ class ImportTransformer(cst.CSTTransformer):
             src_full_refs = [
                 f"{self.mod_ref}.{class_name}" for class_name in self.class_names
             ]
-            # covert new statements
+            # convert new statements
             statements = [
                 imp_cov.get(full_ref).statement
                 for full_ref in src_full_refs
