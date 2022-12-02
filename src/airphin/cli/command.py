@@ -3,15 +3,15 @@ import sys
 from pathlib import Path
 from typing import Sequence
 
-from airtolphin.constants import REGEXP
-from airtolphin.core.rules.loader import all_rules, path_rule
-from airtolphin.runner import run
+from airphin.constants import REGEXP
+from airphin.core.rules.loader import all_rules, path_rule
+from airphin.runner import run
 
 
 def build_argparse() -> argparse.ArgumentParser:
     """Build argparse.ArgumentParser with specific configuration."""
     parser = argparse.ArgumentParser(
-        prog="airtolphin",
+        prog="airphin",
         description="A tool convert Airflow DAGs to DolphinScheduler Python API definition.",
     )
 

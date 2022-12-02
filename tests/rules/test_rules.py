@@ -1,5 +1,5 @@
-from airtolphin.core.rules.loader import path_rule
-from airtolphin.utils.file import read_yaml
+from airphin.core.rules.loader import path_rule
+from airphin.utils.file import read_yaml
 
 MUST_HAVE_ATTR = ["name", "description", "migration"]
 

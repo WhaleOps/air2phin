@@ -4,7 +4,7 @@ class TOKEN:
 
 
 class KEYWORD:
-    CONVERT_MARK: str = "-airtolphin"
+    CONVERT_MARK: str = "-airphin"
 
 
 class REGEXP:

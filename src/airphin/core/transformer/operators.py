@@ -5,7 +5,7 @@ import libcst as cst
 import libcst.matchers as m
 from libcst import Arg, BaseExpression, FlattenSentinel, RemovalSentinel
 
-from airtolphin.core.rules.convertor import call_cov
+from airphin.core.rules.convertor import call_cov
 
 
 class OpTransformer(cst.CSTTransformer):

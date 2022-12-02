@@ -2,9 +2,9 @@ from pathlib import Path
 
 import libcst as cst
 
-from airtolphin.constants import KEYWORD
-from airtolphin.core.transformer.route import Transformer
-from airtolphin.utils.file import add_stem_suffix, read, write
+from airphin.constants import KEYWORD
+from airphin.core.transformer.route import Transformer
+from airphin.utils.file import add_stem_suffix, read, write
 
 
 def run(path: Path) -> None:

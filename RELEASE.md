@@ -42,8 +42,8 @@ TestPyPi is a test environment of PyPi, you could release to it to test whether 
 3. Build package `python3 -m build`, and you will see two new files in `dist` directory, with extension
    `.tar.gz` and `.whl`.
 4. Upload to TestPyPi `python3 -m twine upload --repository testpypi dist/*`.
-5. Check the package in [TestPyPi](https://test.pypi.org/project/airtolphin/) and install it
-   by `python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps airtolphin` to
+5. Check the package in [TestPyPi](https://test.pypi.org/project/airphin/) and install it
+   by `python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps airphin` to
    test whether it is work or not.
 
 ## Release to PyPi
@@ -69,8 +69,8 @@ git push --tags
 3. Build package `python3 -m build`, and you will see two new files in `dist` directory, with extension
    `.tar.gz` and `.whl`.
 4. Upload to TestPyPi `python3 -m twine upload dist/*`.
-5. Check the package in [PyPi](https://pypi.org/project/airtolphin/) and install it
-   by `python3 -m pip install airtolphin` to install it.
+5. Check the package in [PyPi](https://pypi.org/project/airphin/) and install it
+   by `python3 -m pip install airphin` to install it.
 
 ## Ref
 

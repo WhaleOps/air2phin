@@ -17,7 +17,7 @@
 
 import libcst as cst
 
-from airtolphin.core.transformer.route import Transformer
+from airphin.core.transformer.route import Transformer
 
 with open("./airflow/python.py") as f:
     data = f.read()

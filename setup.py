@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-"""The script for setting up airtolphin."""
+"""The script for setting up airphin."""
 import logging
 import os
 import sys
@@ -25,7 +25,7 @@ from typing import List
 if sys.version_info.major < 3 or (
     sys.version_info.major == 3 and sys.version_info.minor < 7
 ):
-    raise Exception("airtolphin support Python 3.7 and above.")
+    raise Exception("airphin support Python 3.7 and above.")
 
 from os.path import dirname, join
 
@@ -95,7 +95,7 @@ class CleanCommand(Command):
 
 
 setup(
-    name="airtolphin",
+    name="airphin",
     version=version,
     license="Apache License 2.0",
     description="Airflow to DolphinScheduler migration tool",
@@ -104,7 +104,7 @@ setup(
     long_description_content_type="text/markdown",
     author="Jay Chung",
     author_email="zhongjiajie955@gmail.com",
-    url="https://github.com/WhaleOps/airtolphin",
+    url="https://github.com/WhaleOps/airphin",
     python_requires=">=3.6",
     keywords=[
         "transfer",
@@ -114,14 +114,14 @@ setup(
         "dolphinscheduler",
     ],
     project_urls={
-        "Source": "https://github.com/WhaleOps/airtolphin",
-        "Issue Tracker": "https://github.com/WhaleOps/airtolphin/issues",
+        "Source": "https://github.com/WhaleOps/airphin",
+        "Issue Tracker": "https://github.com/WhaleOps/airphin/issues",
     },
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     include_package_data=True,
     package_data={
-        "airtolphin": ["rules/**/*.yaml"],
+        "airphin": ["rules/**/*.yaml"],
     },
     platforms=["any"],
     classifiers=[
@@ -153,7 +153,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "airtolphin = airtolphin.cli.command:main",
+            "airphin = airphin.cli.command:main",
         ],
     },
 )

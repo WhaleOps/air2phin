@@ -1,8 +1,8 @@
 from typing import Any, Dict, List, NamedTuple
 
-from airtolphin.constants import REGEXP
-from airtolphin.core.rules.loader import path_dag_cnx, path_operators
-from airtolphin.utils.file import read_multi_yaml, read_yaml
+from airphin.constants import REGEXP
+from airphin.core.rules.loader import path_dag_cnx, path_operators
+from airphin.utils.file import read_multi_yaml, read_yaml
 
 
 class CallConverter(NamedTuple):

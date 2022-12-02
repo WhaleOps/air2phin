@@ -22,9 +22,9 @@ import libcst.matchers as m
 from libcst import BaseExpression, FlattenSentinel, RemovalSentinel
 from libcst.metadata import PositionProvider, QualifiedName, QualifiedNameProvider
 
-from airtolphin.core.rules.convertor import call_cov
-from airtolphin.core.transformer.imports import ImportTransformer
-from airtolphin.core.transformer.operators import OpTransformer
+from airphin.core.rules.convertor import call_cov
+from airphin.core.transformer.imports import ImportTransformer
+from airphin.core.transformer.operators import OpTransformer
 
 
 class Transformer(m.MatcherDecoratableTransformer):

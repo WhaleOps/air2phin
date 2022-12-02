@@ -1,14 +1,14 @@
-# airtolphin
+# airphin
 
-[![PyPi Version](https://img.shields.io/pypi/v/airtolphin.svg?style=flat-square&logo=PyPi)](https://pypi.org/project/airtolphin/)
-[![PyPi Python Versions](https://img.shields.io/pypi/pyversions/airtolphin.svg?style=flat-square&logo=python)](https://pypi.org/project/airtolphin/)
-[![PyPi License](https://img.shields.io/:license-Apache%202-blue.svg?style=flat-square)](https://raw.githubusercontent.com/WhaleOps/airtolphin/main/LICENSE)
-[![PyPi Status](https://img.shields.io/pypi/status/airtolphin.svg?style=flat-square)](https://pypi.org/project/airtolphin/)
-[![Downloads](https://pepy.tech/badge/airtolphin/month)](https://pepy.tech/project/airtolphin)
-[![Coverage Status](https://img.shields.io/codecov/c/github/WhaleOps/airtolphin/main.svg?style=flat-square)](https://codecov.io/github/WhaleOps/airtolphin?branch=main)
+[![PyPi Version](https://img.shields.io/pypi/v/airphin.svg?style=flat-square&logo=PyPi)](https://pypi.org/project/airphin/)
+[![PyPi Python Versions](https://img.shields.io/pypi/pyversions/airphin.svg?style=flat-square&logo=python)](https://pypi.org/project/airphin/)
+[![PyPi License](https://img.shields.io/:license-Apache%202-blue.svg?style=flat-square)](https://raw.githubusercontent.com/WhaleOps/airphin/main/LICENSE)
+[![PyPi Status](https://img.shields.io/pypi/status/airphin.svg?style=flat-square)](https://pypi.org/project/airphin/)
+[![Downloads](https://pepy.tech/badge/airphin/month)](https://pepy.tech/project/airphin)
+[![Coverage Status](https://img.shields.io/codecov/c/github/WhaleOps/airphin/main.svg?style=flat-square)](https://codecov.io/github/WhaleOps/airphin?branch=main)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat-square&labelColor=ef8336)](https://pycqa.github.io/isort)
-[![CI](https://github.com/WhaleOps/airtolphin/actions/workflows/ci.yaml/badge.svg)](https://github.com/WhaleOps/airtolphin/actions/workflows/ci.yaml)
+[![CI](https://github.com/WhaleOps/airphin/actions/workflows/ci.yaml/badge.svg)](https://github.com/WhaleOps/airphin/actions/workflows/ci.yaml)
 
 Airflow to DolphinScheduler migration tool.
 
@@ -18,7 +18,7 @@ For now, it just for test and without publish to pypi but will be adding in the 
 You could still install locally by yourself.
 
 ```shell
-python pip install --upgrade airtolphin
+python pip install --upgrade airphin
 ```
 
 ## Quick Start
@@ -26,13 +26,13 @@ python pip install --upgrade airtolphin
 Get example airflow DAG file via terminal:
 
 ```shell
-wget https://raw.githubusercontent.com/WhaleOps/airtolphin/main/examples/airflow/tutorial.py
+wget https://raw.githubusercontent.com/WhaleOps/airphin/main/examples/airflow/tutorial.py
 ```
 
 Convert it to Apache DolphinScheduler Python API define:
 
 ```shell
-airtolphin tutorial.py
+airphin tutorial.py
 ```
 
 ## Support Statement
