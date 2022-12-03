@@ -18,7 +18,7 @@ For now, it just for test and without publish to pypi but will be adding in the 
 You could still install locally by yourself.
 
 ```shell
-python pip install --upgrade airphin
+python -m pip install --upgrade airphin
 ```
 
 ## Quick Start
@@ -32,7 +32,38 @@ wget https://raw.githubusercontent.com/WhaleOps/airphin/main/examples/airflow/tu
 Convert it to Apache DolphinScheduler Python API define:
 
 ```shell
-airphin tutorial.py
+airphin convert tutorial.py
+```
+
+And the converted related will in the same directory with stem suffix `-airphin`, in this case, it will be `tutorial-airphin.py`
+in current directory.
+
+### Convert Multiple Files or Directory
+
+airphin can not only convert one single file each time, it also works for multiple files, or even the whole directory DAGs file,
+
+```shell
+# For multiple files
+airphin convert /PATH/TO/FILE1.py /PATH/TO/FILE2.py
+
+# Or for whole directory
+airphin convert <DIRECTORY>
+```
+
+### Convert in Standard Input
+
+airphin can also convert standard input for test your covert result.
+
+```shell
+# Quick test the convert rule for standard input
+# Can also add option `--diff` to see the diff detail of this convert
+airphin test "from airflow.operators.bash import BashOperator
+
+test = BashOperator(
+    task_id='test',
+    bash_command='echo 1',
+)
+"
 ```
 
 ## Support Statement

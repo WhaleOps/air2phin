@@ -14,3 +14,9 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
+__project_name__ = "Airphin"
+__version__ = "0.0.3-dev"
+__description__ = (
+    "Airphin is a tool for converting Airflow DAGs to DolphinScheduler Python API."
+)
