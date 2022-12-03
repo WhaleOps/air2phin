@@ -23,21 +23,6 @@ python -m pip install --upgrade airphin
 
 ## Quick Start
 
-Get example airflow DAG file via terminal:
-
-```shell
-wget https://raw.githubusercontent.com/WhaleOps/airphin/main/examples/airflow/tutorial.py
-```
-
-Convert it to Apache DolphinScheduler Python API define:
-
-```shell
-airphin convert tutorial.py
-```
-
-And the converted related will in the same directory with stem suffix `-airphin`, in this case, it will be `tutorial-airphin.py`
-in current directory.
-
 ### Convert Multiple Files or Directory
 
 airphin can not only convert one single file each time, it also works for multiple files, or even the whole directory DAGs file,

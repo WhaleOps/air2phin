@@ -15,14 +15,10 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import libcst as cst
 
-from airphin.core.transformer.route import Transformer
+from airphin import runner
 
 with open("./airflow/python.py") as f:
     data = f.read()
 
-    parse_cst = cst.parse_module(data)
-    wrapper = cst.MetadataWrapper(parse_cst)
-    # print(parse_cst)
-    print(wrapper.visit(Transformer()).code)
+    print(runner.with_str(data))

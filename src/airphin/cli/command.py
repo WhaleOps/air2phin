@@ -30,22 +30,22 @@ def build_argparse() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(
         title="subcommands",
         dest="subcommand",
-        help="Choose one of the subcommand you want to run.",
+        help=f"Subcommand you want to {__project_name__} to run.",
     )
 
     # Test
     parser_convert = subparsers.add_parser(
-        "test", help="Test or play convert with standard input."
+        "test", help=f"Play with {__project_name__} convert with standard input."
     )
     parser_convert.add_argument(
         "-d",
         "--diff",
         action="store_true",
-        help=f"Prints a diff of all changes {__project_name__} would make to a file.",
+        help=f"Prints diff of all the changes {__project_name__} would make.",
     )
     parser_convert.add_argument(
         "stdin",
-        help="Enter the standard input you want to convert.",
+        help="The standard input you want to convert.",
         action="store",
         type=str,
     )
@@ -56,7 +56,7 @@ def build_argparse() -> argparse.ArgumentParser:
         "sources",
         default=[Path(".")],
         nargs="*",
-        help="Enter the directories and file paths you want to convert.",
+        help="The directories or files paths you want to convert.",
         action="store",
         type=Path,
     )
@@ -67,7 +67,7 @@ def build_argparse() -> argparse.ArgumentParser:
         "-s",
         "--show",
         action="store_true",
-        help="Show all rules for converting.",
+        help=f"Show all rules for {__project_name__} convert.",
     )
 
     return parser
