@@ -9,9 +9,11 @@ from airphin.core.rules.convertor import call_cov
 
 
 class OpTransformer(cst.CSTTransformer):
-    """CST Transformer for operators.
+    """CST Transformer for airflow operators.
 
     TODO Need to skip inner call like DAG(date_time=datetime.datetime.now().strftime("%Y-%m-%d"))
+
+    :param qualified_name: qualified name of operator
     """
 
     def __init__(self, qualified_name: Optional[str] = None):
@@ -36,9 +38,9 @@ class OpTransformer(cst.CSTTransformer):
         )
 
     def leave_ImportFrom(
-        self, original_node: "ImportFrom", updated_node: "ImportFrom"
+        self, original_node: cst.ImportFrom, updated_node: cst.ImportFrom
     ) -> Union[
-        "BaseSmallStatement", FlattenSentinel["BaseSmallStatement"], RemovalSentinel
+        cst.BaseSmallStatement, FlattenSentinel[cst.BaseSmallStatement], RemovalSentinel
     ]:
         if self.matcher_import_name(original_node):
             dest_module = self.cov_map.module
@@ -46,7 +48,7 @@ class OpTransformer(cst.CSTTransformer):
         return updated_node
 
     def leave_Name(
-        self, original_node: "Name", updated_node: "Name"
+        self, original_node: cst.Name, updated_node: cst.Name
     ) -> "BaseExpression":
         if self.matcher_op_name(original_node):
             dest_name = self.cov_map.short
@@ -54,8 +56,8 @@ class OpTransformer(cst.CSTTransformer):
         return updated_node
 
     def leave_Arg(
-        self, original_node: "Arg", updated_node: "Arg"
-    ) -> Union[Arg, FlattenSentinel["Arg"], RemovalSentinel]:
+        self, original_node: cst.Arg, updated_node: cst.Arg
+    ) -> Union[Arg, FlattenSentinel[cst.Arg], RemovalSentinel]:
         if self.matcher_param_name(original_node):
             original_keyword = original_node.keyword.value
             dest_keyword = self.cov_map.param.get(original_keyword)

@@ -5,7 +5,7 @@ from airphin.core.rules.loader import path_dag_cnx, path_operators
 from airphin.utils.file import read_multi_yaml, read_yaml
 
 
-class CallConverter(NamedTuple):
+class _CallConverter(NamedTuple):
     long: str
     short: str
     param: Dict[str, Any]
@@ -14,7 +14,7 @@ class CallConverter(NamedTuple):
     src_short: str
 
 
-class ImportConverter(NamedTuple):
+class _ImportConverter(NamedTuple):
     inner_val: str
     inner_attr: str
     attr: str
@@ -22,9 +22,9 @@ class ImportConverter(NamedTuple):
     statement: str
 
 
-def _build_caller(src, migrate: Dict[str, Any]) -> CallConverter:
+def _build_caller(src, migrate: Dict[str, Any]) -> _CallConverter:
     dest = migrate["module"]["dest"]
-    return CallConverter(
+    return _CallConverter(
         long=dest,
         short=dest.split(".")[-1],
         param={p["src"]: p["dest"] for p in migrate["parameter"]},
@@ -36,10 +36,10 @@ def _build_caller(src, migrate: Dict[str, Any]) -> CallConverter:
     )
 
 
-def _build_importer(migrate: Dict[str, Any]) -> ImportConverter:
+def _build_importer(migrate: Dict[str, Any]) -> _ImportConverter:
     dest = migrate["module"]["dest"]
     inner_val, inner_attr, attr, name = dest.split(".")
-    return ImportConverter(
+    return _ImportConverter(
         inner_val=inner_val,
         inner_attr=inner_attr,
         attr=attr,
@@ -59,7 +59,11 @@ def _handle_rules_path(*args) -> List[Dict[str, Any]]:
                 yield content
 
 
-def call_convertor(*args) -> dict[str, CallConverter]:
+def call_convertor(*args) -> dict[str, _CallConverter]:
+    """Get all call convertor from rules.
+
+    :param args: One or more paths to rules.
+    """
     convertor = {}
 
     for content in _handle_rules_path(*args):
@@ -75,7 +79,11 @@ def call_convertor(*args) -> dict[str, CallConverter]:
     return convertor
 
 
-def imp_convertor(*args) -> dict[str, ImportConverter]:
+def imp_convertor(*args) -> dict[str, _ImportConverter]:
+    """Get all import convertor from rules.
+
+    :param args: One or more paths to rules.
+    """
     convertor = {}
 
     for content in _handle_rules_path(*args):

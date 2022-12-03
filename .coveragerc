@@ -15,29 +15,11 @@
 # specific language governing permissions and limitations
 # under the License.
 
-[flake8]
-max-line-length = 110
-exclude =
-    .git,
-    __pycache__,
-    .pytest_cache,
-    *.egg-info,
-    build,
-    dist,
-    .tox,
-    examples,
-    tests,
-ignore = 
-    # D107: Don't require docstrings on __init__
-    D107,
-    # D105: Missing docstring in magic method
-    D105,
-    # D104: Missing docstring in public package
-    D104,
-    # D100: Missing docstring in public module
-    D100,
-    # W503: Line breaks before binary operators
-    W503,
-per-file-ignores =
-    # ignore libcst ``visit_*`` or ``leave_*``
-    */airphin/core/transformer/*.py:D102
+[run]
+command_line = -m pytest
+
+[report]
+# Don’t report files that are 100% covered
+skip_covered = True
+show_missing = True
+precision = 2

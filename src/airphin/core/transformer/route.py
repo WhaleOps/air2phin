@@ -28,9 +28,9 @@ from airphin.core.transformer.operators import OpTransformer
 
 
 class Transformer(m.MatcherDecoratableTransformer):
-    """CST Transformer from airflow to dolphinscheduler-sdk-python.
+    """CST Transformer route class from airflow to dolphinscheduler-sdk-python.
 
-    The main class to call each rules to convert.
+    The main class to call each rules to convert, just like a router.
     """
 
     METADATA_DEPENDENCIES = (

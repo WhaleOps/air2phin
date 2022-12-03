@@ -25,6 +25,8 @@ from airphin.core.rules.convertor import imp_cov
 
 
 class ImportTransformer(cst.CSTTransformer):
+    """CST Transformer for airflow operators."""
+
     def __init__(self):
         super().__init__()
         self.mod_ref = None
@@ -39,7 +41,7 @@ class ImportTransformer(cst.CSTTransformer):
             )
             return f"{nested}.{node.attr.value}"
 
-    def visit_ImportFrom(self, node: "ImportFrom") -> Optional[bool]:
+    def visit_ImportFrom(self, node: cst.ImportFrom) -> Optional[bool]:
         if m.matches(node.module, m.TypeOf(m.Name)):
             self.mod_ref = node.module.value
         elif m.matches(node.module, m.TypeOf(m.Attribute)):
@@ -55,9 +57,9 @@ class ImportTransformer(cst.CSTTransformer):
         return False
 
     def leave_ImportFrom(
-        self, original_node: "ImportFrom", updated_node: "ImportFrom"
+        self, original_node: cst.ImportFrom, updated_node: cst.ImportFrom
     ) -> Union[
-        "BaseSmallStatement", FlattenSentinel["BaseSmallStatement"], RemovalSentinel
+        cst.BaseSmallStatement, FlattenSentinel[cst.BaseSmallStatement], RemovalSentinel
     ]:
         if self.mod_ref is not None:
             src_full_refs = [

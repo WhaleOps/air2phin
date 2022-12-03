@@ -24,6 +24,7 @@ header:
     - LICENSE
     - 'dist'
     - '**/*.md'
+    - '**/*.md'
     - '.github/**'
 
   comment: on-failure

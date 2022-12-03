@@ -74,6 +74,7 @@ def build_argparse() -> argparse.ArgumentParser:
 
 
 def main(argv: Sequence[str] | None = None) -> None:
+    """Run airphin in command line."""
     parser = build_argparse()
     argv = argv if argv is not None else sys.argv[1:]
     # args = parser.parse_args(["rule", "--show"])
