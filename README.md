@@ -1,4 +1,4 @@
-# airphin
+# Airphin
 
 [![PyPi Version](https://img.shields.io/pypi/v/airphin.svg?style=flat-square&logo=PyPi)](https://pypi.org/project/airphin/)
 [![PyPi Python Versions](https://img.shields.io/pypi/pyversions/airphin.svg?style=flat-square&logo=python)](https://pypi.org/project/airphin/)
@@ -11,7 +11,7 @@
 [![CI](https://github.com/WhaleOps/airphin/actions/workflows/ci.yaml/badge.svg)](https://github.com/WhaleOps/airphin/actions/workflows/ci.yaml)
 [![Documentation Status](https://readthedocs.org/projects/airphin/badge/?version=latest)](https://airphin.readthedocs.io/en/latest/?badge=latest)
 
-Airflow to DolphinScheduler migration tool.
+Airphin is a tool for converting Airflow DAGs to DolphinScheduler Python API.
 
 ## Installation
 
@@ -24,21 +24,7 @@ python -m pip install --upgrade airphin
 
 ## Quick Start
 
-### Convert Multiple Files or Directory
-
-airphin can not only convert one single file each time, it also works for multiple files, or even the whole directory DAGs file,
-
-```shell
-# For multiple files
-airphin convert /PATH/TO/FILE1.py /PATH/TO/FILE2.py
-
-# Or for whole directory
-airphin convert <DIRECTORY>
-```
-
-### Convert in Standard Input
-
-airphin can also convert standard input for test your covert result.
+Here will give a quick example to show how to convert base on standard input.
 
 ```shell
 # Quick test the convert rule for standard input
@@ -51,6 +37,13 @@ test = BashOperator(
 )
 "
 ```
+
+And you will see the converted result in the standard output. Airphin can only convert standard input, it can
+also convert file, directory and even can use in your python code. For more detail, please see [our usage](https://airphin.readthedocs.io/en/latest/start.html#usage).
+
+## Documentation
+
+The documentation host on read the doc and is available at [https://airphin.readthedocs.io](https://airphin.readthedocs.io).
 
 ## Support Statement
 
