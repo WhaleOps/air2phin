@@ -1,4 +1,9 @@
 {
+  "ignorePatterns": [
+    {
+      "pattern": "^https://img.shields.io/badge"
+    }
+  ],
   "httpHeaders": [
     {
       "urls": ["https://docs.github.com/"],
