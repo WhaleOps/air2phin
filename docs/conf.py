@@ -6,7 +6,12 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-from airphin import __version__
+import os
+import sys
+
+sys.path.insert(0, os.path.abspath(os.path.join("..", "src")))
+
+from airphin import __version__  # noqa
 
 project = "airphin"
 copyright = "2022, Jay Chung"
