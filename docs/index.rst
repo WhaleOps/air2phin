@@ -12,8 +12,6 @@ It is a rule based AST transformer, using `LibCST <https://github.com/Instagram/
 and Yaml file to define the transformation rules.
 
 
-
-
 .. toctree::
    :maxdepth: 2
 
