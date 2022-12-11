@@ -74,12 +74,12 @@ jobs:
         os: [ubuntu-latest, macOS-latest, windows-latest]
         # FIXME: python 3.6 can not find in ubuntu-latest due to https://github.com/actions/setup-python/issues/162#issuecomment-1325307787
         include:
-          - os: ubuntu-20.04
-            python-version: '3.6'
-          - os: macOS-latest
-            python-version: '3.6'
-          - os: windows-latest
-            python-version: '3.6'
+          - python-version: '3.6'
+            os: ubuntu-20.04
+          - python-version: '3.6'
+            os: macOS-latest
+          - python-version: '3.6'
+            os: windows-latest
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
