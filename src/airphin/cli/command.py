@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 from typing import Sequence
 
-from airphin import __description__, __project_name__, __version__
+from airphin import __project_name__, __version__
 from airphin.constants import REGEXP
 from airphin.core.rules.loader import all_rules, path_rule
 from airphin.runner import with_file, with_str
@@ -14,7 +14,7 @@ def build_argparse() -> argparse.ArgumentParser:
     """Build argparse.ArgumentParser with specific configuration."""
     parser = argparse.ArgumentParser(
         prog="airphin",
-        description=__description__,
+        description="Airphin is a tool for converting Airflow DAGs to DolphinScheduler Python API.",
     )
 
     # Version
