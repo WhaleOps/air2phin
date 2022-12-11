@@ -54,7 +54,7 @@ def test_rules_module_src_list_or_str() -> None:
         if "module" in migration:
             src = migration["module"]["src"]
             assert isinstance(
-                src, list | str
+                src, (list, str)
             ), f"Rule file {rule} migration.module.src must be list or str."
 
 
