@@ -70,8 +70,16 @@ jobs:
       matrix:
         # YAML parse `3.10` to `3.1`, so we have to add quotes for `'3.10'`, see also:
         # https://github.com/actions/setup-python/issues/160#issuecomment-724485470
-        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11']
+        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']
         os: [ubuntu-latest, macOS-latest, windows-latest]
+        # FIXME: python 3.6 can not find in ubuntu-latest due to https://github.com/actions/setup-python/issues/162#issuecomment-1325307787
+        include:
+          - os: ubuntu-20.04
+            python-version: '3.6'
+          - os: macOS-latest
+            python-version: '3.6'
+          - os: windows-latest
+            python-version: '3.6'
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
