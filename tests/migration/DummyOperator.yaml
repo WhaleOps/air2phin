@@ -1,0 +1,20 @@
+migration:
+  # ---------------------------------------------
+  # Different version of airflow import statement
+  # ---------------------------------------------
+  # airflow.operators.dummy_operator
+  # TODO: We have some indentation issues when add new arguments
+  simple_dummy:
+    src: |
+      from airflow.operators.dummy_operator import DummyOperator
+
+      bash = DummyOperator(
+          task_id='dummy',
+      )
+    dest: |
+      from pydolphinschsduler.tasks.shell import Shell
+
+      bash = Shell(
+          name='dummy',
+      command="echo 'Airflow DummyOperator'",
+      )
