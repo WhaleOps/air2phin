@@ -17,6 +17,3 @@
 
 __project_name__ = "Airphin"
 __version__ = "0.0.4"
-__description__ = (
-    "Airphin is a tool for converting Airflow DAGs to DolphinScheduler Python API."
-)
