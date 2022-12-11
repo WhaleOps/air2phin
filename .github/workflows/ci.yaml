@@ -70,7 +70,7 @@ jobs:
       matrix:
         # YAML parse `3.10` to `3.1`, so we have to add quotes for `'3.10'`, see also:
         # https://github.com/actions/setup-python/issues/160#issuecomment-724485470
-        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']
+        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11']
         os: [ubuntu-latest, macOS-latest, windows-latest]
     steps:
       - uses: actions/checkout@v3
