@@ -1,0 +1,67 @@
+migration:
+  # ---------------------------------------------
+  # Different version of airflow import statement
+  # ---------------------------------------------
+  # airflow.operators.bash
+  simple_bash:
+    src: |
+      from airflow.operators.bash import BashOperator
+      
+      bash = BashOperator(
+          task_id='bash',
+          bash_command='echo "Hello World!"',
+      )
+    dest: |
+      from pydolphinschsduler.tasks.shell import Shell
+      
+      bash = Shell(
+          name='bash',
+          command='echo "Hello World!"',
+      )
+  # airflow.operators.bash_operator
+  simple_bash_operator:
+    src: |
+      from airflow.operators.bash_operator import BashOperator
+
+      bash = BashOperator(
+          task_id='bash',
+          bash_command='echo "Hello World!"',
+      )
+    dest: |
+      from pydolphinschsduler.tasks.shell import Shell
+
+      bash = Shell(
+          name='bash',
+          command='echo "Hello World!"',
+      )
+  # ---------------------------------------------
+  # Edge cases
+  # ---------------------------------------------
+  # without import statement
+  value_same_as_mane:
+    src: |
+      from airflow.operators.bash import BashOperator
+
+      bash = BashOperator(
+          task_id='bash_command',
+          bash_command='task_id',
+      )
+    dest: |
+      from pydolphinschsduler.tasks.shell import Shell
+
+      bash = Shell(
+          name='bash_command',
+          command='task_id',
+      )
+  # without import statement
+  without_import_statement:
+    src: |
+      bash = BashOperator(
+          task_id='bash',
+          bash_command='echo "Hello World!"',
+      )
+    dest: |
+      bash = BashOperator(
+          task_id='bash',
+          bash_command='echo "Hello World!"',
+      )

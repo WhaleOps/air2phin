@@ -59,7 +59,7 @@ def _handle_rules_path(*args) -> List[Dict[str, Any]]:
                 yield content
 
 
-def call_convertor(*args) -> dict[str, _CallConverter]:
+def call_convertor(*args) -> Dict[str, _CallConverter]:
     """Get all call convertor from rules.
 
     :param args: One or more paths to rules.
@@ -79,7 +79,7 @@ def call_convertor(*args) -> dict[str, _CallConverter]:
     return convertor
 
 
-def imp_convertor(*args) -> dict[str, _ImportConverter]:
+def imp_convertor(*args) -> Dict[str, _ImportConverter]:
     """Get all import convertor from rules.
 
     :param args: One or more paths to rules.
