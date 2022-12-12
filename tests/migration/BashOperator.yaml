@@ -34,34 +34,3 @@ migration:
           name='bash',
           command='echo "Hello World!"',
       )
-  # ---------------------------------------------
-  # Edge cases
-  # ---------------------------------------------
-  # without import statement
-  value_same_as_mane:
-    src: |
-      from airflow.operators.bash import BashOperator
-
-      bash = BashOperator(
-          task_id='bash_command',
-          bash_command='task_id',
-      )
-    dest: |
-      from pydolphinschsduler.tasks.shell import Shell
-
-      bash = Shell(
-          name='bash_command',
-          command='task_id',
-      )
-  # without import statement
-  without_import_statement:
-    src: |
-      bash = BashOperator(
-          task_id='bash',
-          bash_command='echo "Hello World!"',
-      )
-    dest: |
-      bash = BashOperator(
-          task_id='bash',
-          bash_command='echo "Hello World!"',
-      )
