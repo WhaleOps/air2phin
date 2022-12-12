@@ -1,7 +1,8 @@
 from airphin.core.rules.loader import path_rule
 from airphin.utils.file import read_yaml
 
-MUST_HAVE_ATTR = ["name", "description", "migration"]
+ROOT_MUST_HAVE_ATTR = ["name", "description", "migration", "examples"]
+EXAMPLES_MUST_HAVE_ATTR = ["description", "src", "dest"]
 
 
 all_rules = [path for path in path_rule.glob("**/*") if path.is_file()]
@@ -15,7 +16,7 @@ def test_rules_suffix() -> None:
 def test_rule_file_must_attr() -> None:
     for rule in all_rules:
         content = read_yaml(rule)
-        for attr in MUST_HAVE_ATTR:
+        for attr in ROOT_MUST_HAVE_ATTR:
             assert attr in content, f"Rule file {rule} must have attribute {attr}"
 
 
@@ -76,3 +77,14 @@ def test_rules_module_src_duplicate() -> None:
                     src not in exists
                 ), f"Rule file {rule} migration.module.src {src} duplicate."
                 exists.add(src)
+
+
+def test_rules_example_must_attr() -> None:
+    for rule in all_rules:
+        content = read_yaml(rule)
+        examples = content["examples"]
+        for key in examples:
+            example = examples[key]
+            assert all(
+                attr in example for attr in EXAMPLES_MUST_HAVE_ATTR
+            ), f"Rule file {rule} examples missing must have attribute {EXAMPLES_MUST_HAVE_ATTR}"

@@ -10,3 +10,45 @@ migration:
       dest: name
     - src: conn_id
       dest: datasource_name
+
+examples:
+  bare_sql:
+    description: |
+      The example of converting `airflow.operators.spark_sql_operator.SparkSqlOperator` with bare sql statement
+      as parameter ``sql``.
+    src: |
+      from airflow.operators.spark_sql_operator import SparkSqlOperator
+
+      bash = SparkSqlOperator(
+          task_id='spark-sql',
+          conn_id='spark_default_conn',
+          sql='select * from table',
+      )
+    dest: |
+      from pydolphinschsduler.tasks.sql import Sql
+
+      bash = Sql(
+          name='spark-sql',
+          datasource_name='spark_default_conn',
+          sql='select * from table',
+      )
+  sql_file:
+    description: |
+      The example of converting `airflow.operators.spark_sql_operator.SparkSqlOperator` with sql file as
+      parameter ``sql``.
+    src: |
+      from airflow.operators.spark_sql_operator import SparkSqlOperator
+
+      bash = SparkSqlOperator(
+          task_id='spark-sql',
+          conn_id='spark_default_conn',
+          sql='test.sql',
+      )
+    dest: |
+      from pydolphinschsduler.tasks.sql import Sql
+
+      bash = Sql(
+          name='spark-sql',
+          datasource_name='spark_default_conn',
+          sql='test.sql',
+      )

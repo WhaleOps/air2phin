@@ -10,3 +10,57 @@ migration:
       dest: name
     - src: python_callable
       dest: definition
+
+examples:
+  python_operator:
+    description: The example of converting `airflow.operators.python_operator.PythonOperator`.
+    src: |
+      from airflow.operators.python_operator import PythonOperator
+
+      def foo():
+          print('Hello World!')
+
+      bash = PythonOperator(
+          task_id='python',
+          python_callable=foo,
+      )
+    dest: |
+      from pydolphinschsduler.tasks.python import Python
+
+      def foo():
+          print('Hello World!')
+
+      bash = Python(
+          name='python',
+          definition=foo,
+      )
+  nested_python:
+    description: |
+      The example of converting `airflow.operators.python_operator.PythonOperator` with nested function in
+      `python_callable`.
+    src: |
+      from airflow.operators.python_operator import PythonOperator
+
+      def bar():
+          print('Hello World!')
+
+      def foo():
+          bar()
+
+      bash = PythonOperator(
+          task_id='python',
+          python_callable=foo,
+      )
+    dest: |
+      from pydolphinschsduler.tasks.python import Python
+
+      def bar():
+          print('Hello World!')
+
+      def foo():
+          bar()
+
+      bash = Python(
+          name='python',
+          definition=foo,
+      )

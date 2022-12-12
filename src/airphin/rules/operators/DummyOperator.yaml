@@ -11,3 +11,23 @@ migration:
     - src: bash_command
       dest: command
       default: echo 'Airflow DummyOperator'
+
+examples:
+  dummy:
+    description: |
+      The example of converting `airflow.operators.dummy_operator.DummyOperator`, we convert it to `pydolphinschsduler.tasks.shell.Shell`
+      with default value :code:``echo 'Airflow DummyOperator'`` as command because DolphinScheduler do not have any task like dummy operator.
+    src: |
+      from airflow.operators.dummy_operator import DummyOperator
+
+      bash = DummyOperator(
+          task_id='dummy',
+      )
+    # TODO: We have some indentation issues when add new arguments
+    dest: |
+      from pydolphinschsduler.tasks.shell import Shell
+
+      bash = Shell(
+          name='dummy',
+      command="echo 'Airflow DummyOperator'",
+      )
