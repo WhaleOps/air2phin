@@ -1,0 +1,49 @@
+migration:
+  # ---------------------------------------------
+  # Edge cases
+  # ---------------------------------------------
+  # parameter value is the keyword migration
+  value_same_as_name:
+    src: |
+      from airflow.operators.bash import BashOperator
+
+      bash = BashOperator(
+          task_id='bash_command',
+          bash_command='task_id',
+      )
+    dest: |
+      from pydolphinschsduler.tasks.shell import Shell
+
+      bash = Shell(
+          name='bash_command',
+          command='task_id',
+      )
+  # without import statement
+  without_import_statement:
+    src: |
+      bash = BashOperator(
+          task_id='bash',
+          bash_command='echo "Hello World!"',
+      )
+    dest: |
+      bash = BashOperator(
+          task_id='bash',
+          bash_command='echo "Hello World!"',
+      )
+  # rule default values but not end with comma in previous line
+  add_default_not_comma_previous_line:
+    src: |
+      from airflow.operators.dummy_operator import DummyOperator
+
+      bash = DummyOperator(
+          task_id='dummy',
+          abc='def'
+      )
+    dest: |
+      from pydolphinschsduler.tasks.shell import Shell
+
+      bash = Shell(
+          name='dummy',
+          abc='def', 
+      command="echo 'Airflow DummyOperator'"
+      )
