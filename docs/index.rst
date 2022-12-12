@@ -17,6 +17,7 @@ and Yaml file to define the transformation rules.
 
    start
    cli
+   rule
    arch
 
 Indices and tables
