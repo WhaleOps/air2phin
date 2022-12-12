@@ -6,8 +6,9 @@ from typing import Sequence
 
 from airphin import __project_name__, __version__
 from airphin.constants import REGEXP
-from airphin.core.rules.loader import all_rules, path_rule
-from airphin.runner import with_file, with_str
+from airphin.core.rules.config import Config
+from airphin.core.rules.loader import build_in_rules, path_rule
+from airphin.runner import Runner
 
 
 def build_argparse() -> argparse.ArgumentParser:
@@ -38,6 +39,13 @@ def build_argparse() -> argparse.ArgumentParser:
         "test", help=f"Play with {__project_name__} convert with standard input."
     )
     parser_convert.add_argument(
+        "-r",
+        "--rules",
+        help=f"The custom rule file path you want to add to {__project_name__}.",
+        action="store",
+        type=Path,
+    )
+    parser_convert.add_argument(
         "-d",
         "--diff",
         action="store_true",
@@ -52,6 +60,13 @@ def build_argparse() -> argparse.ArgumentParser:
 
     # Convert
     parser_convert = subparsers.add_parser("convert", help="Convert DAGs definition.")
+    parser_convert.add_argument(
+        "-r",
+        "--rules",
+        help=f"The custom rule file path you want to add to {__project_name__}.",
+        action="store",
+        type=Path,
+    )
     parser_convert.add_argument(
         "sources",
         default=[Path(".")],
@@ -80,9 +95,14 @@ def main(argv: Sequence[str] = None) -> None:
     # args = parser.parse_args(["rule", "--show"])
     args = parser.parse_args(argv)
 
+    customs_rules = [args.rules] if args.rules else []
+
     if args.subcommand == "test":
         stdin = args.stdin
-        result = with_str(stdin)
+        config = Config(customs=customs_rules)
+        runner = Runner(config)
+
+        result = runner.with_str(stdin)
         print(f"\nConverted result is: \n\n{result}")
 
         if args.diff:
@@ -100,18 +120,20 @@ def main(argv: Sequence[str] = None) -> None:
             if not path.exists():
                 raise ValueError("Path %s does not exist.", path)
 
+            config = Config(customs=customs_rules)
+            runner = Runner(config)
             if path.is_file():
-                with_file(path)
+                runner.with_file(path)
                 counter += 1
             else:
                 for file in path.glob(REGEXP.PATH_PYTHON):
-                    with_file(file)
+                    runner.with_file(file)
                     counter += 1
         print(f"Convert {counter} files done.")
 
     if args.subcommand == "rule":
         if args.show:
-            rules = all_rules()
+            rules = build_in_rules()
             print(f"Total {len(rules)} rules:\n")
             for rule in rules:
                 print(rule.relative_to(path_rule))

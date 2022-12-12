@@ -21,14 +21,15 @@ import libcst.matchers as m
 from libcst import FlattenSentinel, RemovalSentinel
 
 from airphin.constants import TOKEN
-from airphin.core.rules.convertor import imp_cov
+from airphin.core.rules.config import Config
 
 
 class ImportTransformer(cst.CSTTransformer):
     """CST Transformer for airflow operators."""
 
-    def __init__(self):
+    def __init__(self, config: Config):
         super().__init__()
+        self.config: Config = config
         self.mod_ref = None
         self.class_names = []
 
@@ -67,9 +68,9 @@ class ImportTransformer(cst.CSTTransformer):
             ]
             # convert new statements
             statements = [
-                imp_cov.get(full_ref).statement
+                self.config.imports.get(full_ref).statement
                 for full_ref in src_full_refs
-                if full_ref in imp_cov
+                if full_ref in self.config.imports
             ]
             if len(statements) == 1:
                 return cst.parse_statement(statements[0]).body[0]
