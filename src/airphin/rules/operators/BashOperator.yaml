@@ -12,3 +12,37 @@ migration:
       dest: name
     - src: bash_command
       dest: command
+
+examples:
+  bash:
+    description: The example of converting `airflow.operators.bash.BashOperator` to `pydolphinschsduler.tasks.shell.Shell`.
+    src: |
+      from airflow.operators.bash import BashOperator
+
+      bash = BashOperator(
+          task_id='bash',
+          bash_command='echo "Hello World!"',
+      )
+    dest: |
+      from pydolphinschsduler.tasks.shell import Shell
+
+      bash = Shell(
+          name='bash',
+          command='echo "Hello World!"',
+      )
+  bash_operator:
+    description: The example of converting `airflow.operators.bash_operator.BashOperator` to `pydolphinschsduler.tasks.shell.Shell`.
+    src: |
+      from airflow.operators.bash_operator import BashOperator
+
+      bash = BashOperator(
+          task_id='bash',
+          bash_command='echo "Hello World!"',
+      )
+    dest: |
+      from pydolphinschsduler.tasks.shell import Shell
+
+      bash = Shell(
+          name='bash',
+          command='echo "Hello World!"',
+      )
