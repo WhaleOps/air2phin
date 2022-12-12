@@ -3,11 +3,11 @@ from typing import List
 
 import pytest
 
-from airphin.core.rules.loader import build_in_rules
+from airphin.constants import CONFIG
 from airphin.core.rules.config import Config
+from airphin.core.rules.loader import build_in_rules
 from airphin.runner import Runner
 from airphin.utils.file import read_yaml
-from airphin.constants import CONFIG
 
 rules_dir = Path(__file__).parent
 test_cases_rules: List[Path] = list(rules_dir.glob("*.yaml"))
@@ -23,7 +23,9 @@ def test_rules_example(rule_ex: Path) -> None:
     for name, case in cases.items():
         src = case.get(CONFIG.SOURCE)
         dest = case.get(CONFIG.DESTINATION)
-        assert dest == runner.with_str(src), f"Migrate test case {rule_ex.stem}.{name} failed."
+        assert dest == runner.with_str(
+            src
+        ), f"Migrate test case {rule_ex.stem}.{name} failed."
 
 
 @pytest.mark.parametrize("rule_ex", test_cases_rules)
@@ -34,5 +36,6 @@ def test_test_rules_example(rule_ex: Path) -> None:
     for name, case in cases.items():
         src = case.get(CONFIG.SOURCE)
         dest = case.get(CONFIG.DESTINATION)
-        assert dest == runner.with_str(src), f"Migrate test case {rule_ex.stem}.{name} failed."
-
+        assert dest == runner.with_str(
+            src
+        ), f"Migrate test case {rule_ex.stem}.{name} failed."
