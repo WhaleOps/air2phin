@@ -19,6 +19,7 @@ and Yaml file to define the transformation rules.
    cli
    fake/index
    howto/index
+   rule
    arch
    changelog
 
