@@ -22,7 +22,7 @@ import libcst.matchers as m
 from libcst import BaseExpression, FlattenSentinel, RemovalSentinel
 from libcst.metadata import PositionProvider, QualifiedName, QualifiedNameProvider
 
-from airphin.core.rules.convertor import call_cov
+from airphin.core.rules.config import Config
 from airphin.core.transformer.imports import ImportTransformer
 from airphin.core.transformer.operators import OpTransformer
 
@@ -38,9 +38,9 @@ class Transformer(m.MatcherDecoratableTransformer):
         PositionProvider,
     )
 
-    def __init__(self):
+    def __init__(self, config: Config):
         super().__init__()
-        self._operator_cov = call_cov
+        self.config: Config = config
 
     @staticmethod
     def _get_qualified_name(qualifie: Set[QualifiedName]) -> str:
@@ -68,8 +68,8 @@ class Transformer(m.MatcherDecoratableTransformer):
         qnp = self.get_metadata(QualifiedNameProvider, original_node)
         if qnp:
             qnp_name = self._get_qualified_name(qnp)
-            if qnp_name in call_cov:
-                return updated_node.visit(OpTransformer(qnp_name))
+            if qnp_name in self.config.calls:
+                return updated_node.visit(OpTransformer(self.config, qnp_name))
         return updated_node
 
     def leave_ImportFrom(
@@ -78,4 +78,4 @@ class Transformer(m.MatcherDecoratableTransformer):
         cst.BaseSmallStatement, FlattenSentinel[cst.BaseSmallStatement], RemovalSentinel
     ]:
         """Convert from import statement."""
-        return updated_node.visit(ImportTransformer())
+        return updated_node.visit(ImportTransformer(self.config))
