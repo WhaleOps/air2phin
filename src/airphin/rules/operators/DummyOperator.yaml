@@ -3,14 +3,18 @@ description: The configuration for converting Airflow DummyOperator to DolphinSc
 
 migration:
   module:
-    src: airflow.operators.dummy_operator.DummyOperator
-    dest: pydolphinschsduler.tasks.shell.Shell
+    - action: replace
+      src: airflow.operators.dummy_operator.DummyOperator
+      dest: pydolphinschsduler.tasks.shell.Shell
   parameter:
-    - src: task_id
+    - action: replace
+      src: task_id
       dest: name
-    - src: bash_command
-      dest: command
-      default: echo 'Airflow DummyOperator'
+    - action: add
+      arg: command
+      default: 
+        type: str
+        value: "echo 'Airflow DummyOperator'"
 
 examples:
   dummy:

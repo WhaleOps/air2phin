@@ -6,25 +6,41 @@ from airphin.core.rules.loader import rule_calls, rule_imports
 from airphin.utils.file import read_multi_yaml, read_yaml
 
 
+class ParamDefaultConfig(NamedTuple):
+    """Default statement config."""
+
+    type: str
+    value: str
+
+
 class CallConfig(NamedTuple):
-    """Call statement config."""
+    """Call config."""
 
     long: str
     short: str
-    param: Dict[str, Any]
-    default: Dict[str, Any]
     src_long: str
     src_short: str
+    replace: Dict[str, str]
+    add: Dict[str, ParamDefaultConfig]
+    remove: List[str]
 
 
-class ImportConfig(NamedTuple):
-    """Import statement config."""
+class ImportStatementConfig(NamedTuple):
+    """Import replace statement config."""
 
     inner_val: str
     inner_attr: str
     attr: str
     name: str
     statement: str
+
+
+class ImportConfig(NamedTuple):
+    """Import config."""
+
+    replace: ImportStatementConfig
+    add: List[str]
+    remove: List[str]
 
 
 class Config:
@@ -72,34 +88,32 @@ class Config:
         return self.call_convertor()
 
     @staticmethod
-    def _build_caller(src, migrate: Dict[str, Any]) -> CallConfig:
-        dest = migrate[CONFIG.MODULE][CONFIG.DESTINATION]
+    def _build_caller(
+        src: str, dest: str, parameters: List[Dict[str, Any]]
+    ) -> CallConfig:
         return CallConfig(
             long=dest,
             short=dest.split(TOKEN.POINT)[-1],
-            param={
-                p[CONFIG.SOURCE]: p[CONFIG.DESTINATION]
-                for p in migrate[CONFIG.PARAMETER]
-            },
-            default={
-                p[CONFIG.DESTINATION]: p[CONFIG.DEFAULT]
-                for p in migrate[CONFIG.PARAMETER]
-                if CONFIG.DEFAULT in p
-            },
             src_long=src,
             src_short=src.split(TOKEN.POINT)[-1],
-        )
-
-    @staticmethod
-    def _build_importer(migrate: Dict[str, Any]) -> ImportConfig:
-        dest = migrate[CONFIG.MODULE][CONFIG.DESTINATION]
-        inner_val, inner_attr, attr, name = dest.split(TOKEN.POINT)
-        return ImportConfig(
-            inner_val=inner_val,
-            inner_attr=inner_attr,
-            attr=attr,
-            name=name,
-            statement=f"from {inner_val}.{inner_attr}.{attr} import {name}",
+            replace={
+                p[CONFIG.SOURCE]: p[CONFIG.DESTINATION]
+                for p in parameters
+                if p[CONFIG.ACTION] == CONFIG.KW_REPLACE
+            },
+            add={
+                p[CONFIG.ARGUMENT]: ParamDefaultConfig(
+                    type=p[CONFIG.DEFAULT][CONFIG.TYPE],
+                    value=p[CONFIG.DEFAULT][CONFIG.VALUE],
+                )
+                for p in parameters
+                if p[CONFIG.ACTION] == CONFIG.KW_ADD
+            },
+            remove=[
+                p[CONFIG.ARGUMENT]
+                for p in parameters
+                if p[CONFIG.ACTION] == CONFIG.KW_REMOVE
+            ],
         )
 
     @staticmethod
@@ -113,34 +127,106 @@ class Config:
                 for content in contents:
                     yield content
 
+    @staticmethod
+    def get_module_action(
+        migration: Dict[str, Any], action_type: str
+    ) -> Optional[Dict[str, Any]]:
+        """Get specific action type from rules.
+
+        :param migration: Config Migration node.
+        :param action_type: Action type, can be `add`, `remove`, `replace`.
+        """
+        actions = [
+            action
+            for action in migration[CONFIG.MODULE]
+            if action[CONFIG.ACTION] == action_type
+        ]
+        if len(actions) > 1:
+            raise ValueError("Each type of action can only have one.")
+        return actions[0] if actions else None
+
     def call_convertor(self) -> Dict[str, CallConfig]:
         """Get all call convertor from rules."""
         convertor = {}
 
         for content in self._handle_rules_path(*self.calls_path):
             migration = content[CONFIG.MIGRATION]
-            src = migration[CONFIG.MODULE][CONFIG.SOURCE]
+            parameters = migration[CONFIG.PARAMETER]
+            replace = self.get_module_action(migration, CONFIG.KW_REPLACE)
+            src = replace[CONFIG.SOURCE]
+            dest = replace[CONFIG.DESTINATION]
+
             if isinstance(src, str):
-                convertor[src] = self._build_caller(src, migration)
+                convertor[src] = self._build_caller(src, dest, parameters)
             elif isinstance(src, list):
                 for inner_src in src:
-                    convertor[inner_src] = self._build_caller(inner_src, migration)
+                    convertor[inner_src] = self._build_caller(
+                        inner_src, dest, parameters
+                    )
             else:
                 raise RuntimeError("Invalid migration.module.src type: %s" % type(src))
         return convertor
+
+    # TODO: make it can use in any number module import statemant
+    @staticmethod
+    def _build_replace_importer(action: Dict[str, Any]) -> ImportStatementConfig:
+        dest = action[CONFIG.DESTINATION]
+        inner_val, inner_attr, attr, name = dest.split(TOKEN.POINT)
+        return ImportStatementConfig(
+            inner_val=inner_val,
+            inner_attr=inner_attr,
+            attr=attr,
+            name=name,
+            statement=f"from {inner_val}.{inner_attr}.{attr} import {name}",
+        )
+
+    @staticmethod
+    def _get_rp_add_action(action: Dict[str, Any]) -> List[str | None]:
+        """Get replace and add action list from rules.
+
+        :param action: Config migration module action.
+        """
+
+        def _build_import_statement(mod: str) -> str:
+            spec = mod.rsplit(TOKEN.POINT, 1)
+            return f"from {spec[0]} import {spec[1]}"
+
+        if action is None:
+            return []
+        module = action[CONFIG.MODULE]
+        if isinstance(module, str):
+            return [_build_import_statement(module)]
+        elif isinstance(module, list):
+            return [_build_import_statement(mod) for mod in module]
+        else:
+            raise RuntimeError(
+                "Invalid migration.module.action.module type: %s" % type(module)
+            )
 
     def imp_convertor(self) -> Dict[str, ImportConfig]:
         """Get all import convertor from rules."""
-        convertor = {}
+        imps = {}
 
         for content in self._handle_rules_path(*self.imports_path):
-            migration = content[CONFIG.MIGRATION]
-            src = migration[CONFIG.MODULE][CONFIG.SOURCE]
+            replace = self.get_module_action(
+                content[CONFIG.MIGRATION], CONFIG.KW_REPLACE
+            )
+            add = self.get_module_action(content[CONFIG.MIGRATION], CONFIG.KW_ADD)
+            remove = self.get_module_action(content[CONFIG.MIGRATION], CONFIG.KW_REMOVE)
+
+            src = replace[CONFIG.SOURCE]
             if isinstance(src, str):
-                convertor[src] = self._build_importer(migration)
+                imps[src] = ImportConfig(
+                    replace=self._build_replace_importer(replace),
+                    add=self._get_rp_add_action(add),
+                    remove=self._get_rp_add_action(remove),
+                )
             elif isinstance(src, list):
                 for inner_src in src:
-                    convertor[inner_src] = self._build_importer(migration)
-            else:
-                raise RuntimeError("Invalid migration.module.src type: %s" % type(src))
-        return convertor
+                    imps[inner_src] = ImportConfig(
+                        replace=self._build_replace_importer(replace),
+                        add=self._get_rp_add_action(add),
+                        remove=self._get_rp_add_action(remove),
+                    )
+
+        return imps

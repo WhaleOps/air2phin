@@ -18,7 +18,6 @@ import warnings
 from typing import Set, Union
 
 import libcst as cst
-import libcst.matchers as m
 from libcst import BaseExpression, FlattenSentinel, RemovalSentinel
 from libcst.metadata import PositionProvider, QualifiedName, QualifiedNameProvider
 
@@ -27,10 +26,11 @@ from airphin.core.transformer.imports import ImportTransformer
 from airphin.core.transformer.operators import OpTransformer
 
 
-class Transformer(m.MatcherDecoratableTransformer):
+class Transformer(cst.CSTTransformer):
     """CST Transformer route class from airflow to dolphinscheduler-sdk-python.
 
-    The main class to call each rules to convert, just like a router.
+    The main class to call each rules to convert, just like a router, currently will route to `imports` and
+    `operators` transformer.
     """
 
     METADATA_DEPENDENCIES = (

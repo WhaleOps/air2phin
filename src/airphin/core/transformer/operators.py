@@ -5,7 +5,8 @@ import libcst as cst
 import libcst.matchers as m
 from libcst import Arg, BaseExpression, FlattenSentinel, RemovalSentinel
 
-from airphin.core.rules.config import CallConfig, Config
+from airphin.constants import TOKEN
+from airphin.core.rules.config import CallConfig, Config, ParamDefaultConfig
 
 
 class OpTransformer(cst.CSTTransformer):
@@ -34,22 +35,20 @@ class OpTransformer(cst.CSTTransformer):
             return True
         return False
 
-    def matcher_param_name(self, node: cst.Arg) -> bool:
-        convert_names = self.config.param.keys()
+    def match_replace_name(self, node: cst.Arg) -> bool:
+        convert_names = self.config.replace.keys()
         return m.matches(
             node,
             m.Arg(keyword=m.Name(m.MatchIfTrue(lambda name: name in convert_names))),
         )
 
-    def leave_ImportFrom(
-        self, original_node: cst.ImportFrom, updated_node: cst.ImportFrom
-    ) -> Union[
-        cst.BaseSmallStatement, FlattenSentinel[cst.BaseSmallStatement], RemovalSentinel
-    ]:
-        if self.matcher_import_name(original_node):
-            dest_module = self.config.module
-            return updated_node.with_changes(module=cst.Name(value=dest_module))
-        return updated_node
+    def match_remove_name(self, node: cst.Arg) -> bool:
+        return m.matches(
+            node,
+            m.Arg(
+                keyword=m.Name(m.MatchIfTrue(lambda name: name in self.config.remove))
+            ),
+        )
 
     def leave_Name(
         self, original_node: cst.Name, updated_node: cst.Name
@@ -62,36 +61,32 @@ class OpTransformer(cst.CSTTransformer):
     def leave_Arg(
         self, original_node: cst.Arg, updated_node: cst.Arg
     ) -> Union[Arg, FlattenSentinel[cst.Arg], RemovalSentinel]:
-        if self.matcher_param_name(original_node):
+        if self.match_replace_name(original_node):
             original_keyword = original_node.keyword.value
-            dest_keyword = self.config.param.get(original_keyword)
+            dest_keyword = self.config.replace.get(original_keyword)
 
             self.converted_param.add(dest_keyword)
-            # also change to default value when have ``default`` node
-            if dest_keyword is self.config.default:
-                default_value: str = self.config.default.get(dest_keyword)
-                return updated_node.with_changes(
-                    keyword=cst.Name(value=dest_keyword),
-                    value=cst.SimpleString(value=default_value),
-                )
-
             return updated_node.with_changes(keyword=cst.Name(value=dest_keyword))
+        if self.match_remove_name(original_node):
+            return cst.RemoveFromParent()
         return updated_node
 
     def _handle_missing_default(self, nodes: Sequence[cst.Arg]) -> Sequence[cst.Arg]:
-        miss_default = self.config.default.keys() - self.converted_param
-        if not miss_default:
-            return nodes
-
         mutable = list(nodes)
         one_of = copy.deepcopy(mutable[-1])
-        for miss in miss_default:
-            value = self.config.default.get(miss)
+        for arg in self.config.add.keys():
+            default: ParamDefaultConfig = self.config.add.get(arg)
 
+            if default.type == TOKEN.STRING:
+                value = cst.SimpleString(value=f'"{default.value}"')
+            elif default.type == TOKEN.CODE:
+                value = cst.parse_expression(default.value)
+            else:
+                raise NotImplementedError
             mutable.append(
                 one_of.with_changes(
-                    value=cst.SimpleString(value=f'"{value}"'),
-                    keyword=cst.Name(value=miss),
+                    value=value,
+                    keyword=cst.Name(value=arg),
                 )
             )
         return mutable
@@ -99,7 +94,7 @@ class OpTransformer(cst.CSTTransformer):
     def leave_Call(
         self, original_node: cst.Call, updated_node: cst.Call
     ) -> BaseExpression:
-        if not self.config.default:
+        if not self.config.add:
             return updated_node
 
         return updated_node.with_changes(
