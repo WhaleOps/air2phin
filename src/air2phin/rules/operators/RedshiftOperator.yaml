@@ -1,0 +1,50 @@
+name: RedshiftOperator
+description: The configuration for converting Airflow BashOperator to DolphinScheduler Shell task.
+
+migration:
+  module:
+    - action: replace
+      src: utils.operator.RedshiftOperator.RedshiftOperator
+      dest: pydolphinscheduler.tasks.sql.Sql
+    - action: add
+      module: pydolphinscheduler.resources_plugin.Local
+  parameter:
+    - action: replace
+      src: task_id
+      dest: name
+    - action: add
+      arg: datasource_name
+      default:
+        type: str
+        value: "redshift_read_conn"
+    - action: add
+      arg: resource_plugin
+      default: 
+        type: code
+        value: Local(prefix="file://")
+
+examples:
+  redshift:
+    description: |
+      The example of converting `utils.operator.RedshiftOperator.RedshiftOperator`, we convert it to `pydolphinscheduler.tasks.sql.Sql`
+      with default value :code:``redshift_read_conn`` as datasource_name because DolphinScheduler do not have any task like dummy operator.
+    src: |
+      from utils.operator.RedshiftOperator import RedshiftOperator
+
+      redshift = RedshiftOperator(
+          task_id="redshift",
+          owner="Fish",
+          sql="file/sql_file/t3/dwm_spot_trade_first_order.sql",
+          check_sql="file/sql_file/t3/check/dwm_spot_trade_first_order.sql"
+      )
+    dest: |
+      from pydolphinscheduler.resources_plugin import Local; from pydolphinscheduler.tasks.sql import Sql
+  
+      redshift = Sql(
+          name="redshift",
+          owner="Fish",
+          sql="file/sql_file/t3/dwm_spot_trade_first_order.sql",
+          check_sql="file/sql_file/t3/check/dwm_spot_trade_first_order.sql", 
+      datasource_name="redshift_read_conn", 
+      resource_plugin=Local(prefix="file://")
+      )

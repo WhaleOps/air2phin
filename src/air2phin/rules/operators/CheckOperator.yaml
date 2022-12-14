@@ -1,0 +1,45 @@
+name: CheckOperator
+description: The configuration for converting Custom CheckOperator to DolphinScheduler Shell task.
+
+migration:
+  module:
+    - action: replace
+      src: utils.operator.CheckOperator.CheckOperator
+      dest: pydolphinscheduler.tasks.shell.Shell
+  parameter:
+    - action: replace
+      src: task_id
+      dest: name
+    - action: add
+      arg: command
+      default: 
+        type: str
+        value: "echo 'Quak Custom CheckOperator'"
+
+examples:
+  datasync:
+    description: |
+      The example of migrating `utils.operator.CheckOperator.CheckOperator`, we migrate it to `pydolphinscheduler.tasks.shell.Shell`
+      with default value :code:``echo 'Quak Custom CheckOperator'`` as command because DolphinScheduler do not have any task like custom CheckOperator.
+    src: |
+      from utils.operator.CheckOperator import CheckOperator
+
+      task_name = CheckOperator(
+          task_id="task_name",
+          owner="Fish",
+          retries=0,
+          execution_timeout=timedelta(minutes=10),
+          sql='file/sql_file/user_asset/check/dws_asset_wallet_user_day.sql'
+      )
+    # TODO: We have some indentation issues when add new arguments
+    dest: |
+      from pydolphinscheduler.tasks.shell import Shell
+
+      task_name = Shell(
+          name="task_name",
+          owner="Fish",
+          retries=0,
+          execution_timeout=timedelta(minutes=10),
+          sql='file/sql_file/user_asset/check/dws_asset_wallet_user_day.sql', 
+      command="echo 'Quak Custom CheckOperator'"
+      )

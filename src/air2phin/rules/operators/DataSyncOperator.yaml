@@ -1,0 +1,53 @@
+name: DataSyncOperator
+description: The configuration for converting Custom DataSyncOperator to DolphinScheduler Shell task.
+
+migration:
+  module:
+    - action: replace
+      src: utils.operator.DataSyncOperator.DataSyncOperator
+      dest: pydolphinscheduler.tasks.shell.Shell
+  parameter:
+    - action: replace
+      src: task_id
+      dest: name
+    - action: add
+      arg: command
+      default: 
+        type: str
+        value: "echo 'Quak Custom DataSyncOperator'"
+
+examples:
+  datasync:
+    description: |
+      The example of migrating `utils.operator.DataSyncOperator.DataSyncOperator`, we migrate it to `pydolphinscheduler.tasks.shell.Shell`
+      with default value :code:``echo 'Quak Custom DataSyncOperator'`` as command because DolphinScheduler do not have any task like custom DataSyncOperator.
+    src: |
+      from utils.operator.DataSyncOperator import DataSyncOperator
+
+      task_name = DataSyncOperator(
+          task_id="task_name",
+          owner="owner",
+          tagger_conn_id="bon_agent_rds",
+          target_table="dws_user_reward_trade_invite_day",
+          is_status=True,
+          retries=1,
+          retry_delay=timedelta(seconds=90),
+          execution_timeout=timedelta(minutes=5),
+          sql='file/sql_file/user_reward/dws_user_reward_trade_invite_day_sync.sql'
+      )
+    # TODO: We have some indentation issues when add new arguments
+    dest: |
+      from pydolphinscheduler.tasks.shell import Shell
+
+      task_name = Shell(
+          name="task_name",
+          owner="owner",
+          tagger_conn_id="bon_agent_rds",
+          target_table="dws_user_reward_trade_invite_day",
+          is_status=True,
+          retries=1,
+          retry_delay=timedelta(seconds=90),
+          execution_timeout=timedelta(minutes=5),
+          sql='file/sql_file/user_reward/dws_user_reward_trade_invite_day_sync.sql', 
+      command="echo 'Quak Custom DataSyncOperator'"
+      )

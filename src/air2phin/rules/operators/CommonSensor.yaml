@@ -1,0 +1,51 @@
+name: CommonSensor
+description: The configuration for converting Custom CommonSensor to DolphinScheduler Shell task.
+
+migration:
+  module:
+    - action: replace
+      src: utils.operator.CommonSensor.CommonSensor
+      dest: pydolphinscheduler.tasks.shell.Shell
+  parameter:
+    - action: replace
+      src: task_id
+      dest: name
+    - action: add
+      arg: command
+      default: 
+        type: str
+        value: "echo 'Quak Custom CommonSensor'"
+
+examples:
+  datasync:
+    description: |
+      The example of migrating `utils.operator.CommonSensor.CommonSensor`, we migrate it to `pydolphinscheduler.tasks.shell.Shell`
+      with default value :code:``echo 'Quak Custom CommonSensor'`` as command because DolphinScheduler do not have any task like custom CommonSensor.
+    src: |
+      from utils.operator.CommonSensor import CommonSensor
+
+      task_name = CommonSensor(
+          task_id='task_name',
+          poke_interval=30,
+          timeout=300,
+          retries=1,
+          owner='Fish',
+          execution_date_fn=lambda dt: [dt - datetime.timedelta(days=-1,minutes=x) for x in range(60, 120)],
+          external_dag_id='1hour_core_level_dag',
+          external_task_id='dwd_std_cntr_order',
+      )
+    # TODO: We have some indentation issues when add new arguments
+    dest: |
+      from pydolphinscheduler.tasks.shell import Shell
+
+      task_name = Shell(
+          name='task_name',
+          poke_interval=30,
+          timeout=300,
+          retries=1,
+          owner='Fish',
+          execution_date_fn=lambda dt: [dt - datetime.timedelta(days=-1,minutes=x) for x in range(60, 120)],
+          external_dag_id='1hour_core_level_dag',
+          external_task_id='dwd_std_cntr_order',
+      command="echo 'Quak Custom CommonSensor'",
+      )

@@ -1,0 +1,37 @@
+name: FbiRefreshOperator
+description: The configuration for converting Custom FbiRefreshOperator to DolphinScheduler Shell task.
+
+migration:
+  module:
+    - action: replace
+      src: utils.operator.FbiRefreshOperator.FbiRefreshOperator
+      dest: pydolphinscheduler.tasks.shell.Shell
+  parameter:
+    - action: replace
+      src: task_id
+      dest: name
+    - action: add
+      arg: command
+      default: 
+        type: str
+        value: "echo 'Quak Custom FbiRefreshOperator'"
+
+examples:
+  datasync:
+    description: |
+      The example of migrating `utils.operator.FbiRefreshOperator.FbiRefreshOperator`, we migrate it to `pydolphinscheduler.tasks.shell.Shell`
+      with default value :code:``echo 'Quak Custom FbiRefreshOperator'`` as command because DolphinScheduler do not have any task like custom FbiRefreshOperator.
+    src: |
+      from utils.operator.FbiRefreshOperator import FbiRefreshOperator
+
+      task_name = FbiRefreshOperator(
+          task_id="task_name"
+      )
+    # TODO: We have some indentation issues when add new arguments
+    dest: |
+      from pydolphinscheduler.tasks.shell import Shell
+
+      task_name = Shell(
+          name="task_name", 
+      command="echo 'Quak Custom FbiRefreshOperator'"
+      )
