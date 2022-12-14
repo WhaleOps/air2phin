@@ -21,7 +21,7 @@ import libcst.matchers as m
 from libcst import FlattenSentinel, RemovalSentinel
 
 from airphin.constants import TOKEN
-from airphin.core.rules.config import Config
+from airphin.core.rules.config import Config, ImportConfig
 
 
 class ImportTransformer(cst.CSTTransformer):
@@ -43,8 +43,10 @@ class ImportTransformer(cst.CSTTransformer):
             return f"{nested}.{node.attr.value}"
 
     def visit_ImportFrom(self, node: cst.ImportFrom) -> Optional[bool]:
+        # case ``from modules import class``
         if m.matches(node.module, m.TypeOf(m.Name)):
             self.mod_ref = node.module.value
+        # case ``from package.module.[module1] import class``
         elif m.matches(node.module, m.TypeOf(m.Attribute)):
             self.mod_ref = self._get_attr_nested_value(
                 cst.ensure_type(node.module, cst.Attribute)
@@ -66,18 +68,32 @@ class ImportTransformer(cst.CSTTransformer):
             src_full_refs = [
                 f"{self.mod_ref}.{class_name}" for class_name in self.class_names
             ]
-            # convert new statements
-            statements = [
-                self.config.imports.get(full_ref).statement
-                for full_ref in src_full_refs
-                if full_ref in self.config.imports
-            ]
-            if len(statements) == 1:
-                return cst.parse_statement(statements[0]).body[0]
-            elif len(statements) > 1:
+
+            replaces = []
+            adds = set()
+            for full_ref in src_full_refs:
+                if full_ref in self.config.imports:
+                    dest: ImportConfig = self.config.imports[full_ref]
+                    replaces.append(dest.replace.statement)
+                    adds.update(dest.add)
+
+            # get replace statement
+            if len(replaces) == 0:
+                return updated_node
+            elif len(replaces) == 1:
+                statement = replaces[0]
+            else:
                 class_name_only = [
-                    stat.split(f" {TOKEN.IMPORT} ")[1] for stat in statements[1:]
+                    stat.split(f" {TOKEN.IMPORT} ")[1] for stat in replaces[1:]
                 ]
-                statement = f"{TOKEN.COMMA} ".join(statements[:1] + class_name_only)
-                return cst.parse_statement(statement).body[0]
+                statement = f"{TOKEN.COMMA} ".join(replaces[:1] + class_name_only)
+
+            # Return replace and add statement
+            # TODO, will use ; as separator of multiple statements, we should better use \n in the future
+            return FlattenSentinel(
+                [
+                    *[cst.parse_statement(add).body[0] for add in adds],
+                    cst.parse_statement(statement).body[0],
+                ]
+            )
         return updated_node

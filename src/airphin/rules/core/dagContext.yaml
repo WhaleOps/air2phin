@@ -3,16 +3,18 @@ description: The configuration for converting airflow.DAG context to pydolphinsc
 
 migration:
   module:
-    src: airflow.DAG
-    dest: pydolphinscheduler.core.process_definition.ProcessDefinition
+    - action: replace
+      src: airflow.DAG
+      dest: pydolphinscheduler.core.process_definition.ProcessDefinition
   parameter:
-    - src: dag_id
+    - action: replace
+      src: dag_id
       dest: name
-    - src: description
-      dest: description
-    - src: start_date
+    - action: replace
+      src: start_date
       dest: start_time
-    - src: schedule_interval
+    - action: replace
+      src: schedule_interval
       dest: schedule
 
 examples:

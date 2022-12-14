@@ -4,6 +4,8 @@ class TOKEN:
     IMPORT: str = "import"
     COMMA: str = ","
     POINT: str = "."
+    STRING: str = "str"
+    CODE: str = "code"
 
 
 class KEYWORD:
@@ -22,10 +24,21 @@ class REGEXP:
 class CONFIG:
     """Constants config file for airphin."""
 
-    MODULE: str = "module"
-    MIGRATION: str = "migration"
-    DESTINATION: str = "dest"
-    SOURCE: str = "src"
-    PARAMETER: str = "parameter"
-    DEFAULT: str = "default"
     EXAMPLE: str = "examples"
+
+    MIGRATION: str = "migration"
+    MODULE: str = "module"
+    PARAMETER: str = "parameter"
+
+    ACTION: str = "action"
+    SOURCE: str = "src"
+    DESTINATION: str = "dest"
+
+    KW_REPLACE: str = "replace"
+    KW_ADD: str = "add"
+    KW_REMOVE: str = "remove"
+
+    ARGUMENT: str = "arg"
+    DEFAULT: str = "default"
+    TYPE: str = "type"
+    VALUE: str = "value"

@@ -3,14 +3,17 @@ description: The configuration for converting Airflow BashOperator to DolphinSch
 
 migration:
   module:
-    src: 
-      - airflow.operators.bash.BashOperator
-      - airflow.operators.bash_operator.BashOperator
-    dest: pydolphinschsduler.tasks.shell.Shell
+    - action: replace
+      src:
+        - airflow.operators.bash.BashOperator
+        - airflow.operators.bash_operator.BashOperator
+      dest: pydolphinschsduler.tasks.shell.Shell
   parameter:
-    - src: task_id
+    - action: replace
+      src: task_id
       dest: name
-    - src: bash_command
+    - action: replace
+      src: bash_command
       dest: command
 
 examples:

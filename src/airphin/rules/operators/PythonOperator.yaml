@@ -3,12 +3,15 @@ description: The configuration for converting Airflow PythonOperator to DolphinS
 
 migration:
   module:
-    src: airflow.operators.python_operator.PythonOperator
-    dest: pydolphinschsduler.tasks.python.Python
+    - action: replace
+      src: airflow.operators.python_operator.PythonOperator
+      dest: pydolphinschsduler.tasks.python.Python
   parameter:
-    - src: task_id
+    - action: replace
+      src: task_id
       dest: name
-    - src: python_callable
+    - action: replace
+      src: python_callable
       dest: definition
 
 examples:

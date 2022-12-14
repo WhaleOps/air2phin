@@ -3,12 +3,15 @@ description: The configuration for converting Airflow SparkSqlOperator to Dolphi
 
 migration:
   module:
-    src: airflow.operators.spark_sql_operator.SparkSqlOperator
-    dest: pydolphinschsduler.tasks.sql.Sql
+    - action: replace
+      src: airflow.operators.spark_sql_operator.SparkSqlOperator
+      dest: pydolphinschsduler.tasks.sql.Sql
   parameter:
-    - src: task_id
+    - action: replace
+      src: task_id
       dest: name
-    - src: conn_id
+    - action: replace
+      src: conn_id
       dest: datasource_name
 
 examples:

@@ -23,8 +23,8 @@ def test_rules_example(rule_ex: Path) -> None:
     for name, case in cases.items():
         src = case.get(CONFIG.SOURCE)
         dest = case.get(CONFIG.DESTINATION)
-        assert dest == runner.with_str(
-            src
+        assert (
+            runner.with_str(src) == dest
         ), f"Migrate test case {rule_ex.stem}.{name} failed."
 
 
