@@ -181,7 +181,7 @@ class Config:
         )
 
     @staticmethod
-    def _get_rp_add_action(action: Dict[str, Any]) -> List[str | None]:
+    def _get_rp_add_action(action: Dict[str, Any]) -> Optional[List[str]]:
         """Get replace and add action list from rules.
 
         :param action: Config migration module action.
