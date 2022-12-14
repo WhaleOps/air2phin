@@ -72,12 +72,15 @@ during the migration
     
     migration:
       module:
-        src: custom.my_custom_operator.MyCustomOperator
-        dest: pydolphinschsduler.tasks.sql.Sql
+        - action: replace
+          src: custom.my_custom_operator.MyCustomOperator
+          dest: pydolphinschsduler.tasks.sql.Sql
       parameter:
-        - src: task_id
+        - action: replace
+          src: task_id
           dest: name
-        - src: my_custom_conn_id
+        - action: replace
+          src: my_custom_conn_id
           dest: datasource_name
 
 Save the yaml config file to any directory you want, and declare the path when you run the ``airphin`` command:
