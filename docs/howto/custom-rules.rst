@@ -74,7 +74,7 @@ during the migration
       module:
         - action: replace
           src: custom.my_custom_operator.MyCustomOperator
-          dest: pydolphinschsduler.tasks.sql.Sql
+          dest: pydolphinscheduler.tasks.sql.Sql
       parameter:
         - action: replace
           src: task_id

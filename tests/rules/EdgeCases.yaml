@@ -12,7 +12,7 @@ test_cases:
           bash_command='task_id',
       )
     dest: |
-      from pydolphinschsduler.tasks.shell import Shell
+      from pydolphinscheduler.tasks.shell import Shell
 
       bash = Shell(
           name='bash_command',
@@ -40,7 +40,7 @@ test_cases:
           abc='def'
       )
     dest: |
-      from pydolphinschsduler.tasks.shell import Shell
+      from pydolphinscheduler.tasks.shell import Shell
 
       bash = Shell(
           name='dummy',

@@ -5,7 +5,7 @@ migration:
   module:
     - action: replace
       src: airflow.operators.python_operator.PythonOperator
-      dest: pydolphinschsduler.tasks.python.Python
+      dest: pydolphinscheduler.tasks.python.Python
   parameter:
     - action: replace
       src: task_id
@@ -28,7 +28,7 @@ examples:
           python_callable=foo,
       )
     dest: |
-      from pydolphinschsduler.tasks.python import Python
+      from pydolphinscheduler.tasks.python import Python
 
       def foo():
           print('Hello World!')
@@ -55,7 +55,7 @@ examples:
           python_callable=foo,
       )
     dest: |
-      from pydolphinschsduler.tasks.python import Python
+      from pydolphinscheduler.tasks.python import Python
 
       def bar():
           print('Hello World!')

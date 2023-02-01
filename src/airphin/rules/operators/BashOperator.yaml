@@ -7,7 +7,7 @@ migration:
       src:
         - airflow.operators.bash.BashOperator
         - airflow.operators.bash_operator.BashOperator
-      dest: pydolphinschsduler.tasks.shell.Shell
+      dest: pydolphinscheduler.tasks.shell.Shell
   parameter:
     - action: replace
       src: task_id
@@ -18,7 +18,7 @@ migration:
 
 examples:
   bash:
-    description: The example of converting `airflow.operators.bash.BashOperator` to `pydolphinschsduler.tasks.shell.Shell`.
+    description: The example of converting `airflow.operators.bash.BashOperator` to `pydolphinscheduler.tasks.shell.Shell`.
     src: |
       from airflow.operators.bash import BashOperator
 
@@ -27,14 +27,14 @@ examples:
           bash_command='echo "Hello World!"',
       )
     dest: |
-      from pydolphinschsduler.tasks.shell import Shell
+      from pydolphinscheduler.tasks.shell import Shell
 
       bash = Shell(
           name='bash',
           command='echo "Hello World!"',
       )
   bash_operator:
-    description: The example of converting `airflow.operators.bash_operator.BashOperator` to `pydolphinschsduler.tasks.shell.Shell`.
+    description: The example of converting `airflow.operators.bash_operator.BashOperator` to `pydolphinscheduler.tasks.shell.Shell`.
     src: |
       from airflow.operators.bash_operator import BashOperator
 
@@ -43,7 +43,7 @@ examples:
           bash_command='echo "Hello World!"',
       )
     dest: |
-      from pydolphinschsduler.tasks.shell import Shell
+      from pydolphinscheduler.tasks.shell import Shell
 
       bash = Shell(
           name='bash',
