@@ -21,13 +21,27 @@ under the License.
 
 [PyPI](https://pypi.org), Python Package Index, is a repository of software for the Python programming language.
 
-## Install or Upgrade package
+## Build Package
 
 We use [build](https://pypi.org/project/build/) to build package, and [twine](https://pypi.org/project/twine/) to
 upload package to PyPi. You could first install and upgrade them by:
 
 ```bash
+# Install or upgrade dependencies
 python3 -m pip install --upgrade pip build twine
+
+
+# Change version
+VERSION=<VERSION>  # The version of the package you want to release, e.g. 1.2.3
+# For macOS
+sed -i '' "s/__version__ = \".*\"/__version__ = \"${VERSION}\"/" src/airphin/__init__.py
+# For Linux
+sed -i "s/__version__ = \".*\"/__version__ = \"${VERSION}\"/" src/airphin/__init__.py
+
+git commit -am "Release v${VERSION}"
+
+# Build and sign according to the Apache requirements
+python setup.py clean && python3 -m build
 ```
 
 It is highly recommended [releasing package to TestPyPi](#release-to-testpypi) first, to check whether the
@@ -37,12 +51,8 @@ package is correct, and then [release to PyPi](#release-to-pypi).
 
 TestPyPi is a test environment of PyPi, you could release to it to test whether the package is work or not.
 
-1. Create an account in [TestPyPi](https://test.pypi.org/account/register/).
-2. Clean unrelated files in `dist` directory, and build package `python3 setup.py clean`.
-3. Build package `python3 -m build`, and you will see two new files in `dist` directory, with extension
-   `.tar.gz` and `.whl`.
-4. Upload to TestPyPi `python3 -m twine upload --repository testpypi dist/*`.
-5. Check the package in [TestPyPi](https://test.pypi.org/project/airphin/) and install it
+1. Upload to TestPyPi `python3 -m twine upload --repository testpypi dist/*`.
+2. Check the package in [TestPyPi](https://test.pypi.org/project/airphin/) and install it
    by `python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps airphin` to
    test whether it is work or not.
 
@@ -57,19 +67,17 @@ After you check the package in TestPyPi is correct, you can directly tag the com
 GitHub Actions will automatically release to PyPi based on the tag event. You can see more detail in [pypi-workflow.yml](.github/workflows/pypi.yaml).
 
 ```shell
-tag_val=0.0.1
-git tag -a "${tag_val}" -m "Release v${tag_val}"
-git push --tags
+# Add Tag
+VERSION=<VERSION>  # The version of the package you want to release, e.g. 1.2.3
+REMOTE=<REMOTE>  # The git remote name, we usually use `origin` or `remote`
+git tag -a "${VERSION}" -m "Release v${VERSION}"
+git push "${REMOTE}" --tags
 ```
 
 ### Manually
 
-1. Create an account in [PyPI](https://pypi.org/account/register/).
-2. Clean unrelated files in `dist` directory, and build package `python3 setup.py clean`.
-3. Build package `python3 -m build`, and you will see two new files in `dist` directory, with extension
-   `.tar.gz` and `.whl`.
-4. Upload to TestPyPi `python3 -m twine upload dist/*`.
-5. Check the package in [PyPi](https://pypi.org/project/airphin/) and install it
+1. Upload to TestPyPi `python3 -m twine upload dist/*`.
+2. Check the package in [PyPi](https://pypi.org/project/airphin/) and install it
    by `python3 -m pip install airphin` to install it.
 
 ## Ref
