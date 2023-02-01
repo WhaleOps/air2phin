@@ -30,7 +30,6 @@ upload package to PyPi. You could first install and upgrade them by:
 # Install or upgrade dependencies
 python3 -m pip install --upgrade pip build twine
 
-
 # Change version
 VERSION=<VERSION>  # The version of the package you want to release, e.g. 1.2.3
 # For macOS
