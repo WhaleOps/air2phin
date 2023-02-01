@@ -5,7 +5,7 @@ migration:
   module:
     - action: replace
       src: airflow.operators.dummy_operator.DummyOperator
-      dest: pydolphinschsduler.tasks.shell.Shell
+      dest: pydolphinscheduler.tasks.shell.Shell
   parameter:
     - action: replace
       src: task_id
@@ -19,7 +19,7 @@ migration:
 examples:
   dummy:
     description: |
-      The example of converting `airflow.operators.dummy_operator.DummyOperator`, we convert it to `pydolphinschsduler.tasks.shell.Shell`
+      The example of converting `airflow.operators.dummy_operator.DummyOperator`, we convert it to `pydolphinscheduler.tasks.shell.Shell`
       with default value :code:``echo 'Airflow DummyOperator'`` as command because DolphinScheduler do not have any task like dummy operator.
     src: |
       from airflow.operators.dummy_operator import DummyOperator
@@ -29,7 +29,7 @@ examples:
       )
     # TODO: We have some indentation issues when add new arguments
     dest: |
-      from pydolphinschsduler.tasks.shell import Shell
+      from pydolphinscheduler.tasks.shell import Shell
 
       bash = Shell(
           name='dummy',

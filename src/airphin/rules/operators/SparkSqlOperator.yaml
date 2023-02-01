@@ -5,7 +5,7 @@ migration:
   module:
     - action: replace
       src: airflow.operators.spark_sql_operator.SparkSqlOperator
-      dest: pydolphinschsduler.tasks.sql.Sql
+      dest: pydolphinscheduler.tasks.sql.Sql
   parameter:
     - action: replace
       src: task_id
@@ -28,7 +28,7 @@ examples:
           sql='select * from table',
       )
     dest: |
-      from pydolphinschsduler.tasks.sql import Sql
+      from pydolphinscheduler.tasks.sql import Sql
 
       bash = Sql(
           name='spark-sql',
@@ -48,7 +48,7 @@ examples:
           sql='test.sql',
       )
     dest: |
-      from pydolphinschsduler.tasks.sql import Sql
+      from pydolphinscheduler.tasks.sql import Sql
 
       bash = Sql(
           name='spark-sql',
