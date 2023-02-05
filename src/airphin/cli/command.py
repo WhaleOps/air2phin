@@ -126,10 +126,7 @@ def main(argv: Sequence[str] = None) -> None:
             if not path.exists():
                 raise ValueError("Path %s does not exist.", path)
 
-            if args.inplace:
-                config = Config(customs=customs_rules, inplace=True)
-            else:
-                config = Config(customs=customs_rules)
+            config = Config(customs=customs_rules, inplace=args.inplace)
             runner = Runner(config)
             if path.is_file():
                 runner.with_file(path)
