@@ -13,7 +13,6 @@ with DAG(
     schedule_interval=timedelta(days=1),
     start_date=datetime(2021, 1, 1),
 ) as dag:
-
     run_this = PythonOperator(
         task_id="print_the_context",
         python_callable=print_context,
