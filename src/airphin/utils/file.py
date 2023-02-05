@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import yaml
 
@@ -61,3 +61,18 @@ def add_stem_suffix(path: Path, suf: str) -> Path:
     stem, suffix = path.stem, path.suffix
     new_name = f"{stem}{suf}{suffix}"
     return path.with_name(new_name)
+
+
+def recurse_files(path: Path, pattern: Optional[str] = "**/*") -> List[Path]:
+    """Recurse all match pattern files in path.
+
+    :param path: file or directory path want to recurse.
+    :param pattern: pattern want to filter the path.
+    """
+    if not path.exists():
+        raise ValueError("Path %s does not exist.", path)
+
+    if path.is_file():
+        return [path]
+    else:
+        return list(path.glob(pattern))

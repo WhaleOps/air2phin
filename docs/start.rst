@@ -30,7 +30,7 @@ The CLI is the easiest way to use Airphin, we will take a quick look at the basi
     airphin --help
 
     # A simple migrate example base on stdin, and will show migrated result on stdout
-    # Can add option `--diff` to see the diff detail of this migrate
+    # Can add option argument `--diff` to see the diff detail of this migrate
     airphin test "from airflow.operators.bash import BashOperator
     
     test = BashOperator(

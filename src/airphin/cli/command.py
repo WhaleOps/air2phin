@@ -6,10 +6,11 @@ from pathlib import Path
 from typing import Dict, Sequence
 
 from airphin import __project_name__, __version__
-from airphin.constants import REGEXP
+from airphin.constants import REGEXP, TOKEN
 from airphin.core.rules.config import Config
 from airphin.core.rules.loader import build_in_rules, path_rule
 from airphin.runner import Runner
+from airphin.utils.file import recurse_files
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging.getLogger("airphin")
@@ -17,7 +18,7 @@ logger = logging.getLogger("airphin")
 common_args: Dict[str, Dict] = {
     "rules": {
         "help": f"The custom rule file path you want to add to {__project_name__}.",
-        "action": "store",
+        "action": "append",
         "type": Path,
     },
     "verbose": {
@@ -137,7 +138,16 @@ def main(argv: Sequence[str] = None) -> None:
         logger.setLevel(logging.DEBUG)
     logger.debug("Finish parse airphin arguments, current args is %s.", args)
 
-    customs_rules = [args.rules] if hasattr(args, "rules") and args.rules else []
+    # recurse all file in given path
+    customs_rules = []
+    if hasattr(args, "rules") and args.rules:
+        for rule in args.rules:
+            customs_rules.extend(recurse_files(rule))
+    if logger.level <= logging.DEBUG and customs_rules:
+        logger.debug(
+            "This migration have custom rules:\n%s",
+            TOKEN.NEW_LINE.join((f"  {r}" for r in customs_rules)),
+        )
 
     if args.subcommand == "test":
         stdin = args.stdin
@@ -162,14 +172,8 @@ def main(argv: Sequence[str] = None) -> None:
     if args.subcommand == "migrate":
         migrate_files = []
         for path in args.sources:
-            if not path.exists():
-                raise ValueError("Path %s does not exist.", path)
+            migrate_files.extend(recurse_files(path, args.filter))
 
-            if path.is_file():
-                migrate_files.append(path)
-            else:
-                for file in path.glob(args.filter):
-                    migrate_files.append(file)
         config = Config(customs=customs_rules, inplace=args.inplace)
         runner = Runner(config)
         runner.with_files(migrate_files)
