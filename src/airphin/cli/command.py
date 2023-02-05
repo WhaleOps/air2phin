@@ -1,5 +1,6 @@
 import argparse
 import difflib
+import logging
 import sys
 from pathlib import Path
 from typing import Sequence
@@ -9,6 +10,9 @@ from airphin.constants import REGEXP
 from airphin.core.rules.config import Config
 from airphin.core.rules.loader import build_in_rules, path_rule
 from airphin.runner import Runner
+
+logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+logger = logging.getLogger("airphin")
 
 
 def build_argparse() -> argparse.ArgumentParser:
@@ -39,6 +43,12 @@ def build_argparse() -> argparse.ArgumentParser:
         "test", help=f"Play with {__project_name__} convert with standard input."
     )
     parser_convert.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="Show more verbose output.",
+    )
+    parser_convert.add_argument(
         "-r",
         "--rules",
         help=f"The custom rule file path you want to add to {__project_name__}.",
@@ -60,6 +70,12 @@ def build_argparse() -> argparse.ArgumentParser:
 
     # Convert
     parser_convert = subparsers.add_parser("convert", help="Convert DAGs definition.")
+    parser_convert.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="Show more verbose output.",
+    )
     parser_convert.add_argument(
         "-r",
         "--rules",
@@ -101,6 +117,10 @@ def main(argv: Sequence[str] = None) -> None:
     # argv = ["rule", "--show"]
     args = parser.parse_args(argv)
 
+    if hasattr(args, "verbose") and args.verbose:
+        logger.setLevel(logging.DEBUG)
+    logger.debug("Finish parse airphin arguments, current args is %s.", args)
+
     customs_rules = [args.rules] if hasattr(args, "rules") and args.rules else []
 
     if args.subcommand == "test":
@@ -109,7 +129,8 @@ def main(argv: Sequence[str] = None) -> None:
         runner = Runner(config)
 
         result = runner.with_str(stdin)
-        print(f"\nConverted result is: \n\n{result}")
+        logger.debug("The source input is:\n%s", stdin)
+        logger.info(f"Converted result is: \n{result}")
 
         if args.diff:
             diff = difflib.unified_diff(
@@ -118,29 +139,29 @@ def main(argv: Sequence[str] = None) -> None:
                 fromfile="source",
                 tofile="dest",
             )
-            print(f"\nThe diff is: \n{''.join(diff)}")
+            logger.info(
+                f"The different between source and target is: \n{''.join(diff)}"
+            )
 
     if args.subcommand == "convert":
-        counter = 0
+        convert_files = []
         for path in args.sources:
             if not path.exists():
                 raise ValueError("Path %s does not exist.", path)
 
-            config = Config(customs=customs_rules, inplace=args.inplace)
-            runner = Runner(config)
             if path.is_file():
-                runner.with_file(path)
-                counter += 1
+                convert_files.append(path)
             else:
                 for file in path.glob(REGEXP.PATH_PYTHON):
-                    runner.with_file(file)
-                    counter += 1
-        print(f"Convert {counter} files done.")
+                    convert_files.append(file)
+        config = Config(customs=customs_rules, inplace=args.inplace)
+        runner = Runner(config)
+        runner.with_files(convert_files)
 
     if args.subcommand == "rule":
         if args.show:
             rules = build_in_rules()
-            print(f"Total {len(rules)} rules:\n")
+            logger.info(f"Total {len(rules)} rules:\n")
             for rule in rules:
                 print(rule.relative_to(path_rule))
 

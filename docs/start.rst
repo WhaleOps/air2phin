@@ -53,8 +53,8 @@ a existing Airflow DAG file, which can be done by :code:`airphin convert` comman
     # Run convert command
     airphin convert tutorial.py
 
-And the converted result will in the same directory with stem suffix :code:`-airphin`, in this case, it will
-be `tutorial-airphin.py` in current directory.
+And the converted result will in the same directory with stem suffix :code:`-airphin` (by default, also support
+:doc:`inplace migrate <howto/migrate-inplace>`), in this case, it will be `tutorial-airphin.py` in current directory.
 
 Multiple Files or Directories
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -72,8 +72,8 @@ airphin can not only convert one single file, but also works for multiple files 
     # Covert all *.py file Airflow DAG directory
     airphin convert ~/airflow/dags
 
-Same as `single file`_, the converted result in the same directory as source file, with stem suffix :code:`-airphin` to
-marked.
+Same as `single file`_, the converted result in the same directory as source file, with stem suffix :code:`-airphin`
+(by default, also support :doc:`inplace migrate <howto/migrate-inplace>`) to marked.
 
 If you want to deep dive into the CLI, please check the :doc:`cli` section. 
 

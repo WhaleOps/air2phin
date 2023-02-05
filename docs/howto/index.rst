@@ -7,3 +7,4 @@ Useful guides when you using airphin.
    :maxdepth: 2
 
    custom-rules
+   migrate-inplace

@@ -6,6 +6,7 @@ class TOKEN:
     POINT: str = "."
     STRING: str = "str"
     CODE: str = "code"
+    NEW_LINE: str = "\n"
 
 
 class KEYWORD:
