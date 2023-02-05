@@ -47,6 +47,7 @@ class Config:
     """Configurations of airphin, including all configs change behavior of airphin.
 
     :param customs: User custom path of rules, can overwrite build-in rules.
+    :param inplace: Replace source python file inplace instread of create a new file.
     :param imports: Build-in imports rules path.
     :param calls: Build-in call rules path.
     """
@@ -54,10 +55,12 @@ class Config:
     def __init__(
         self,
         customs: Optional[List[Path]] = None,
+        inplace: Optional[bool] = False,
         imports: Optional[List[Path]] = rule_imports,
         calls: Optional[List[Path]] = rule_calls,
     ):
         self._customs = customs
+        self.inplace = inplace
         self._imports = imports
         self._calls = calls
 

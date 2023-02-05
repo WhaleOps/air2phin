@@ -28,12 +28,19 @@ class Runner:
         return converted
 
     def with_file(self, path: Path) -> None:
-        """Run airphin with a single file path and create a new file with converted content.
+        """Run airphin with a single file path and convert to dolphinscheduler python sdk definition.
+
+        Will change file inplace when ``config.inplace = True``, and create new file end with ``-airphin``
+        when ``config.inplace = False``.
 
         :param path: Path of file you want to convert.
         """
         content = read(path)
         converted = self.with_str(content)
+
+        if self.config.inplace:
+            write(path, converted)
+            return
 
         new_path = add_stem_suffix(path, KEYWORD.CONVERT_MARK)
         write(new_path, converted)
