@@ -1,5 +1,5 @@
 name: DummyOperator
-description: The configuration for converting Airflow DummyOperator to DolphinScheduler Shell task.
+description: The configuration for migrating Airflow DummyOperator to DolphinScheduler Shell task.
 
 migration:
   module:
@@ -19,7 +19,7 @@ migration:
 examples:
   dummy:
     description: |
-      The example of converting `airflow.operators.dummy_operator.DummyOperator`, we convert it to `pydolphinscheduler.tasks.shell.Shell`
+      The example of migrating `airflow.operators.dummy_operator.DummyOperator`, we migrate it to `pydolphinscheduler.tasks.shell.Shell`
       with default value :code:``echo 'Airflow DummyOperator'`` as command because DolphinScheduler do not have any task like dummy operator.
     src: |
       from airflow.operators.dummy_operator import DummyOperator

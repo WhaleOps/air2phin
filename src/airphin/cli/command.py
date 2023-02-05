@@ -31,7 +31,7 @@ def build_argparse() -> argparse.ArgumentParser:
     """Build argparse.ArgumentParser with specific configuration."""
     parser = argparse.ArgumentParser(
         prog="airphin",
-        description="Airphin is a tool for converting Airflow DAGs to DolphinScheduler Python API.",
+        description="Airphin is a tool for migrating Airflow DAGs to DolphinScheduler Python API.",
     )
 
     # Version
@@ -51,45 +51,47 @@ def build_argparse() -> argparse.ArgumentParser:
     )
 
     # Test
-    parser_convert = subparsers.add_parser(
-        "test", help=f"Play with {__project_name__} convert with standard input."
+    parser_test = subparsers.add_parser(
+        "test", help=f"{__project_name__} playground for migrating with standard input."
     )
-    parser_convert.add_argument(
+    parser_test.add_argument(
         "-v",
         "--verbose",
         **common_args["verbose"],
     )
-    parser_convert.add_argument(
+    parser_test.add_argument(
         "-r",
         "--rules",
         **common_args["rules"],
     )
-    parser_convert.add_argument(
+    parser_test.add_argument(
         "-d",
         "--diff",
         action="store_true",
         help=f"Prints diff of all the changes {__project_name__} would make.",
     )
-    parser_convert.add_argument(
+    parser_test.add_argument(
         "stdin",
-        help="The standard input you want to convert.",
+        help="The standard input you want to migrate.",
         action="store",
         type=str,
     )
 
-    # Convert
-    parser_convert = subparsers.add_parser("convert", help="Convert DAGs definition.")
-    parser_convert.add_argument(
+    # migrate
+    parser_migrate = subparsers.add_parser(
+        "migrate", help="Migrate Airflow DAGs to DolphinScheduler Python definition."
+    )
+    parser_migrate.add_argument(
         "-v",
         "--verbose",
         **common_args["verbose"],
     )
-    parser_convert.add_argument(
+    parser_migrate.add_argument(
         "-r",
         "--rules",
         **common_args["rules"],
     )
-    parser_convert.add_argument(
+    parser_migrate.add_argument(
         "-f",
         "--filter",
         help=f"Filter files based on conditions provided, default '{REGEXP.PATH_PYTHON}'",
@@ -97,28 +99,28 @@ def build_argparse() -> argparse.ArgumentParser:
         default=REGEXP.PATH_PYTHON,
         type=str,
     )
-    parser_convert.add_argument(
+    parser_migrate.add_argument(
         "-i",
         "--inplace",
         help="Migrate python file in place instead of create a new file.",
         action="store_true",
     )
-    parser_convert.add_argument(
+    parser_migrate.add_argument(
         "sources",
         default=[Path(".")],
         nargs="*",
-        help="The directories or files paths you want to convert.",
+        help="The directories or files paths you want to migrate.",
         action="store",
         type=Path,
     )
 
     # Rule
-    parser_rule = subparsers.add_parser("rule", help="Rule of converting.")
+    parser_rule = subparsers.add_parser("rule", help="Rule of migrating.")
     parser_rule.add_argument(
         "-s",
         "--show",
         action="store_true",
-        help=f"Show all rules for {__project_name__} convert.",
+        help=f"Show all rules for {__project_name__} migrate.",
     )
 
     return parser
@@ -144,7 +146,7 @@ def main(argv: Sequence[str] = None) -> None:
 
         result = runner.with_str(stdin)
         logger.debug("The source input is:\n%s", stdin)
-        logger.info(f"Converted result is: \n{result}")
+        logger.info(f"Migrated result is: \n{result}")
 
         if args.diff:
             diff = difflib.unified_diff(
@@ -157,20 +159,20 @@ def main(argv: Sequence[str] = None) -> None:
                 f"The different between source and target is: \n{''.join(diff)}"
             )
 
-    if args.subcommand == "convert":
-        convert_files = []
+    if args.subcommand == "migrate":
+        migrate_files = []
         for path in args.sources:
             if not path.exists():
                 raise ValueError("Path %s does not exist.", path)
 
             if path.is_file():
-                convert_files.append(path)
+                migrate_files.append(path)
             else:
                 for file in path.glob(args.filter):
-                    convert_files.append(file)
+                    migrate_files.append(file)
         config = Config(customs=customs_rules, inplace=args.inplace)
         runner = Runner(config)
-        runner.with_files(convert_files)
+        runner.with_files(migrate_files)
 
     if args.subcommand == "rule":
         if args.show:

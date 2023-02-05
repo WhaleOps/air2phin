@@ -29,7 +29,7 @@ from airphin.core.transformer.operators import OpTransformer
 class Transformer(cst.CSTTransformer):
     """CST Transformer route class from airflow to dolphinscheduler-sdk-python.
 
-    The main class to call each rules to convert, just like a router, currently will route to `imports` and
+    The main class to call each rules to migrate, just like a router, currently will route to `imports` and
     `operators` transformer.
     """
 
@@ -77,5 +77,5 @@ class Transformer(cst.CSTTransformer):
     ) -> Union[
         cst.BaseSmallStatement, FlattenSentinel[cst.BaseSmallStatement], RemovalSentinel
     ]:
-        """Convert from import statement."""
+        """Migrate from import statement."""
         return updated_node.visit(ImportTransformer(self.config))

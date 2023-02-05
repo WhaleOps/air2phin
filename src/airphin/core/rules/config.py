@@ -74,8 +74,8 @@ class Config:
 
     @property
     def imports(self) -> Dict[str, ImportConfig]:
-        """Get all import convertor from rules."""
-        return self.imp_convertor()
+        """Get all import migrator from rules."""
+        return self.imp_migrator()
 
     @property
     def calls_path(self) -> List[Path]:
@@ -87,8 +87,8 @@ class Config:
 
     @property
     def calls(self) -> Dict[str, CallConfig]:
-        """Get all call convertor from rules."""
-        return self.call_convertor()
+        """Get all call migrator from rules."""
+        return self.call_migrator()
 
     @staticmethod
     def _build_caller(
@@ -148,9 +148,9 @@ class Config:
             raise ValueError("Each type of action can only have one.")
         return actions[0] if actions else None
 
-    def call_convertor(self) -> Dict[str, CallConfig]:
-        """Get all call convertor from rules."""
-        convertor = {}
+    def call_migrator(self) -> Dict[str, CallConfig]:
+        """Get all call migrator from rules."""
+        migrator = {}
 
         for content in self._handle_rules_path(*self.calls_path):
             migration = content[CONFIG.MIGRATION]
@@ -160,15 +160,15 @@ class Config:
             dest = replace[CONFIG.DESTINATION]
 
             if isinstance(src, str):
-                convertor[src] = self._build_caller(src, dest, parameters)
+                migrator[src] = self._build_caller(src, dest, parameters)
             elif isinstance(src, list):
                 for inner_src in src:
-                    convertor[inner_src] = self._build_caller(
+                    migrator[inner_src] = self._build_caller(
                         inner_src, dest, parameters
                     )
             else:
                 raise RuntimeError("Invalid migration.module.src type: %s" % type(src))
-        return convertor
+        return migrator
 
     # TODO: make it can use in any number module import statemant
     @staticmethod
@@ -206,8 +206,8 @@ class Config:
                 "Invalid migration.module.action.module type: %s" % type(module)
             )
 
-    def imp_convertor(self) -> Dict[str, ImportConfig]:
-        """Get all import convertor from rules."""
+    def imp_migrator(self) -> Dict[str, ImportConfig]:
+        """Get all import migrator from rules."""
         imps = {}
 
         for content in self._handle_rules_path(*self.imports_path):

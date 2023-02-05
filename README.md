@@ -11,7 +11,7 @@
 [![CI](https://github.com/WhaleOps/airphin/actions/workflows/ci.yaml/badge.svg)](https://github.com/WhaleOps/airphin/actions/workflows/ci.yaml)
 [![Documentation Status](https://readthedocs.org/projects/airphin/badge/?version=latest)](https://airphin.readthedocs.io/en/latest/?badge=latest)
 
-Airphin is a tool for converting Airflow DAGs to DolphinScheduler Python API.
+Airphin is a tool for migrating Airflow DAGs to DolphinScheduler Python API.
 
 ## Installation
 
@@ -24,11 +24,11 @@ python -m pip install --upgrade airphin
 
 ## Quick Start
 
-Here will give a quick example to show how to convert base on standard input.
+Here will give a quick example to show how to migrate base on standard input.
 
 ```shell
-# Quick test the convert rule for standard input
-# Can also add option `--diff` to see the diff detail of this convert
+# Quick test the migrate rule for standard input
+# Can also add option `--diff` to see the diff detail of this migrate
 airphin test "from airflow.operators.bash import BashOperator
 
 test = BashOperator(
@@ -38,8 +38,8 @@ test = BashOperator(
 "
 ```
 
-And you will see the converted result in the standard output. Airphin can only convert standard input, it can
-also convert file, directory and even can use in your python code. For more detail, please see [our usage](https://airphin.readthedocs.io/en/latest/start.html#usage).
+And you will see the migrated result in the standard output. Airphin can only migrate standard input, it can
+also migrate file, directory and even can use in your python code. For more detail, please see [our usage](https://airphin.readthedocs.io/en/latest/start.html#usage).
 
 ## Documentation
 
@@ -47,42 +47,42 @@ The documentation host on read the doc and is available at [https://airphin.read
 
 ## Support Statement
 
-For now, we support following conversion from Airflow's DAG files
+For now, we support following statement from Airflow's DAG files
 
 ### DAG
 
-| Before Conversion | After Conversion |
-| ----- | ----- |
-| `from airflow import DAG` | `from pydolphinscheduler.core.process_definition import ProcessDefinition` |
-| `with DAG(...) as dag: pass` | `with ProcessDefinition(...) as dag: pass` |
+| Before Migration             | After Migration                                                            |
+|------------------------------|----------------------------------------------------------------------------|
+| `from airflow import DAG`    | `from pydolphinscheduler.core.process_definition import ProcessDefinition` |
+| `with DAG(...) as dag: pass` | `with ProcessDefinition(...) as dag: pass`                                 |
 
 ### Operators
 
 #### Dummy Operator
 
-| Before Conversion | After Conversion |
-| ----- | ----- |
-| `from airflow.operators.dummy_operator import DummyOperator` | `from pydolphinscheduler.tasks.shell import Shell` |
-| `from airflow.operators.dummy import DummyOperator` | `from pydolphinscheduler.tasks.shell import Shell` |
-| `dummy = DummyOperator(...)` | `dummy = Shell(..., command="echo 'airflow dummy operator'")` |
+| Before Migration                                             | After Migration                                               |
+|--------------------------------------------------------------|---------------------------------------------------------------|
+| `from airflow.operators.dummy_operator import DummyOperator` | `from pydolphinscheduler.tasks.shell import Shell`            |
+| `from airflow.operators.dummy import DummyOperator`          | `from pydolphinscheduler.tasks.shell import Shell`            |
+| `dummy = DummyOperator(...)`                                 | `dummy = Shell(..., command="echo 'airflow dummy operator'")` |
 
 #### Shell Operator
 
-| Before Conversion | After Conversion |
-| ----- | ----- |
+| Before Migration                                  | After Migration                                    |
+|---------------------------------------------------|----------------------------------------------------|
 | `from airflow.operators.bash import BashOperator` | `from pydolphinscheduler.tasks.shell import Shell` |
-| `bash = BashOperator(...)` | `bash = Shell(...)` |
+| `bash = BashOperator(...)`                        | `bash = Shell(...)`                                |
 
 #### Spark Sql Operator
 
-| Before Conversion | After Conversion |
-| ----- | ----- |
+| Before Migration                                                    | After Migration                                |
+|---------------------------------------------------------------------|------------------------------------------------|
 | `from airflow.operators.spark_sql_operator import SparkSqlOperator` | `from pydolphinscheduler.tasks.sql import Sql` |
-| `spark = SparkSqlOperator(...)` | `spark = Sql(...)` |
+| `spark = SparkSqlOperator(...)`                                     | `spark = Sql(...)`                             |
 
 #### Python Operator
 
-| Before Conversion                                              | After Conversion                                     |
+| Before Migration                                               | After Migration                                      |
 |----------------------------------------------------------------|------------------------------------------------------|
 | `from airflow.operators.python_operator import PythonOperator` | `from pydolphinscheduler.tasks.python import Python` |
 | `python = PythonOperator(...)`                                 | `python = Python(...)`                               |

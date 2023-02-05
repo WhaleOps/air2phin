@@ -1,5 +1,5 @@
 name: BashOperator
-description: The configuration for converting Airflow BashOperator to DolphinScheduler Shell task.
+description: The configuration for migrating Airflow BashOperator to DolphinScheduler Shell task.
 
 migration:
   module:
@@ -18,7 +18,7 @@ migration:
 
 examples:
   bash:
-    description: The example of converting `airflow.operators.bash.BashOperator` to `pydolphinscheduler.tasks.shell.Shell`.
+    description: The example of migrating `airflow.operators.bash.BashOperator` to `pydolphinscheduler.tasks.shell.Shell`.
     src: |
       from airflow.operators.bash import BashOperator
 
@@ -34,7 +34,7 @@ examples:
           command='echo "Hello World!"',
       )
   bash_operator:
-    description: The example of converting `airflow.operators.bash_operator.BashOperator` to `pydolphinscheduler.tasks.shell.Shell`.
+    description: The example of migrating `airflow.operators.bash_operator.BashOperator` to `pydolphinscheduler.tasks.shell.Shell`.
     src: |
       from airflow.operators.bash_operator import BashOperator
 

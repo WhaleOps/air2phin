@@ -12,7 +12,7 @@ class TOKEN:
 class KEYWORD:
     """Constants keywords for airphin."""
 
-    CONVERT_MARK: str = "-airphin"
+    MIGRATE_MARK: str = "-airphin"
 
 
 class REGEXP:

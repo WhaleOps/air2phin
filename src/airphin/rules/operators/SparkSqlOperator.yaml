@@ -1,5 +1,5 @@
 name: PythonOperator
-description: The configuration for converting Airflow SparkSqlOperator to DolphinScheduler SQL task.
+description: The configuration for migrating Airflow SparkSqlOperator to DolphinScheduler SQL task.
 
 migration:
   module:
@@ -17,7 +17,7 @@ migration:
 examples:
   bare_sql:
     description: |
-      The example of converting `airflow.operators.spark_sql_operator.SparkSqlOperator` with bare sql statement
+      The example of migrating `airflow.operators.spark_sql_operator.SparkSqlOperator` with bare sql statement
       as parameter ``sql``.
     src: |
       from airflow.operators.spark_sql_operator import SparkSqlOperator
@@ -37,7 +37,7 @@ examples:
       )
   sql_file:
     description: |
-      The example of converting `airflow.operators.spark_sql_operator.SparkSqlOperator` with sql file as
+      The example of migrating `airflow.operators.spark_sql_operator.SparkSqlOperator` with sql file as
       parameter ``sql``.
     src: |
       from airflow.operators.spark_sql_operator import SparkSqlOperator

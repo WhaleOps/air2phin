@@ -1,5 +1,5 @@
 name: DAG-Context
-description: The configuration for converting airflow.DAG context to pydolphinscheduler workflow context.
+description: The configuration for migrating airflow.DAG context to pydolphinscheduler workflow context.
 
 migration:
   module:
@@ -20,7 +20,7 @@ migration:
 examples:
   assign:
     description: |
-      The example of converting `airflow.DAG` declaration with assigned.
+      The example of migrating `airflow.DAG` declaration with assigned.
     src: |
       from airflow import DAG
       from datetime import datetime
@@ -43,7 +43,7 @@ examples:
       )
   context:
     description: |
-      The example of converting `airflow.DAG` in context mode.
+      The example of migrating `airflow.DAG` in context mode.
     src: |
       from airflow import DAG
       from datetime import datetime

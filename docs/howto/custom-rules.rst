@@ -68,7 +68,7 @@ during the migration
 .. code-block:: yaml
 
     name: MyCustomOperator
-    description: The configuration for converting airflow custom operator MyCustomOperator to DolphinScheduler SQL task.
+    description: The configuration for migrating airflow custom operator MyCustomOperator to DolphinScheduler SQL task.
     
     migration:
       module:
@@ -87,7 +87,7 @@ Save the yaml config file to any directory you want, and declare the path when y
 
 .. code-block:: bash
 
-    airphin convert --rules /path/to/MyCustomOperator.yaml ~/airflow/dags/dag.py
+    airphin migrate --rules /path/to/MyCustomOperator.yaml ~/airflow/dags/dag.py
 
 And you can see the new DAG file directory ``~/airflow/dags`` named ``dag-airphin.py`` is created which is the
-converted result of ``dag.py``.
+migrated result of ``dag.py``.
