@@ -6,7 +6,7 @@
 Airphin's Documentation
 =======================
 
-Airphin is a tool for converting Airflow DAGs to DolphinScheduler Python API.
+Airphin is a tool for migrating Airflow DAGs to DolphinScheduler Python API.
 
 It is a rule based AST transformer, using `LibCST <https://github.com/Instagram/LibCST>`_ to parse and transform Python code,
 and Yaml file to define the transformation rules.

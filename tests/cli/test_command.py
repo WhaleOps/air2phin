@@ -9,16 +9,16 @@ from airphin.cli.command import build_argparse
     "argv, expect",
     [
         (
-            ["convert", "file"],
+            ["migrate", "file"],
             {
-                "subcommand": "convert",
+                "subcommand": "migrate",
                 "inplace": False,
             },
         ),
         (
-            ["convert", "--inplace", "file"],
+            ["migrate", "--inplace", "file"],
             {
-                "subcommand": "convert",
+                "subcommand": "migrate",
                 "inplace": True,
             },
         ),

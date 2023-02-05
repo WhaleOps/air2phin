@@ -1,5 +1,5 @@
 name: PythonOperator
-description: The configuration for converting Airflow PythonOperator to DolphinScheduler Python task.
+description: The configuration for migrating Airflow PythonOperator to DolphinScheduler Python task.
 
 migration:
   module:
@@ -16,7 +16,7 @@ migration:
 
 examples:
   python_operator:
-    description: The example of converting `airflow.operators.python_operator.PythonOperator`.
+    description: The example of migrating `airflow.operators.python_operator.PythonOperator`.
     src: |
       from airflow.operators.python_operator import PythonOperator
 
@@ -39,7 +39,7 @@ examples:
       )
   nested_python:
     description: |
-      The example of converting `airflow.operators.python_operator.PythonOperator` with nested function in
+      The example of migrating `airflow.operators.python_operator.PythonOperator` with nested function in
       `python_callable`.
     src: |
       from airflow.operators.python_operator import PythonOperator

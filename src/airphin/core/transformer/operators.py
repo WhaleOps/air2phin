@@ -23,7 +23,7 @@ class OpTransformer(cst.CSTTransformer):
         self.qualified_name = qualified_name
         assert self.qualified_name is not None
         self.visit_name = False
-        self.converted_param = set()
+        self.migrated_param = set()
 
     @property
     def config(self) -> CallConfig:
@@ -36,10 +36,10 @@ class OpTransformer(cst.CSTTransformer):
         return False
 
     def match_replace_name(self, node: cst.Arg) -> bool:
-        convert_names = self.config.replace.keys()
+        migrate_names = self.config.replace.keys()
         return m.matches(
             node,
-            m.Arg(keyword=m.Name(m.MatchIfTrue(lambda name: name in convert_names))),
+            m.Arg(keyword=m.Name(m.MatchIfTrue(lambda name: name in migrate_names))),
         )
 
     def match_remove_name(self, node: cst.Arg) -> bool:
@@ -65,7 +65,7 @@ class OpTransformer(cst.CSTTransformer):
             original_keyword = original_node.keyword.value
             dest_keyword = self.config.replace.get(original_keyword)
 
-            self.converted_param.add(dest_keyword)
+            self.migrated_param.add(dest_keyword)
             return updated_node.with_changes(keyword=cst.Name(value=dest_keyword))
         if self.match_remove_name(original_node):
             return cst.RemoveFromParent()
