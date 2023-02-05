@@ -4,7 +4,9 @@ description: The configuration for migrating Airflow PythonOperator to DolphinSc
 migration:
   module:
     - action: replace
-      src: airflow.operators.python_operator.PythonOperator
+      src:
+        - airflow.operators.python_operator.PythonOperator
+        - airflow.operators.python.PythonOperator
       dest: pydolphinscheduler.tasks.python.Python
   parameter:
     - action: replace
