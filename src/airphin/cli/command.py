@@ -90,6 +90,14 @@ def build_argparse() -> argparse.ArgumentParser:
         **common_args["rules"],
     )
     parser_convert.add_argument(
+        "-f",
+        "--filter",
+        help=f"Filter files based on conditions provided, default '{REGEXP.PATH_PYTHON}'",
+        action="store",
+        default=REGEXP.PATH_PYTHON,
+        type=str,
+    )
+    parser_convert.add_argument(
         "-i",
         "--inplace",
         help="Migrate python file in place instead of create a new file.",
@@ -158,7 +166,7 @@ def main(argv: Sequence[str] = None) -> None:
             if path.is_file():
                 convert_files.append(path)
             else:
-                for file in path.glob(REGEXP.PATH_PYTHON):
+                for file in path.glob(args.filter):
                     convert_files.append(file)
         config = Config(customs=customs_rules, inplace=args.inplace)
         runner = Runner(config)

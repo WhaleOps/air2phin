@@ -8,3 +8,4 @@ Useful guides when you using airphin.
 
    custom-rules
    migrate-inplace
+   filter
