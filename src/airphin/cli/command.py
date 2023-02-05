@@ -68,6 +68,12 @@ def build_argparse() -> argparse.ArgumentParser:
         type=Path,
     )
     parser_convert.add_argument(
+        "-i",
+        "--inplace",
+        help="Migrate python file in place instead of create a new file.",
+        action="store_true",
+    )
+    parser_convert.add_argument(
         "sources",
         default=[Path(".")],
         nargs="*",
@@ -92,10 +98,10 @@ def main(argv: Sequence[str] = None) -> None:
     """Run airphin in command line."""
     parser = build_argparse()
     argv = argv if argv is not None else sys.argv[1:]
-    # args = parser.parse_args(["rule", "--show"])
+    # argv = ["rule", "--show"]
     args = parser.parse_args(argv)
 
-    customs_rules = [args.rules] if args.rules else []
+    customs_rules = [args.rules] if hasattr(args, "rules") and args.rules else []
 
     if args.subcommand == "test":
         stdin = args.stdin
@@ -120,7 +126,7 @@ def main(argv: Sequence[str] = None) -> None:
             if not path.exists():
                 raise ValueError("Path %s does not exist.", path)
 
-            config = Config(customs=customs_rules)
+            config = Config(customs=customs_rules, inplace=args.inplace)
             runner = Runner(config)
             if path.is_file():
                 runner.with_file(path)

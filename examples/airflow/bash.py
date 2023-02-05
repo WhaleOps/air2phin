@@ -12,7 +12,6 @@ with DAG(
     schedule_interval=timedelta(days=1),
     start_date=datetime(2021, 1, 1),
 ) as dag:
-
     run_this = BashOperator(
         task_id="print_date",
         bash_command="date",
