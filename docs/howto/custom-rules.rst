@@ -1,6 +1,9 @@
 Custom Rules
 ============
 
+Create Custom Rule
+------------------
+
 Sometime, you need to add some custom rules to your migration. For example, you have some custom airflow operators
 base on the existing ``PostgresOperator`` and you want to migrate them to dolphinscheduler. The custom operator
 definition is like this:
@@ -83,6 +86,9 @@ during the migration
           src: my_custom_conn_id
           dest: datasource_name
 
+Use Custom Rule
+---------------
+
 Save the yaml config file to any directory you want, and declare the path when you run the ``airphin`` command:
 
 .. code-block:: bash
@@ -91,3 +97,40 @@ Save the yaml config file to any directory you want, and declare the path when y
 
 And you can see the new DAG file directory ``~/airflow/dags`` named ``dag-airphin.py`` is created which is the
 migrated result of ``dag.py``.
+
+Use Multiple Custom Rules
+-------------------------
+
+Airphin also support using multiple custom rules in single migration, and have directory and scatter files due
+to different files organized.
+
+In Single File and Directory
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When all custom rules is in one single file or directory, use single option argument :code:`--rules` or :code:`-r`
+can use them
+
+.. code-block:: bash
+
+    # single file
+    airphin migrate --rules /path/to/MyCustomOperator.yaml ~/airflow/dags/dag.py
+
+    # single directory
+    airphin migrate --rules /path/to/rules/dir ~/airflow/dags/dag.py
+
+In Scatter Files or Directories
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Sometime, our rules will in the different places, and airphin support use option argument :code:`--rules` or :code:`-r`
+multiple time in one single migration
+
+.. code-block:: bash
+
+    # multiple files
+    airphin migrate --rules /path/to/MyCustomOperator1.yaml --rules /path/to/MyCustomOperator2.yaml ~/airflow/dags/dag.py
+
+    # multiple directories
+    airphin migrate --rules /path/to/rules/dir1 --rules /path/to/rules/dir2 ~/airflow/dags/dag.py
+
+    # multiple mixed files and directories
+    airphin migrate --rules /path/to/MyCustomOperator1.yaml --rules /path/to/rules/dir1 ~/airflow/dags/dag.py
