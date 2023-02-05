@@ -41,11 +41,11 @@ class Runner:
 
         :param path: Path of file you want to migrate.
         """
+        logger.debug("Start migrate file %s", path)
+        start = timer()
         content = read(path)
         migrated = self.with_str(content)
 
-        logger.debug("Start migrate file %s", path)
-        start = timer()
         if self.config.inplace:
             write(path, migrated)
         else:
