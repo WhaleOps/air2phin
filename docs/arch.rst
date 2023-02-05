@@ -16,4 +16,4 @@ And the steps of the transformation are:
 - Load all the rules from the Yaml file.
 - Parse the source content into an LibCST.
 - Transform the CST tree based on the rules.
-- Provide the result to original file path with :code:`-airphin` as stem suffix or stdout.
+- Provide the result to original file path with :code:`-airphin` as stem suffix(by default, also support :doc:`inplace migrate <howto/migrate-inplace>`) or stdout.
