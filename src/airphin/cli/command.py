@@ -3,7 +3,7 @@ import difflib
 import logging
 import sys
 from pathlib import Path
-from typing import Sequence
+from typing import Dict, Sequence
 
 from airphin import __project_name__, __version__
 from airphin.constants import REGEXP
@@ -13,6 +13,18 @@ from airphin.runner import Runner
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging.getLogger("airphin")
+
+common_args: Dict[str, Dict] = {
+    "rules": {
+        "help": f"The custom rule file path you want to add to {__project_name__}.",
+        "action": "store",
+        "type": Path,
+    },
+    "verbose": {
+        "action": "store_true",
+        "help": "Show more verbose output.",
+    },
+}
 
 
 def build_argparse() -> argparse.ArgumentParser:
@@ -45,15 +57,12 @@ def build_argparse() -> argparse.ArgumentParser:
     parser_convert.add_argument(
         "-v",
         "--verbose",
-        action="store_true",
-        help="Show more verbose output.",
+        **common_args["verbose"],
     )
     parser_convert.add_argument(
         "-r",
         "--rules",
-        help=f"The custom rule file path you want to add to {__project_name__}.",
-        action="store",
-        type=Path,
+        **common_args["rules"],
     )
     parser_convert.add_argument(
         "-d",
@@ -73,15 +82,12 @@ def build_argparse() -> argparse.ArgumentParser:
     parser_convert.add_argument(
         "-v",
         "--verbose",
-        action="store_true",
-        help="Show more verbose output.",
+        **common_args["verbose"],
     )
     parser_convert.add_argument(
         "-r",
         "--rules",
-        help=f"The custom rule file path you want to add to {__project_name__}.",
-        action="store",
-        type=Path,
+        **common_args["rules"],
     )
     parser_convert.add_argument(
         "-i",
