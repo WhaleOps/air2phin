@@ -41,7 +41,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 # extensions for sphinx_github_changelog, token from Jay Chung with None permission scope. have to encode it
 # due to github will delete token string if it finds in any commit
-token_encode = b"Z2hwXzlhczh1ZG1zYTcxbFpPODZZelQzRTVJZHpLYjNDRzBvZzNEUQ=="
+token_encode = b"Z2hwX294Mlh0VEpSdUZMWGxuNUVzdlE5YXI3N2dWdUt5dzJxYlN2RQ=="
 sphinx_github_changelog_token = base64.b64decode(token_encode).decode()
 
 # -- Options for HTML output -------------------------------------------------
