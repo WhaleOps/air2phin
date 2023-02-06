@@ -126,7 +126,7 @@ class Config:
                 content: Dict = read_yaml(arg)
                 yield content
             if arg.is_dir():
-                contents: List[Dict] = read_multi_yaml(arg.glob(REGEXP.PATH_YAML))
+                contents: List[Dict] = read_multi_yaml(arg.rglob(REGEXP.PATH_YAML))
                 for content in contents:
                     yield content
 
