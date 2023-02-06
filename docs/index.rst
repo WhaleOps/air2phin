@@ -19,6 +19,7 @@ and Yaml file to define the transformation rules.
    cli
    howto/index
    arch
+   changelog
 
 Indices and tables
 ==================

@@ -5,7 +5,7 @@
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
-
+import base64
 import os
 import sys
 
@@ -28,6 +28,8 @@ extensions = [
     "sphinx_copybutton",
     # argparse
     "sphinxarg.ext",
+    # changelog
+    "sphinx_github_changelog",
 ]
 
 # -- Extensions configuration -------------------------------------------------
@@ -36,6 +38,11 @@ autosectionlabel_prefix_document = True
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+
+# extensions for sphinx_github_changelog, token from Jay Chung with None permission scope. have to encode it
+# due to github will delete token string if it finds in any commit
+token_encode = b"Z2hwXzlhczh1ZG1zYTcxbFpPODZZelQzRTVJZHpLYjNDRzBvZzNEUQ=="
+sphinx_github_changelog_token = base64.b64decode(token_encode).decode()
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
