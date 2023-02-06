@@ -107,6 +107,13 @@ def build_argparse() -> argparse.ArgumentParser:
         action="store_true",
     )
     parser_migrate.add_argument(
+        "-m",
+        "--multiprocess",
+        help="Migrate python files with multiprocess.",
+        action="store",
+        type=int,
+    )
+    parser_migrate.add_argument(
         "sources",
         default=[Path(".")],
         nargs="*",
@@ -176,7 +183,11 @@ def main(argv: Sequence[str] = None) -> None:
 
         config = Config(customs=customs_rules, inplace=args.inplace)
         runner = Runner(config)
-        runner.with_files(migrate_files)
+
+        if args.multiprocess:
+            runner.with_files_multiprocess(migrate_files, args.multiprocess)
+        else:
+            runner.with_files(migrate_files)
 
     if args.subcommand == "rule":
         if args.show:
