@@ -63,13 +63,13 @@ airphin can not only migrate one single file, but also works for multiple files 
 
 .. code-block:: bash
 
-    # Covert multiple files
+    # Migrate multiple files
     airphin migrate /PATH/TO/FILE1.py /PATH/TO/FILE2.py
 
-    # Covert all *.py file in directory
+    # Migrate all *.py file in directory
     airphin migrate <DIRECTORY>
     
-    # Covert all *.py file Airflow DAG directory
+    # Migrate all *.py file Airflow DAG directory
     airphin migrate ~/airflow/dags
 
 Same as `single file`_, the migrated result in the same directory as source file, with stem suffix :code:`-airphin`

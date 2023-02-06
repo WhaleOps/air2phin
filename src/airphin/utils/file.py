@@ -3,6 +3,8 @@ from typing import Any, Dict, List, Optional
 
 import yaml
 
+from airphin.constants import REGEXP
+
 
 def read(path: Path) -> str:
     """Read content from path.
@@ -63,11 +65,14 @@ def add_stem_suffix(path: Path, suf: str) -> Path:
     return path.with_name(new_name)
 
 
-def recurse_files(path: Path, pattern: Optional[str] = "**/*") -> List[Path]:
+def recurse_files(
+    path: Path, include: Optional[str] = REGEXP.ALL, exclude: Optional[str] = None
+) -> List[Path]:
     """Recurse all match pattern files in path.
 
     :param path: file or directory path want to recurse.
-    :param pattern: pattern want to filter the path.
+    :param include: include match pattern in given path, default include all file in directory.
+    :param exclude: include match pattern in given path, default None.
     """
     if not path.exists():
         raise ValueError("Path %s does not exist.", path)
@@ -75,4 +80,7 @@ def recurse_files(path: Path, pattern: Optional[str] = "**/*") -> List[Path]:
     if path.is_file():
         return [path]
     else:
-        return list(path.glob(pattern))
+        paths = set(path.rglob(include))
+        if exclude:
+            paths = paths - set(path.rglob(exclude))
+        return [file for file in paths if file.is_file()]

@@ -93,11 +93,18 @@ def build_argparse() -> argparse.ArgumentParser:
         **common_args["rules"],
     )
     parser_migrate.add_argument(
-        "-f",
-        "--filter",
-        help=f"Filter files based on conditions provided, default '{REGEXP.PATH_PYTHON}'",
+        "-I",
+        "--include",
+        help=f"Include files based on conditions provided, default '{REGEXP.PATH_PYTHON}'",
         action="store",
         default=REGEXP.PATH_PYTHON,
+        type=str,
+    )
+    parser_migrate.add_argument(
+        "-E",
+        "--exclude",
+        help="Exclude files based on conditions provided, without default value",
+        action="store",
         type=str,
     )
     parser_migrate.add_argument(
@@ -179,7 +186,7 @@ def main(argv: Sequence[str] = None) -> None:
     if args.subcommand == "migrate":
         migrate_files = []
         for path in args.sources:
-            migrate_files.extend(recurse_files(path, args.filter))
+            migrate_files.extend(recurse_files(path, args.include, args.exclude))
 
         config = Config(customs=customs_rules, inplace=args.inplace)
         runner = Runner(config)

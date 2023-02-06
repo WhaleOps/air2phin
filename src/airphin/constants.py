@@ -18,8 +18,9 @@ class KEYWORD:
 class REGEXP:
     """Constants regular expression for airphin."""
 
-    PATH_YAML: str = "**/*.yaml"
-    PATH_PYTHON: str = "**/*.py"
+    PATH_YAML: str = "*.yaml"
+    PATH_PYTHON: str = "*.py"
+    ALL: str = "**/*"
 
 
 class CONFIG:
