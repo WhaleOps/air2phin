@@ -1,7 +1,9 @@
 import logging
+import multiprocessing
+from multiprocessing import Pool
 from pathlib import Path
 from timeit import default_timer as timer
-from typing import List
+from typing import List, Optional
 
 import libcst as cst
 from tqdm import tqdm
@@ -64,9 +66,41 @@ class Runner:
             "Start migrate files, files contain:\n%s",
             TOKEN.NEW_LINE.join((f"  {p}" for p in paths)),
         )
+
         start = timer()
         for file in tqdm(paths):
             self.with_file(file)
+
+        logger.info(
+            f"Total migrated {len(paths)} files, spend time: %.5fs.", timer() - start
+        )
+
+    def with_files_multiprocess(
+        self, paths: List[Path], processes: Optional[int] = multiprocessing.cpu_count()
+    ) -> None:
+        """Run airphin migrating with multiprocess.
+
+        :param paths: Path of file you want to migrate.
+        :param processes: multiprocess processes cpu count number.
+        """
+        logger.info(
+            "Start multiple processing migrate files, total %d files scan.", len(paths)
+        )
+        logger.debug(
+            "Start migrate files with processes number %d, files contain:\n%s",
+            processes,
+            TOKEN.NEW_LINE.join((f"  {p}" for p in paths)),
+        )
+
+        start = timer()
+        with Pool(processes) as pool:
+            list(tqdm(pool.imap(self.with_file, paths), total=len(paths)))
+
+        logger.debug(
+            "All files had add to multiprocess pool, spend time %.5fs.", timer() - start
+        )
+        pool.join()
+
         logger.info(
             f"Total migrated {len(paths)} files, spend time: %.5fs.", timer() - start
         )
