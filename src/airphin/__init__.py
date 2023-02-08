@@ -16,4 +16,4 @@
 # under the License.
 
 __project_name__ = "Airphin"
-__version__ = "1.0.0-dev"
+__version__ = "0.0.10"
