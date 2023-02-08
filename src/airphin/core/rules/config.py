@@ -1,4 +1,3 @@
-import logging
 import warnings
 from pathlib import Path
 from typing import Any, Dict, List, NamedTuple, Optional
@@ -6,8 +5,6 @@ from typing import Any, Dict, List, NamedTuple, Optional
 from airphin.constants import CONFIG, REGEXP, TOKEN
 from airphin.core.rules.loader import rule_calls, rule_imports
 from airphin.utils.file import read_multi_yaml, read_yaml
-
-logger = logging.getLogger("airphin.config")
 
 
 class ParamDefaultConfig(NamedTuple):
