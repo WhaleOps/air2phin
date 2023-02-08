@@ -16,10 +16,15 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging.getLogger("airphin")
 
 common_args: Dict[str, Dict] = {
-    "rules": {
+    "custom_rules": {
         "help": f"The custom rule file path you want to add to {__project_name__}.",
         "action": "append",
         "type": Path,
+    },
+    "custom_only": {
+        "help": "Only use custom rules and ignore all built-in's, it is helpful for patching the"
+        "exists migration.",
+        "action": "store_true",
     },
     "verbose": {
         "action": "store_true",
@@ -62,8 +67,13 @@ def build_argparse() -> argparse.ArgumentParser:
     )
     parser_test.add_argument(
         "-r",
-        "--rules",
-        **common_args["rules"],
+        "--custom-rules",
+        **common_args["custom_rules"],
+    )
+    parser_test.add_argument(
+        "-R",
+        "--custom-only",
+        **common_args["custom_only"],
     )
     parser_test.add_argument(
         "-d",
@@ -89,8 +99,13 @@ def build_argparse() -> argparse.ArgumentParser:
     )
     parser_migrate.add_argument(
         "-r",
-        "--rules",
-        **common_args["rules"],
+        "--custom-rules",
+        **common_args["custom_rules"],
+    )
+    parser_migrate.add_argument(
+        "-R",
+        "--custom-only",
+        **common_args["custom_only"],
     )
     parser_migrate.add_argument(
         "-I",
@@ -145,7 +160,6 @@ def main(argv: Sequence[str] = None) -> None:
     """Run airphin in command line."""
     parser = build_argparse()
     argv = argv if argv is not None else sys.argv[1:]
-    # argv = ["rule", "--show"]
     args = parser.parse_args(argv)
 
     if hasattr(args, "verbose") and args.verbose:
@@ -154,8 +168,8 @@ def main(argv: Sequence[str] = None) -> None:
 
     # recurse all file in given path
     customs_rules = []
-    if hasattr(args, "rules") and args.rules:
-        for rule in args.rules:
+    if hasattr(args, "custom_rules") and args.custom_rules:
+        for rule in args.custom_rules:
             customs_rules.extend(recurse_files(rule))
     if logger.level <= logging.DEBUG and customs_rules:
         logger.debug(
@@ -165,7 +179,7 @@ def main(argv: Sequence[str] = None) -> None:
 
     if args.subcommand == "test":
         stdin = args.stdin
-        config = Config(customs=customs_rules)
+        config = Config(customs=customs_rules, customs_only=args.custom_only)
         runner = Runner(config)
 
         result = runner.with_str(stdin)
@@ -188,7 +202,9 @@ def main(argv: Sequence[str] = None) -> None:
         for path in args.sources:
             migrate_files.extend(recurse_files(path, args.include, args.exclude))
 
-        config = Config(customs=customs_rules, inplace=args.inplace)
+        config = Config(
+            customs=customs_rules, customs_only=args.custom_only, inplace=args.inplace
+        )
         runner = Runner(config)
 
         if args.multiprocess:

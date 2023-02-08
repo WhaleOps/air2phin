@@ -1,3 +1,4 @@
+import warnings
 from pathlib import Path
 from typing import Any, Dict, List, NamedTuple, Optional
 
@@ -46,8 +47,10 @@ class ImportConfig(NamedTuple):
 class Config:
     """Configurations of airphin, including all configs change behavior of airphin.
 
-    :param customs: User custom path of rules, can overwrite build-in rules.
-    :param inplace: Replace source python file inplace instread of create a new file.
+    :param customs: User custom path of rules, will combine with build-in rules when :param:``customs_only``
+        is False, will only use custom rules and ignore build-in rules when :param:``customs_only`` is True.
+    :param customs_only: Only use custom rules or not.
+    :param inplace: Replace source python file inplace instead of create a new file.
     :param imports: Build-in imports rules path.
     :param calls: Build-in call rules path.
     """
@@ -55,18 +58,37 @@ class Config:
     def __init__(
         self,
         customs: Optional[List[Path]] = None,
+        customs_only: Optional[bool] = False,
         inplace: Optional[bool] = False,
         imports: Optional[List[Path]] = rule_imports,
         calls: Optional[List[Path]] = rule_calls,
     ):
         self._customs = customs
+        self.customs_only = customs_only
+        if self.customs_only and not self._customs:
+            raise ValueError(
+                "Argument `customs` not allow value None, when customs_only is True."
+            )
+        if self.customs_only:
+            warnings.warn(
+                "Will only use customs rules to migration, will ignore built-in rules.",
+                UserWarning,
+                stacklevel=2,
+            )
         self.inplace = inplace
         self._imports = imports
         self._calls = calls
 
     @property
     def imports_path(self) -> List[Path]:
-        """Get all imports path from rules."""
+        """Get all imports path for migration rules.
+
+        Will only use :param:``customs`` rules and ignore built-in rules when :param:``customs_only`` is True,
+        and combine :param:``customs``, built-in rules when :param:``customs_only`` is False.
+        """
+        if self.customs_only:
+            return self._customs
+
         if not self._customs:
             return self._imports
         self._imports.extend(self._customs)
@@ -79,7 +101,14 @@ class Config:
 
     @property
     def calls_path(self) -> List[Path]:
-        """Get all call rules path."""
+        """Get all call path for migration rules.
+
+        Will only use :param:``customs`` rules and ignore built-in rules when :param:``customs_only`` is True,
+        and combine :param:``customs``, built-in rules when :param:``customs_only`` is False.
+        """
+        if self.customs_only:
+            return self._customs
+
         if not self._customs:
             return self._calls
         self._calls.extend(self._customs)

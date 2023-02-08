@@ -93,7 +93,7 @@ Save the yaml config file to any directory you want, and declare the path when y
 
 .. code-block:: bash
 
-    airphin migrate --rules /path/to/MyCustomOperator.yaml ~/airflow/dags/dag.py
+    airphin migrate --custom-rules /path/to/MyCustomOperator.yaml ~/airflow/dags/dag.py
 
 And you can see the new DAG file directory ``~/airflow/dags`` named ``dag-airphin.py`` is created which is the
 migrated result of ``dag.py``.
@@ -107,30 +107,45 @@ to different files organized.
 In Single File and Directory
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-When all custom rules is in one single file or directory, use single option argument :code:`--rules` or :code:`-r`
+When all custom rules is in one single file or directory, use single option argument :code:`--custom-rules` or :code:`-r`
 can use them
 
 .. code-block:: bash
 
     # single file
-    airphin migrate --rules /path/to/MyCustomOperator.yaml ~/airflow/dags/dag.py
+    airphin migrate --custom-rules /path/to/MyCustomOperator.yaml ~/airflow/dags/dag.py
 
     # single directory
-    airphin migrate --rules /path/to/rules/dir ~/airflow/dags/dag.py
+    airphin migrate --custom-rules /path/to/rules/dir ~/airflow/dags/dag.py
 
 In Scatter Files or Directories
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Sometime, our rules will in the different places, and airphin support use option argument :code:`--rules` or :code:`-r`
+Sometime, our rules will in the different places, and airphin support use option argument :code:`--custom-rules` or :code:`-r`
 multiple time in one single migration
 
 .. code-block:: bash
 
     # multiple files
-    airphin migrate --rules /path/to/MyCustomOperator1.yaml --rules /path/to/MyCustomOperator2.yaml ~/airflow/dags/dag.py
+    airphin migrate --custom-rules /path/to/MyCustomOperator1.yaml --custom-rules /path/to/MyCustomOperator2.yaml ~/airflow/dags/dag.py
 
     # multiple directories
-    airphin migrate --rules /path/to/rules/dir1 --rules /path/to/rules/dir2 ~/airflow/dags/dag.py
+    airphin migrate --custom-rules /path/to/rules/dir1 --custom-rules /path/to/rules/dir2 ~/airflow/dags/dag.py
 
     # multiple mixed files and directories
-    airphin migrate --rules /path/to/MyCustomOperator1.yaml --rules /path/to/rules/dir1 ~/airflow/dags/dag.py
+    airphin migrate --custom-rules /path/to/MyCustomOperator1.yaml --custom-rules /path/to/rules/dir1 ~/airflow/dags/dag.py
+
+Use Custom Rule Only Without Built-in's
+---------------------------------------
+
+All above examples using custom rules are combine built-in rules and custom's, sometime we just want to apply
+the custom rule to migrate exist files, just like we apply a patch to our codebase. We can use option argument
+:code:`--custom-only` or :code:`-R` to use custom rules and ignore built-in.
+
+.. code-block:: bash
+
+    # Only use custom rules and ignore built-in one
+    airphin migrate --custom-rules /path/to/MyCustomOperator1.yaml --custom-only ~/airflow/dags/dag.py
+
+It is useful when you have lot of files to migrate, if you found some code should change again after the first
+migration run, but do not want to apply all the rules which cost lots of time, you can try to use this feature.
