@@ -50,6 +50,15 @@ class OpTransformer(cst.CSTTransformer):
             ),
         )
 
+    def match_call_name(self, node: cst.Call) -> bool:
+        if m.matches(node.func, m.TypeOf(m.Name)):
+            val = cst.ensure_type(node.func, cst.Name).value
+        elif m.matches(node.func, m.TypeOf(m.Attribute)):
+            val = cst.ensure_type(node.func, cst.Attribute).attr.value
+        else:
+            return True
+        return val in self.qualified_name.split(TOKEN.POINT)
+
     def leave_Name(
         self, original_node: cst.Name, updated_node: cst.Name
     ) -> "BaseExpression":
@@ -95,6 +104,9 @@ class OpTransformer(cst.CSTTransformer):
         self, original_node: cst.Call, updated_node: cst.Call
     ) -> BaseExpression:
         if not self.config.add:
+            return updated_node
+
+        if not self.match_call_name(original_node):
             return updated_node
 
         return updated_node.with_changes(
