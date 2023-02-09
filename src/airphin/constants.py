@@ -13,6 +13,7 @@ class KEYWORD:
     """Constants keywords for airphin."""
 
     MIGRATE_MARK: str = "-airphin"
+    WORKFLOW_SUBMIT: str = "submit"
 
 
 class REGEXP:
@@ -20,7 +21,7 @@ class REGEXP:
 
     PATH_YAML: str = "*.yaml"
     PATH_PYTHON: str = "*.py"
-    ALL: str = "**/*"
+    PATH_ALL: str = "**/*"
 
 
 class CONFIG:

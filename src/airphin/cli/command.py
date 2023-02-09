@@ -160,6 +160,7 @@ def main(argv: Sequence[str] = None) -> None:
     """Run airphin in command line."""
     parser = build_argparse()
     argv = argv if argv is not None else sys.argv[1:]
+    # argv = ["rule", "--show"]
     args = parser.parse_args(argv)
 
     if hasattr(args, "verbose") and args.verbose:

@@ -66,7 +66,7 @@ def add_stem_suffix(path: Path, suf: str) -> Path:
 
 
 def recurse_files(
-    path: Path, include: Optional[str] = REGEXP.ALL, exclude: Optional[str] = None
+    path: Path, include: Optional[str] = REGEXP.PATH_ALL, exclude: Optional[str] = None
 ) -> List[Path]:
     """Recurse all match pattern files in path.
 
