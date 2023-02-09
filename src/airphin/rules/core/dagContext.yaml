@@ -39,7 +39,7 @@ examples:
           name='dag',
           description='DAG description',
           start_time=datetime(2020, 1, 1),
-          schedule='@once',
+          schedule='0 0 0 * * ? *',
       )
   context:
     description: |
@@ -63,7 +63,7 @@ examples:
           name='dag',
           description='DAG description',
           start_time=datetime(2020, 1, 1),
-          schedule='@once',
+          schedule='0 0 0 * * ? *',
       ) as dag:
           pass
       dag.submit()
