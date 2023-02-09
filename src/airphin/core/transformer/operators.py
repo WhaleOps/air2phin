@@ -5,8 +5,9 @@ import libcst as cst
 import libcst.matchers as m
 from libcst import Arg, BaseExpression, FlattenSentinel, RemovalSentinel
 
-from airphin.constants import TOKEN
+from airphin.constants import KEYWORD, TOKEN
 from airphin.core.rules.config import CallConfig, Config, ParamDefaultConfig
+from airphin.utils import string
 
 
 class OpTransformer(cst.CSTTransformer):
@@ -59,9 +60,38 @@ class OpTransformer(cst.CSTTransformer):
             return True
         return val in self.qualified_name.split(TOKEN.POINT)
 
+    def _handle_specific_args(self, node: cst.Arg) -> cst.Arg:
+        """Handle specific args for custom rule.
+
+        Including:
+        * airflow.DAG.schedule_interval: migrate schedule value
+        """
+        name = node.keyword.value
+        if (
+            KEYWORD.AIRFLOW_DAG in self.qualified_name
+            and name == KEYWORD.AIRFLOW_DAG_SCHEDULE
+        ):
+            if not m.matches(
+                node,
+                m.Arg(value=m.SimpleString()),
+            ):
+                return node.with_changes(
+                    value=cst.SimpleString(f"'{KEYWORD.DEFAULT_SCHEDULE}'")
+                )
+
+            orig_value = cst.ensure_type(node.value, cst.SimpleString).value
+            value = string.convert_schedule(orig_value.strip("'").strip('"'))
+            return node.with_changes(value=cst.SimpleString(value=f"'{value}'"))
+        return node
+
     def leave_Name(
         self, original_node: cst.Name, updated_node: cst.Name
     ) -> "BaseExpression":
+        """Handle callable name according to configuration.
+
+        Which include the following steps:
+        * Change callable name.
+        """
         if self.matcher_op_name(original_node):
             dest_name = self.config.short
             return updated_node.with_changes(value=dest_name)
@@ -70,14 +100,27 @@ class OpTransformer(cst.CSTTransformer):
     def leave_Arg(
         self, original_node: cst.Arg, updated_node: cst.Arg
     ) -> Union[Arg, FlattenSentinel[cst.Arg], RemovalSentinel]:
+        """Handle callable argument name according to configuration.
+
+        Which include the following steps:
+        * Change argument name.
+        * Replace airflow.DAG argument ``schedule_interval`` to dolphinscheduler style.
+        """
+        if self.match_remove_name(original_node):
+            return cst.RemoveFromParent()
+
+        if original_node.keyword:
+            updated_node = self._handle_specific_args(updated_node)
+
         if self.match_replace_name(original_node):
             original_keyword = original_node.keyword.value
             dest_keyword = self.config.replace.get(original_keyword)
 
             self.migrated_param.add(dest_keyword)
-            return updated_node.with_changes(keyword=cst.Name(value=dest_keyword))
-        if self.match_remove_name(original_node):
-            return cst.RemoveFromParent()
+            return updated_node.with_changes(
+                keyword=cst.Name(value=dest_keyword), value=updated_node.value
+            )
+
         return updated_node
 
     def _handle_missing_default(self, nodes: Sequence[cst.Arg]) -> Sequence[cst.Arg]:

@@ -15,11 +15,11 @@
 # specific language governing permissions and limitations
 # under the License.
 import warnings
-from typing import List, Set, Union
+from typing import Set, Union
 
 import libcst as cst
 import libcst.matchers as m
-from libcst import BaseExpression, FlattenSentinel, RemovalSentinel
+from libcst import BaseExpression, FlattenSentinel, RemovalSentinel, SimpleStatementLine
 from libcst.metadata import PositionProvider, QualifiedName, QualifiedNameProvider
 
 from airphin.constants import KEYWORD
@@ -110,7 +110,7 @@ class Transformer(cst.CSTTransformer):
             self.have_submit_expr.add(original_node.value.func.value.value)
         return updated_node
 
-    def _build_submit_exprs(self) -> List[BaseExpression]:
+    def _build_submit_exprs(self) -> list[SimpleStatementLine]:
         miss_alias = self.workflow_alias.difference(self.have_submit_expr)
         return [
             cst.parse_statement(f"{alias}.{KEYWORD.WORKFLOW_SUBMIT}()")
