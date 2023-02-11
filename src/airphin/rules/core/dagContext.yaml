@@ -29,7 +29,7 @@ examples:
           dag_id='dag',
           description='DAG description',
           start_date=datetime(2020, 1, 1),
-          schedule_interval='@once',
+          schedule_interval='5 4 * * *',
       )
     dest: |
       from pydolphinscheduler.core.process_definition import ProcessDefinition
@@ -39,7 +39,7 @@ examples:
           name='dag',
           description='DAG description',
           start_time=datetime(2020, 1, 1),
-          schedule='0 0 0 * * ? *',
+          schedule='0 5 4 * * ? *',
       )
   context:
     description: |
