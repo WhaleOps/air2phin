@@ -1,4 +1,4 @@
-name: PythonOperator
+name: SparkSqlOperator
 description: The configuration for migrating Airflow SparkSqlOperator to DolphinScheduler SQL task.
 
 migration:

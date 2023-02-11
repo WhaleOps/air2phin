@@ -37,18 +37,6 @@ def read_yaml(path: Path) -> Dict[str, Any]:
     return yaml.safe_load(content)
 
 
-def read_multi_yaml(paths: List[Path]) -> List[Dict[str, Any]]:
-    """Read multiple yaml files and return a list of dict.
-
-    :param paths: List of paths to read.
-    """
-    yamls = []
-    for path in paths:
-        content = read_yaml(path)
-        yamls.append(content)
-    return yamls
-
-
 def add_stem_suffix(path: Path, suf: str) -> Path:
     """Add stem suffix of path.
 
