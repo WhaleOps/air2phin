@@ -1,6 +1,5 @@
 import logging
 import warnings
-from functools import cached_property
 from pathlib import Path
 from typing import Any, Dict, List, NamedTuple, Optional
 
@@ -82,6 +81,10 @@ class Config:
         self.inplace = inplace
         self._imports = imports
         self._calls = calls
+        # Want to be compatible with python 3.6 and python 3.7, so can not use
+        # ``from functools import cached_property``
+        self._call_migrator: Dict[str, CallConfig] = None
+        self._import_migrator: Dict[str, ImportConfig] = None
 
     @property
     def imports_path(self) -> List[Path]:
@@ -98,10 +101,13 @@ class Config:
         self._imports.extend(self._customs)
         return self._imports
 
-    @cached_property
+    @property
     def imports(self) -> Dict[str, ImportConfig]:
         """Get all import migrator from rules."""
-        return self.imp_migrator()
+        if self._import_migrator:
+            return self._import_migrator
+        self._import_migrator = self.imp_migrator()
+        return self._import_migrator
 
     @property
     def calls_path(self) -> List[Path]:
@@ -118,10 +124,13 @@ class Config:
         self._calls.extend(self._customs)
         return self._calls
 
-    @cached_property
+    @property
     def calls(self) -> Dict[str, CallConfig]:
         """Get all call migrator from rules."""
-        return self.call_migrator()
+        if self._call_migrator:
+            return self._call_migrator
+        self._call_migrator = self.call_migrator()
+        return self._call_migrator
 
     @staticmethod
     def _build_caller(
