@@ -33,6 +33,8 @@ class REGEXP:
 class CONFIG:
     """Constants config file for airphin."""
 
+    NAME: str = "name"
+
     EXAMPLE: str = "examples"
 
     MIGRATION: str = "migration"

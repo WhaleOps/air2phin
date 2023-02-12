@@ -1,10 +1,13 @@
+import logging
 import warnings
 from pathlib import Path
 from typing import Any, Dict, List, NamedTuple, Optional
 
 from airphin.constants import CONFIG, REGEXP, TOKEN
 from airphin.core.rules.loader import rule_calls, rule_imports
-from airphin.utils.file import read_multi_yaml, read_yaml
+from airphin.utils.file import read_yaml, recurse_files
+
+logger = logging.getLogger("airphin.config")
 
 
 class ParamDefaultConfig(NamedTuple):
@@ -78,10 +81,14 @@ class Config:
         self.inplace = inplace
         self._imports = imports
         self._calls = calls
+        # Want to be compatible with python 3.6 and python 3.7, so can not use
+        # ``from functools import cached_property``
+        self._call_migrator: Dict[str, CallConfig] = None
+        self._import_migrator: Dict[str, ImportConfig] = None
 
     @property
     def imports_path(self) -> List[Path]:
-        """Get all imports path for migration rules.
+        """Get all imports path for migration rules, the built-in rules before custom rules.
 
         Will only use :param:``customs`` rules and ignore built-in rules when :param:``customs_only`` is True,
         and combine :param:``customs``, built-in rules when :param:``customs_only`` is False.
@@ -97,11 +104,14 @@ class Config:
     @property
     def imports(self) -> Dict[str, ImportConfig]:
         """Get all import migrator from rules."""
-        return self.imp_migrator()
+        if self._import_migrator:
+            return self._import_migrator
+        self._import_migrator = self.imp_migrator()
+        return self._import_migrator
 
     @property
     def calls_path(self) -> List[Path]:
-        """Get all call path for migration rules.
+        """Get all call path for migration rules, the built-in rules before custom rules.
 
         Will only use :param:``customs`` rules and ignore built-in rules when :param:``customs_only`` is True,
         and combine :param:``customs``, built-in rules when :param:``customs_only`` is False.
@@ -117,7 +127,10 @@ class Config:
     @property
     def calls(self) -> Dict[str, CallConfig]:
         """Get all call migrator from rules."""
-        return self.call_migrator()
+        if self._call_migrator:
+            return self._call_migrator
+        self._call_migrator = self.call_migrator()
+        return self._call_migrator
 
     @staticmethod
     def _build_caller(
@@ -149,17 +162,6 @@ class Config:
         )
 
     @staticmethod
-    def _handle_rules_path(*args) -> List[Dict[str, Any]]:
-        for arg in args:
-            if arg.is_file():
-                content: Dict = read_yaml(arg)
-                yield content
-            if arg.is_dir():
-                contents: List[Dict] = read_multi_yaml(arg.rglob(REGEXP.PATH_YAML))
-                for content in contents:
-                    yield content
-
-    @staticmethod
     def get_module_action(
         migration: Dict[str, Any], action_type: str
     ) -> Optional[Dict[str, Any]]:
@@ -177,12 +179,35 @@ class Config:
             raise ValueError("Each type of action can only have one.")
         return actions[0] if actions else None
 
+    @staticmethod
+    def rules_override(rule_paths: List[Path]) -> List[Dict]:
+        """Handle rules override, override the previous rules by the latest one when have the same name.
+
+        Use dict comprehension to overwrite built-in rules, if custom rules also have the same name rules,
+        will use the latest rules pass to :class:`Config`.
+        """
+        rules_map = {}
+
+        rule_files = []
+        for path in rule_paths:
+            rule_files.extend(recurse_files(path, include=REGEXP.PATH_YAML))
+
+        for filename in rule_files:
+            content = read_yaml(filename)
+            rule_name = content.get(CONFIG.NAME)
+            if rule_name in rules_map:
+                logger.info(
+                    "Rule name with %s will be override by file %s", rule_name, filename
+                )
+            rules_map[rule_name] = content
+        return list(rules_map.values())
+
     def call_migrator(self) -> Dict[str, CallConfig]:
         """Get all call migrator from rules."""
         migrator = {}
 
-        for content in self._handle_rules_path(*self.calls_path):
-            migration = content[CONFIG.MIGRATION]
+        for rule in self.rules_override(self.calls_path):
+            migration = rule[CONFIG.MIGRATION]
             parameters = migration[CONFIG.PARAMETER]
             replace = self.get_module_action(migration, CONFIG.KW_REPLACE)
             src = replace[CONFIG.SOURCE]
@@ -239,12 +264,10 @@ class Config:
         """Get all import migrator from rules."""
         imps = {}
 
-        for content in self._handle_rules_path(*self.imports_path):
-            replace = self.get_module_action(
-                content[CONFIG.MIGRATION], CONFIG.KW_REPLACE
-            )
-            add = self.get_module_action(content[CONFIG.MIGRATION], CONFIG.KW_ADD)
-            remove = self.get_module_action(content[CONFIG.MIGRATION], CONFIG.KW_REMOVE)
+        for rule in self.rules_override(self.imports_path):
+            replace = self.get_module_action(rule[CONFIG.MIGRATION], CONFIG.KW_REPLACE)
+            add = self.get_module_action(rule[CONFIG.MIGRATION], CONFIG.KW_ADD)
+            remove = self.get_module_action(rule[CONFIG.MIGRATION], CONFIG.KW_REMOVE)
 
             src = replace[CONFIG.SOURCE]
             if isinstance(src, str):

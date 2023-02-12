@@ -149,3 +149,84 @@ the custom rule to migrate exist files, just like we apply a patch to our codeba
 
 It is useful when you have lot of files to migrate, if you found some code should change again after the first
 migration run, but do not want to apply all the rules which cost lots of time, you can try to use this feature.
+
+Use Rule Override
+-----------------
+
+Custom rules provide the ability to override built-in rules. Sometime we want to override the built-in migrate
+rules by custom one, we can use the same name as the built-in rule when you specific the custom rule.
+
+For example we have the build-in rule ``PythonOperator.yaml``, and the content as below:
+
+.. code-block:: yaml
+
+    name: PythonOperator
+    description: The configuration for migrating Airflow PythonOperator to DolphinScheduler Python task.
+    
+    migration:
+      module:
+        - action: replace
+          src:
+            - airflow.operators.python_operator.PythonOperator
+            - airflow.operators.python.PythonOperator
+          dest: pydolphinscheduler.tasks.python.Python
+      parameter:
+        - action: replace
+          src: task_id
+          dest: name
+        - action: replace
+          src: python_callable
+          dest: definition
+
+You want to run those python task base on dolphinscheduler specific environment, the best practice is use rule
+override. Create custom rule with name ``CustomPythonOperator.yaml`` with content
+
+.. code-block:: yaml
+
+    name: PythonOperator
+    description: The configuration for migrating Airflow PythonOperator to DolphinScheduler Python task.
+    
+    migration:
+      module:
+        - action: replace
+          src:
+            - airflow.operators.python_operator.PythonOperator
+            - airflow.operators.python.PythonOperator
+          dest: pydolphinscheduler.tasks.python.Python
+      parameter:
+        - action: replace
+          src: task_id
+          dest: name
+        - action: replace
+          src: python_callable
+          dest: definition
+        - action: add
+          arg: environment_name
+          default: 
+            type: str
+            value: airflow_migrate
+
+We do nothing but add five new lines(Note that the ``name`` attribute in ``CustomPythonOperator.yaml`` is the
+same as the value of built-in on in ``PythonOperator.yaml``)
+
+.. code-block:: yaml
+
+        - action: add
+          arg: environment_name
+          default: 
+            type: str
+            value: airflow_migrate
+
+in ``CustomPythonOperator.yaml`` to tell airphin add one new argument name ``environment_name`` with default
+value ``airflow_migrate``, then we can use it by command
+
+.. code-block:: bash
+
+    airphin migrate --custom-rules CustomPythonOperator.yaml ~/airflow/dags/dag.py
+
+``PythonOperator.yaml`` will be overriden by ``CustomPythonOperator.yaml`` due to ``CustomPythonOperator.yaml``
+have then same name and ``CustomPythonOperator.yaml`` is the custom rule.
+
+.. note::
+
+    We use the ``name`` attribute in the file content instead of the filename of identification
