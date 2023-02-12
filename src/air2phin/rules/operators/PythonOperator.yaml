@@ -15,6 +15,17 @@ migration:
     - action: replace
       src: python_callable
       dest: definition
+    - action: add
+      arg: environment_name
+      default: 
+        type: str
+        value: airflow_migrate
+    - action: add
+      arg: resource_list
+      default: 
+        type: code
+        value: '["airflow"]'
+        
 
 examples:
   python_operator:

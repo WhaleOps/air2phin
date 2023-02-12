@@ -13,9 +13,13 @@ migration:
     - action: replace
       src: start_date
       dest: start_time
-    - action: replace
-      src: schedule_interval
-      dest: schedule
+    - action: remove
+      arg: schedule_interval
+    - action: add
+      arg: release_state
+      default: 
+        type: str
+        value: 'offline'
 
 examples:
   assign:
