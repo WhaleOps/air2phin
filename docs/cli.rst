@@ -1,7 +1,7 @@
 CLI
 ===
 
-This section describes all command line interface to the Airphin. You can see :ref:`quick start <start:cli>` if
+This section describes all command line interfaces to the Airphin. You can see :ref:`quick start <start:cli>` if
 you want to get started quickly.
 
 .. argparse::
