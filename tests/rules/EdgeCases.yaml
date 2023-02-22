@@ -47,3 +47,39 @@ test_cases:
           abc='def', 
       command="echo 'Airflow DummyOperator'"
       )
+  # have with itme but not airflow.DAG 
+  have_not_dag_with_item:
+    src: |
+      from contextlib import closing
+      from airflow.operators.python import PythonOperator
+      from airflow.providers.postgres.hooks.postgres import PostgresHook
+      
+      def demo():
+          connection = PostgresHook.get_connection('postgres_default')
+          hook = PostgresHook(connection=connection)
+          with closing(hook.get_conn()) as conn:
+              with closing(conn.cursor()) as cursor:
+                  cursor.execute('SELECT 1')
+                  print(cursor.fetchall())
+      
+      demo = PythonOperator(
+          task_id='demo',
+          python_callable=demo,
+      )
+    dest: |
+      from contextlib import closing
+      from pydolphinscheduler.tasks.python import Python
+      from airphin.fake.hooks.postgres import PostgresHook
+      
+      def demo():
+          connection = PostgresHook.get_connection('postgres_default')
+          hook = PostgresHook(connection=connection)
+          with closing(hook.get_conn()) as conn:
+              with closing(conn.cursor()) as cursor:
+                  cursor.execute('SELECT 1')
+                  print(cursor.fetchall())
+      
+      demo = Python(
+          name='demo',
+          definition=demo,
+      )

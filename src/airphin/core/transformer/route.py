@@ -88,7 +88,11 @@ class Transformer(cst.CSTTransformer):
 
     def leave_WithItem_asname(self, node: cst.WithItem) -> None:
         """Get airflow Dags alias names."""
-        self.workflow_alias.add(node.asname.name.value)
+        if m.matches(node.item, m.Call()) and m.matches(
+            cst.ensure_type(node.item, cst.Call).func,
+            m.Name(value=KEYWORD.AIRFLOW_DAG_SIMPLE),
+        ):
+            self.workflow_alias.add(node.asname.name.value)
 
     def leave_Expr(
         self, original_node: cst.Expr, updated_node: cst.Expr
