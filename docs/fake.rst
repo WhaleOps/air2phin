@@ -156,7 +156,7 @@ or you can change your datasource name to make it unique.
     from airphin.fake.hooks.postgres import PostgresHook
     connection = PostgresHook.get_connection("postgres_default_uniq")
 
-And dolphinscheduler only support the following type of datasource, which mean your type must be one of them:
+And dolphinscheduler only supports the following types of datasource, which mean your type must be one of them:
 
 - mysql
 - postgresql
