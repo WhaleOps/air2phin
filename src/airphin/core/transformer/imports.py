@@ -74,7 +74,7 @@ class ImportTransformer(cst.CSTTransformer):
             for full_ref in src_full_refs:
                 if full_ref in self.config.imports:
                     dest: ImportConfig = self.config.imports[full_ref]
-                    replaces.append(dest.replace.statement)
+                    replaces.append(dest.replace)
                     adds.update(dest.add)
 
             # get replace statement
