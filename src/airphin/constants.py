@@ -19,6 +19,7 @@ class KEYWORD:
     WORKFLOW_SUBMIT: str = "submit"
     AIRFLOW_DAG_SCHEDULE: str = "schedule_interval"
     AIRFLOW_DAG: str = "airflow.DAG"
+    AIRFLOW_DAG_SIMPLE: str = "DAG"
     DEFAULT_SCHEDULE: str = "0 0 0 * * ? *"
 
 
