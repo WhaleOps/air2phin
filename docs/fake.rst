@@ -155,3 +155,19 @@ or you can change your datasource name to make it unique.
     # Change the datasource name to make it unique, for example, change from "postgres_default" to "postgres_default_uniq"
     from airphin.fake.hooks.postgres import PostgresHook
     connection = PostgresHook.get_connection("postgres_default_uniq")
+
+And dolphinscheduler only support the following type of datasource, which mean your type must be one of them:
+
+- mysql
+- postgresql
+- hive
+- spark
+- clickhouse
+- oracle
+- sqlserver
+- db2
+- presto
+- h2
+- redshift
+- dameng
+- starrocks

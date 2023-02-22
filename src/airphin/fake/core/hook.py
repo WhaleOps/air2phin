@@ -17,12 +17,28 @@ class BaseHook:
     :param connection: specific hook connection. :class:``airphin.fake.core.connection.Connection`` object.
     """
 
-    query_type_name = (
-        "SELECT connection_params FROM t_ds_datasource WHERE type = '{type}' "
+    _QUERY_TYPE_NAME = (
+        "SELECT connection_params FROM t_ds_datasource WHERE type = {type} "
         "and name = '{name}'"
     )
-    query_name = "SELECT connection_params FROM t_ds_datasource WHERE name = '{name}'"
-    pattern = re.compile("jdbc:.*://(?P<host>[\\w\\W]+):(?P<port>\\d+)")
+    _QUERY_NAME = "SELECT connection_params FROM t_ds_datasource WHERE name = '{name}'"
+    _PATTERN = re.compile("jdbc:.*://(?P<host>[\\w\\W]+):(?P<port>\\d+)")
+
+    _DATABASE_TYPE_MAP = dict(
+        mysql=0,
+        postgresql=1,
+        hive=2,
+        spark=3,
+        clickhouse=4,
+        oracle=5,
+        sqlserver=6,
+        db2=7,
+        presto=8,
+        h2=9,
+        redshift=10,
+        dameng=11,
+        starrocks=12,
+    )
 
     def __init__(self, connection: Connection):
         self.connection = connection
@@ -39,7 +55,7 @@ class BaseHook:
         """
         data = json.loads(connection_params)
 
-        address_match = cls.pattern.match(data.get("jdbcUrl", None)).groupdict()
+        address_match = cls._PATTERN.match(data.get("jdbcUrl", None)).groupdict()
 
         return Connection(
             host=address_match.get("host", None),
@@ -71,7 +87,7 @@ class BaseHook:
         with engine.connect() as conn:
             # conn_id not in format of datasource_type.datasource_name
             if TOKEN.POINT not in conn_id:
-                result_name = conn.execute(text(cls.query_name.format(name=conn_id)))
+                result_name = conn.execute(text(cls._QUERY_NAME.format(name=conn_id)))
                 if result_name.rowcount == 0:
                     raise ValueError(
                         f"Connection {conn_id} not found in dolphinscheduler metadata database."
@@ -85,9 +101,14 @@ class BaseHook:
                 return cls.parser_conn_namedtuple(record[0])
 
             # conn_id in format of datasource_type.datasource_name
-            dst, dsn = conn_id.split(TOKEN.POINT)
+            dst, dsn = conn_id.strip().split(TOKEN.POINT)
+            if dst.lower() not in cls._DATABASE_TYPE_MAP:
+                raise ValueError(
+                    f"Datasource type `{dst}` not support currently, please use one of "
+                    f"{list(cls._DATABASE_TYPE_MAP.keys())}"
+                )
             result_type_name = conn.execute(
-                text(cls.query_name.format(type=dst, name=dsn))
+                text(cls._QUERY_NAME.format(type=dst, name=dsn))
             )
             if result_type_name.rowcount == 0:
                 raise ValueError(
