@@ -131,7 +131,7 @@ def test_example_must_attr() -> None:
 def test_param_action_type() -> None:
     for rule in all_rules:
         content = read_yaml(rule)
-        parameter = content["migration"]["parameter"]
+        parameter = content["migration"].get("parameter", [])
         for params in parameter:
             assert (
                 CONFIG.ACTION in params

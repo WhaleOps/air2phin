@@ -1,0 +1,19 @@
+name: MySqlHook
+description: The configuration for migrating airflow.providers.mysql.hooks.mysql.MySqlHook context to airphin.fake.hooks.mysql.
+
+migration:
+  module:
+    - action: replace
+      src: airflow.providers.mysql.hooks.mysql.MySqlHook
+      dest: airphin.fake.hooks.mysql.MySqlHook
+
+examples:
+  providers:
+    description: |
+      The example of migrating `airflow.DAG` declaration with assigned.
+    src: |
+      from airflow.providers.mysql.hooks.mysql import MySqlHook
+      hook = MySqlHook(mysql_conn_id='mysql_default')
+    dest: |
+      from airphin.fake.hooks.mysql import MySqlHook
+      hook = MySqlHook(mysql_conn_id='mysql_default')

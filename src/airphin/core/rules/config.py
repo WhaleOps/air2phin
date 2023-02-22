@@ -29,20 +29,10 @@ class CallConfig(NamedTuple):
     remove: List[str]
 
 
-class ImportStatementConfig(NamedTuple):
-    """Import replace statement config."""
-
-    inner_val: str
-    inner_attr: str
-    attr: str
-    name: str
-    statement: str
-
-
 class ImportConfig(NamedTuple):
     """Import config."""
 
-    replace: ImportStatementConfig
+    replace: str
     add: List[str]
     remove: List[str]
 
@@ -83,8 +73,8 @@ class Config:
         self._calls = calls
         # Want to be compatible with python 3.6 and python 3.7, so can not use
         # ``from functools import cached_property``
-        self._call_migrator: Dict[str, CallConfig] = None
-        self._import_migrator: Dict[str, ImportConfig] = None
+        self._call_migrator: Dict[str, CallConfig] | None = None
+        self._import_migrator: Dict[str, ImportConfig] | None = None
 
     @property
     def imports_path(self) -> List[Path]:
@@ -145,7 +135,9 @@ class Config:
                 p[CONFIG.SOURCE]: p[CONFIG.DESTINATION]
                 for p in parameters
                 if p[CONFIG.ACTION] == CONFIG.KW_REPLACE
-            },
+            }
+            if parameters
+            else dict(),
             add={
                 p[CONFIG.ARGUMENT]: ParamDefaultConfig(
                     type=p[CONFIG.DEFAULT][CONFIG.TYPE],
@@ -153,12 +145,16 @@ class Config:
                 )
                 for p in parameters
                 if p[CONFIG.ACTION] == CONFIG.KW_ADD
-            },
+            }
+            if parameters
+            else dict(),
             remove=[
                 p[CONFIG.ARGUMENT]
                 for p in parameters
                 if p[CONFIG.ACTION] == CONFIG.KW_REMOVE
-            ],
+            ]
+            if parameters
+            else [],
         )
 
     @staticmethod
@@ -208,7 +204,7 @@ class Config:
 
         for rule in self.rules_override(self.calls_path):
             migration = rule[CONFIG.MIGRATION]
-            parameters = migration[CONFIG.PARAMETER]
+            parameters = migration.get(CONFIG.PARAMETER, None)
             replace = self.get_module_action(migration, CONFIG.KW_REPLACE)
             src = replace[CONFIG.SOURCE]
             dest = replace[CONFIG.DESTINATION]
@@ -224,18 +220,11 @@ class Config:
                 raise RuntimeError("Invalid migration.module.src type: %s" % type(src))
         return migrator
 
-    # TODO: make it can use in any number module import statemant
     @staticmethod
-    def _build_replace_importer(action: Dict[str, Any]) -> ImportStatementConfig:
+    def _build_replace_importer(action: Dict[str, Any]) -> str:
         dest = action[CONFIG.DESTINATION]
-        inner_val, inner_attr, attr, name = dest.split(TOKEN.POINT)
-        return ImportStatementConfig(
-            inner_val=inner_val,
-            inner_attr=inner_attr,
-            attr=attr,
-            name=name,
-            statement=f"from {inner_val}.{inner_attr}.{attr} import {name}",
-        )
+        module, asname = dest.rsplit(TOKEN.POINT, 1)
+        return f"from {module} import {asname}"
 
     @staticmethod
     def _get_rp_add_action(action: Dict[str, Any]) -> Optional[List[str]]:
