@@ -4,7 +4,7 @@ Custom Rules
 Create Custom Rule
 ------------------
 
-Sometime, you need to add some custom rules to your migration. For example, you have some custom airflow operators
+Sometimes, you need to add some custom rules to your migration. For example, you have some custom airflow operators
 base on the existing ``PostgresOperator`` and you want to migrate them to dolphinscheduler. The custom operator
 definition is like this:
 
@@ -36,7 +36,7 @@ definition is like this:
                 **kwargs,
             )
 
-You put this operator same directory with your DAG file. and you airflow dags files are like this:
+You put this operator same directory as your DAG file. and your airflow dags files are like this:
 
 .. code-block:: text
 
@@ -45,7 +45,7 @@ You put this operator same directory with your DAG file. and you airflow dags fi
     custom
      └── my_custom_operator.py
 
-And in file ``dag.py``, you use this custom operator like this:
+And in the file ``dag.py``, you use this custom operator like this:
 
 .. code-block:: python
 
@@ -89,7 +89,7 @@ during the migration
 Use Custom Rule
 ---------------
 
-Save the yaml config file to any directory you want, and declare the path when you run the ``airphin`` command:
+Save the YAML config file to any directory you want, and declare the path when you run the ``airphin`` command:
 
 .. code-block:: bash
 
@@ -101,13 +101,13 @@ migrated result of ``dag.py``.
 Use Multiple Custom Rules
 -------------------------
 
-Airphin also support using multiple custom rules in single migration, and have directory and scatter files due
+Airphin also supports using multiple custom rules in a single migration, and has directory and scatter files due
 to different files organized.
 
 In Single File and Directory
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-When all custom rules is in one single file or directory, use single option argument :code:`--custom-rules` or :code:`-r`
+When all custom rules are in one single file or directory, use single options argument :code:`--custom-rules` or :code:`-r`
 can use them
 
 .. code-block:: bash
@@ -121,8 +121,8 @@ can use them
 In Scatter Files or Directories
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Sometime, our rules will in the different places, and airphin support use option argument :code:`--custom-rules` or :code:`-r`
-multiple time in one single migration
+Sometimes, our rules will be in the different places, and airphin support the use option argument :code:`--custom-rules` or :code:`-r`
+multiple times in one single migration
 
 .. code-block:: bash
 
@@ -135,11 +135,11 @@ multiple time in one single migration
     # multiple mixed files and directories
     airphin migrate --custom-rules /path/to/MyCustomOperator1.yaml --custom-rules /path/to/rules/dir1 ~/airflow/dags/dag.py
 
-Use Custom Rule Only Without Built-in's
+Use Custom Rule Only Without Built-ins
 ---------------------------------------
 
-All above examples using custom rules are combine built-in rules and custom's, sometime we just want to apply
-the custom rule to migrate exist files, just like we apply a patch to our codebase. We can use option argument
+All the above examples using custom rules combine built-in rules and customs, sometimes we just want to apply
+the custom rule to migrate existing files, just like we apply a patch to our codebase. We can use option argument
 :code:`--custom-only` or :code:`-R` to use custom rules and ignore built-in.
 
 .. code-block:: bash
@@ -147,16 +147,16 @@ the custom rule to migrate exist files, just like we apply a patch to our codeba
     # Only use custom rules and ignore built-in one
     airphin migrate --custom-rules /path/to/MyCustomOperator1.yaml --custom-only ~/airflow/dags/dag.py
 
-It is useful when you have lot of files to migrate, if you found some code should change again after the first
+It is useful when you have lots of files to migrate, if you found some code should change again after the first
 migration run, but do not want to apply all the rules which cost lots of time, you can try to use this feature.
 
 Use Rule Override
 -----------------
 
-Custom rules provide the ability to override built-in rules. Sometime we want to override the built-in migrate
-rules by custom one, we can use the same name as the built-in rule when you specific the custom rule.
+Custom rules provide the ability to override built-in rules. Sometimes we want to override the built-in migrate
+rules by custom one, we can use the same name as the built-in rule when you specify the custom rule.
 
-For example we have the build-in rule ``PythonOperator.yaml``, and the content as below:
+For example, we have the build-in rule ``PythonOperator.yaml``, and the content as below:
 
 .. code-block:: yaml
 
@@ -178,8 +178,8 @@ For example we have the build-in rule ``PythonOperator.yaml``, and the content a
           src: python_callable
           dest: definition
 
-You want to run those python task base on dolphinscheduler specific environment, the best practice is use rule
-override. Create custom rule with name ``CustomPythonOperator.yaml`` with content
+If you want to run those python task base on the dolphinscheduler specific environment, the best practice is to use rule
+override. Create a custom rule with the name ``CustomPythonOperator.yaml`` with content
 
 .. code-block:: yaml
 
@@ -224,8 +224,8 @@ value ``airflow_migrate``, then we can use it by command
 
     airphin migrate --custom-rules CustomPythonOperator.yaml ~/airflow/dags/dag.py
 
-``PythonOperator.yaml`` will be overriden by ``CustomPythonOperator.yaml`` due to ``CustomPythonOperator.yaml``
-have then same name and ``CustomPythonOperator.yaml`` is the custom rule.
+``PythonOperator.yaml`` will be overridden by ``CustomPythonOperator.yaml`` due to ``CustomPythonOperator.yaml``
+have the same name and ``CustomPythonOperator.yaml`` is the custom rule.
 
 .. note::
 

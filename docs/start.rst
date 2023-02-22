@@ -29,7 +29,7 @@ The CLI is the easiest way to use Airphin, we will take a quick look at the basi
     # Show all arguments or subcommands of airphin
     airphin --help
 
-    # A simple migrate example base on stdin, and will show migrated result on stdout
+    # A simple migration example base on stdin, and will show the migrated result on stdout
     # Can add option argument `--diff` to see the diff detail of this migrate
     airphin test "from airflow.operators.bash import BashOperator
     
@@ -42,37 +42,37 @@ The CLI is the easiest way to use Airphin, we will take a quick look at the basi
 Single File
 ^^^^^^^^^^^
 
-After run the above command, will get the migrated result show in stdout. And the most common usage is migrate
-a existing Airflow DAG file, which can be done by :code:`airphin migrate` command. We have a out of box example:
+After running the above command, will get the migrated result shown in stdout. And the most common usage is to migrate
+an existing Airflow DAG file, which can be done by :code:`airphin migrate` command. We have an out of box example:
 
 .. code-block:: bash
 
-    # Get example airflow DAG file via terminal
+    # Get an example airflow DAG file via terminal
     wget https://raw.githubusercontent.com/WhaleOps/airphin/main/examples/airflow/tutorial.py
 
     # Run migrate command
     airphin migrate tutorial.py
 
-And the migrated result will in the same directory with stem suffix :code:`-airphin` (by default, also support
-:doc:`inplace migrate <howto/migrate-inplace>`), in this case, it will be `tutorial-airphin.py` in current directory.
+And the migrated result will in the same directory with the stem suffix :code:`-airphin` (by default, also support
+:doc:`inplace migrate <howto/migrate-inplace>`), in this case, it will be `tutorial-airphin.py` in the current directory.
 
 Multiple Files or Directories
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-airphin can not only migrate one single file, but also works for multiple files and even the whole directory DAGs file,
+airphin can not only migrate one single file but also works for multiple files and even the whole directory DAGs file,
 
 .. code-block:: bash
 
     # Migrate multiple files
     airphin migrate /PATH/TO/FILE1.py /PATH/TO/FILE2.py
 
-    # Migrate all *.py file in directory
+    # Migrate all *.py files in directory
     airphin migrate <DIRECTORY>
     
     # Migrate all *.py file Airflow DAG directory
     airphin migrate ~/airflow/dags
 
-Same as `single file`_, the migrated result in the same directory as source file, with stem suffix :code:`-airphin`
+Same as `single file`_, the migrated result is in the same directory as the source file, with stem suffix :code:`-airphin`
 (by default, also support :doc:`inplace migrate <howto/migrate-inplace>`) to marked.
 
 If you want to deep dive into the CLI, please check the :doc:`cli` section. 
@@ -80,8 +80,8 @@ If you want to deep dive into the CLI, please check the :doc:`cli` section.
 Programming
 ~~~~~~~~~~~
 
-Airphin also provide API to use in your own program, all you need to do is import :code:`airphin.runner` module and
-call :code:`with_str` or :code:`with_file` base on your input type.
+Airphin also provides API to use in your program, all you need to do is import :code:`airphin.runner` module and
+call :code:`with_str` or :code:`with_file` based on your input type.
 
 For String
 ^^^^^^^^^^
@@ -106,8 +106,8 @@ For String
 For File
 ^^^^^^^^
 
-:code:`with_file` will handle and migrate the input file, and write the migrated result with addition :code:`-ariphin` as stem suffix
-to the same directory of input file. 
+:code:`with_file` will handle and migrate the input file, and write the migrated result with addition :code:`-ariphin` as a stem suffix
+to the same directory as the input file. 
 
 .. code-block:: python
 
