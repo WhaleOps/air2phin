@@ -22,10 +22,10 @@ import libcst.matchers as m
 from libcst import BaseExpression, FlattenSentinel, RemovalSentinel, SimpleStatementLine
 from libcst.metadata import PositionProvider, QualifiedName, QualifiedNameProvider
 
-from airphin.constants import KEYWORD
-from airphin.core.rules.config import Config
-from airphin.core.transformer.imports import ImportTransformer
-from airphin.core.transformer.operators import OpTransformer
+from air2phin.constants import KEYWORD
+from air2phin.core.rules.config import Config
+from air2phin.core.transformer.imports import ImportTransformer
+from air2phin.core.transformer.operators import OpTransformer
 
 
 class Transformer(cst.CSTTransformer):

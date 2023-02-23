@@ -18,5 +18,5 @@ rule_calls = [
 
 
 def build_in_rules() -> List[Path]:
-    """Get all build-in rules in airphin.rules directory."""
+    """Get all build-in rules in air2phin.rules directory."""
     return [path for path in path_rule.glob("**/*") if path.is_file()]

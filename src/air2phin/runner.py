@@ -8,25 +8,25 @@ from typing import List, Optional
 import libcst as cst
 from tqdm import tqdm
 
-from airphin.constants import KEYWORD, TOKEN
-from airphin.core.rules.config import Config
-from airphin.core.transformer.route import Transformer
-from airphin.utils.file import add_stem_suffix, read, write
+from air2phin.constants import KEYWORD, TOKEN
+from air2phin.core.rules.config import Config
+from air2phin.core.transformer.route import Transformer
+from air2phin.utils.file import add_stem_suffix, read, write
 
-logger = logging.getLogger("airphin.runner")
+logger = logging.getLogger("air2phin.runner")
 
 
 class Runner:
-    """Airphin runner, main class to run transformer.
+    """Air2phin runner, main class to run transformer.
 
-    :param config: Config of airphin.
+    :param config: Config of air2phin.
     """
 
     def __init__(self, config: Config) -> None:
         self.config: Config = config
 
     def with_str(self, content: str) -> str:
-        """Run airphin with a string and return migrated content.
+        """Run air2phin with a string and return migrated content.
 
         :param content: Content of string you want to migrate.
         """
@@ -36,9 +36,9 @@ class Runner:
         return migrated
 
     def with_file(self, path: Path) -> None:
-        """Run airphin with a single file path and migrate to dolphinscheduler python sdk definition.
+        """Run air2phin with a single file path and migrate to dolphinscheduler python sdk definition.
 
-        Will change file inplace when ``config.inplace = True``, and create new file end with ``-airphin``
+        Will change file inplace when ``config.inplace = True``, and create new file end with ``-air2phin``
         when ``config.inplace = False``.
 
         :param path: Path of file you want to migrate.
@@ -57,7 +57,7 @@ class Runner:
         logger.debug("End migrate file %s, elapsed time %.5fs", path, timer() - start)
 
     def with_files(self, paths: List[Path]) -> None:
-        """Run airphin with multiple files to dolphinscheduler python sdk definition.
+        """Run air2phin with multiple files to dolphinscheduler python sdk definition.
 
         :param paths: Path of file you want to migrate.
         """
@@ -78,7 +78,7 @@ class Runner:
     def with_files_multiprocess(
         self, paths: List[Path], processes: Optional[int] = multiprocessing.cpu_count()
     ) -> None:
-        """Run airphin migrating with multiprocess.
+        """Run air2phin migrating with multiprocess.
 
         :param paths: Path of file you want to migrate.
         :param processes: multiprocess processes cpu count number.

@@ -1,9 +1,9 @@
 from typing import Any, Dict
 
-from airphin.constants import CONFIG
-from airphin.core.rules.config import Config
-from airphin.core.rules.loader import path_rule
-from airphin.utils.file import read_yaml
+from air2phin.constants import CONFIG
+from air2phin.core.rules.config import Config
+from air2phin.core.rules.loader import path_rule
+from air2phin.utils.file import read_yaml
 
 ROOT_MUST_HAVE_ATTR = ["name", "description", "migration", "examples"]
 EXAMPLES_MUST_HAVE_ATTR = ["description", "src", "dest"]

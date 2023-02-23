@@ -3,11 +3,11 @@ from typing import List
 
 import pytest
 
-from airphin.constants import CONFIG
-from airphin.core.rules.config import Config
-from airphin.core.rules.loader import build_in_rules
-from airphin.runner import Runner
-from airphin.utils.file import read_yaml
+from air2phin.constants import CONFIG
+from air2phin.core.rules.config import Config
+from air2phin.core.rules.loader import build_in_rules
+from air2phin.runner import Runner
+from air2phin.utils.file import read_yaml
 
 rules_dir = Path(__file__).parent
 test_cases_rules: List[Path] = list(rules_dir.glob("*.yaml"))

@@ -33,9 +33,9 @@ python3 -m pip install --upgrade pip build twine
 # Change version
 VERSION=<VERSION>  # The version of the package you want to release, e.g. 1.2.3
 # For macOS
-sed -i '' "s/__version__ = \".*\"/__version__ = \"${VERSION}\"/" src/airphin/__init__.py
+sed -i '' "s/__version__ = \".*\"/__version__ = \"${VERSION}\"/" src/air2phin/__init__.py
 # For Linux
-sed -i "s/__version__ = \".*\"/__version__ = \"${VERSION}\"/" src/airphin/__init__.py
+sed -i "s/__version__ = \".*\"/__version__ = \"${VERSION}\"/" src/air2phin/__init__.py
 
 git commit -am "Release v${VERSION}"
 
@@ -51,8 +51,8 @@ package is correct, and then [release to PyPi](#release-to-pypi).
 TestPyPi is a test environment of PyPi, you could release to it to test whether the package is work or not.
 
 1. Upload to TestPyPi `python3 -m twine upload --repository testpypi dist/*`.
-2. Check the package in [TestPyPi](https://test.pypi.org/project/airphin/) and install it
-   by `python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps airphin` to
+2. Check the package in [TestPyPi](https://test.pypi.org/project/air2phin/) and install it
+   by `python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps air2phin` to
    test whether it is work or not.
 
 ## Release to PyPi
@@ -76,8 +76,8 @@ git push "${REMOTE}" --tags
 ### Manually
 
 1. Upload to TestPyPi `python3 -m twine upload dist/*`.
-2. Check the package in [PyPi](https://pypi.org/project/airphin/) and install it
-   by `python3 -m pip install airphin` to install it.
+2. Check the package in [PyPi](https://pypi.org/project/air2phin/) and install it
+   by `python3 -m pip install air2phin` to install it.
 
 ## Ref
 

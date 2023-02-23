@@ -3,11 +3,11 @@ import warnings
 from pathlib import Path
 from typing import Any, Dict, List, NamedTuple, Optional
 
-from airphin.constants import CONFIG, REGEXP, TOKEN
-from airphin.core.rules.loader import rule_calls, rule_imports
-from airphin.utils.file import read_yaml, recurse_files
+from air2phin.constants import CONFIG, REGEXP, TOKEN
+from air2phin.core.rules.loader import rule_calls, rule_imports
+from air2phin.utils.file import read_yaml, recurse_files
 
-logger = logging.getLogger("airphin.config")
+logger = logging.getLogger("air2phin.config")
 
 
 class ParamDefaultConfig(NamedTuple):
@@ -38,7 +38,7 @@ class ImportConfig(NamedTuple):
 
 
 class Config:
-    """Configurations of airphin, including all configs change behavior of airphin.
+    """Configurations of air2phin, including all configs change behavior of air2phin.
 
     :param customs: User custom path of rules, will combine with build-in rules when :param:``customs_only``
         is False, will only use custom rules and ignore build-in rules when :param:``customs_only`` is True.

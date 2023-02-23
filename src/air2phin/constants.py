@@ -1,5 +1,5 @@
 class TOKEN:
-    """Constants token for airphin."""
+    """Constants token for air2phin."""
 
     QUESTION: str = "?"
     COMMA: str = ","
@@ -13,9 +13,9 @@ class TOKEN:
 
 
 class KEYWORD:
-    """Constants keywords for airphin."""
+    """Constants keywords for air2phin."""
 
-    MIGRATE_MARK: str = "-airphin"
+    MIGRATE_MARK: str = "-air2phin"
     WORKFLOW_SUBMIT: str = "submit"
     AIRFLOW_DAG_SCHEDULE: str = "schedule_interval"
     AIRFLOW_DAG: str = "airflow.DAG"
@@ -24,7 +24,7 @@ class KEYWORD:
 
 
 class REGEXP:
-    """Constants regular expression for airphin."""
+    """Constants regular expression for air2phin."""
 
     PATH_YAML: str = "*.yaml"
     PATH_PYTHON: str = "*.py"
@@ -32,7 +32,7 @@ class REGEXP:
 
 
 class CONFIG:
-    """Constants config file for airphin."""
+    """Constants config file for air2phin."""
 
     NAME: str = "name"
 
@@ -57,7 +57,7 @@ class CONFIG:
 
 
 class NUMBER:
-    """Constants number for airphin."""
+    """Constants number for air2phin."""
 
     SCHEDULE_TOTAL_NUM: int = 9
     SCHEDULE_SPACE_NUM: int = 4

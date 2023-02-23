@@ -4,8 +4,8 @@ import re
 
 from sqlalchemy import create_engine, text
 
-from airphin.constants import TOKEN
-from airphin.fake.core.connection import Connection
+from air2phin.constants import TOKEN
+from air2phin.fake.core.connection import Connection
 
 
 class BaseHook:
@@ -14,7 +14,7 @@ class BaseHook:
     This hook is a fake hook for Airflow base hook, to allow user do not change their code but use
     dolphinscheduler datasource connection to connect specific datasource.
 
-    :param connection: specific hook connection. :class:``airphin.fake.core.connection.Connection`` object.
+    :param connection: specific hook connection. :class:``air2phin.fake.core.connection.Connection`` object.
     """
 
     _QUERY_TYPE_NAME = (
@@ -71,15 +71,15 @@ class BaseHook:
 
         This method is a fake function for Airflow connection get_connection, to allow user do not change
         their code but use dolphinscheduler datasource and return
-        :class:``airphin.fake.core.connection.Connection`` object.
+        :class:``air2phin.fake.core.connection.Connection`` object.
 
         :param conn_id: connection id, if in format of datasource_type.datasource_name, will query by type
             and name, and if only use datasource_name, will query by name only.
         """
-        ds_metadata = os.environ.get("AIRPHIN_FAKE_CONNECTION", None)
+        ds_metadata = os.environ.get("AIR2PHIN_FAKE_CONNECTION", None)
         if ds_metadata is None:
             raise ValueError(
-                "AIRPHIN_FAKE_CONNECTION is not set in environment variables"
+                "AIR2PHIN_FAKE_CONNECTION is not set in environment variables"
             )
 
         engine = create_engine(ds_metadata, echo=True)

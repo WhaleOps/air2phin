@@ -16,7 +16,7 @@
 # under the License.
 
 
-from airphin import runner
+from air2phin import runner
 
 with open("./airflow/python.py") as f:
     data = f.read()
