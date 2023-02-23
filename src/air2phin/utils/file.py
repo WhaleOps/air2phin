@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Optional
 
 import yaml
 
-from airphin.constants import REGEXP
+from air2phin.constants import REGEXP
 
 
 def read(path: Path) -> str:

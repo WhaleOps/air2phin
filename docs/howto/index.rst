@@ -1,7 +1,7 @@
 HOWTOS
 ======
 
-The useful guides to use airphin.
+The useful guides to use air2phin.
 
 .. toctree::
    :maxdepth: 2

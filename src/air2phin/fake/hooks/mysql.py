@@ -1,5 +1,5 @@
-from airphin.fake.core.connection import Connection
-from airphin.fake.core.hook import BaseHook
+from air2phin.fake.core.connection import Connection
+from air2phin.fake.core.hook import BaseHook
 
 try:
     import MySQLdb
@@ -13,7 +13,7 @@ class MySqlHook(BaseHook):
     This hook is a fake hook for Airflow MySQL hook, to allow user do not change their code but use
     dolphinscheduler datasource connection to connect to MySQL database.
 
-    :param connection: specific hook connection. :class:``airphin.fake.core.connection.Connection`` object.
+    :param connection: specific hook connection. :class:``air2phin.fake.core.connection.Connection`` object.
     """
 
     def __init__(self, connection: Connection, *args, **kwargs):

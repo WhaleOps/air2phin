@@ -69,7 +69,7 @@ test_cases:
     dest: |
       from contextlib import closing
       from pydolphinscheduler.tasks.python import Python
-      from airphin.fake.hooks.postgres import PostgresHook
+      from air2phin.fake.hooks.postgres import PostgresHook
       
       def demo():
           connection = PostgresHook.get_connection('postgres_default')

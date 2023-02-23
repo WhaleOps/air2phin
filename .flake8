@@ -40,4 +40,4 @@ ignore =
     W503,
 per-file-ignores =
     # ignore libcst ``visit_*`` or ``leave_*``
-    */airphin/core/transformer/*.py:D102
+    */air2phin/core/transformer/*.py:D102

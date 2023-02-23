@@ -5,9 +5,9 @@ import libcst as cst
 import libcst.matchers as m
 from libcst import Arg, BaseExpression, FlattenSentinel, RemovalSentinel
 
-from airphin.constants import KEYWORD, TOKEN
-from airphin.core.rules.config import CallConfig, Config, ParamDefaultConfig
-from airphin.utils import string
+from air2phin.constants import KEYWORD, TOKEN
+from air2phin.core.rules.config import CallConfig, Config, ParamDefaultConfig
+from air2phin.utils import string
 
 
 class OpTransformer(cst.CSTTransformer):

@@ -11,9 +11,9 @@ import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join("..", "src")))
 
-from airphin import __version__  # noqa
+from air2phin import __version__  # noqa
 
-project = "airphin"
+project = "air2phin"
 copyright = "2022, Jay Chung"
 author = "Jay Chung"
 release = __version__

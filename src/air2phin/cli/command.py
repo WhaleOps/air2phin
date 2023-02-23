@@ -5,15 +5,15 @@ import sys
 from pathlib import Path
 from typing import Dict, Sequence
 
-from airphin import __project_name__, __version__
-from airphin.constants import REGEXP, TOKEN
-from airphin.core.rules.config import Config
-from airphin.core.rules.loader import build_in_rules, path_rule
-from airphin.runner import Runner
-from airphin.utils.file import recurse_files
+from air2phin import __project_name__, __version__
+from air2phin.constants import REGEXP, TOKEN
+from air2phin.core.rules.config import Config
+from air2phin.core.rules.loader import build_in_rules, path_rule
+from air2phin.runner import Runner
+from air2phin.utils.file import recurse_files
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
-logger = logging.getLogger("airphin")
+logger = logging.getLogger("air2phin")
 
 common_args: Dict[str, Dict] = {
     "custom_rules": {
@@ -36,8 +36,8 @@ common_args: Dict[str, Dict] = {
 def build_argparse() -> argparse.ArgumentParser:
     """Build argparse.ArgumentParser with specific configuration."""
     parser = argparse.ArgumentParser(
-        prog="airphin",
-        description="Airphin is a tool for migrating Airflow DAGs to DolphinScheduler Python API.",
+        prog="air2phin",
+        description="Air2phin is a tool for migrating Airflow DAGs to DolphinScheduler Python API.",
     )
 
     # Version
@@ -157,7 +157,7 @@ def build_argparse() -> argparse.ArgumentParser:
 
 
 def main(argv: Sequence[str] = None) -> None:
-    """Run airphin in command line."""
+    """Run air2phin in command line."""
     parser = build_argparse()
     argv = argv if argv is not None else sys.argv[1:]
     # argv = ["rule", "--show"]
@@ -165,7 +165,7 @@ def main(argv: Sequence[str] = None) -> None:
 
     if hasattr(args, "verbose") and args.verbose:
         logger.setLevel(logging.DEBUG)
-    logger.debug("Finish parse airphin arguments, current args is %s.", args)
+    logger.debug("Finish parse air2phin arguments, current args is %s.", args)
 
     # recurse all file in given path
     customs_rules = []

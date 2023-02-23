@@ -15,5 +15,5 @@
 # specific language governing permissions and limitations
 # under the License.
 
-__project_name__ = "Airphin"
+__project_name__ = "Air2phin"
 __version__ = "1.0.0-dev"

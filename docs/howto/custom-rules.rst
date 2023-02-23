@@ -65,7 +65,7 @@ And in the file ``dag.py``, you use this custom operator like this:
         )
 
 
-In this case, you can add a custom rule file named ``MyCustomOperator.yaml`` to tell airphin what you want to do
+In this case, you can add a custom rule file named ``MyCustomOperator.yaml`` to tell air2phin what you want to do
 during the migration
 
 .. code-block:: yaml
@@ -89,19 +89,19 @@ during the migration
 Use Custom Rule
 ---------------
 
-Save the YAML config file to any directory you want, and declare the path when you run the ``airphin`` command:
+Save the YAML config file to any directory you want, and declare the path when you run the ``air2phin`` command:
 
 .. code-block:: bash
 
-    airphin migrate --custom-rules /path/to/MyCustomOperator.yaml ~/airflow/dags/dag.py
+    air2phin migrate --custom-rules /path/to/MyCustomOperator.yaml ~/airflow/dags/dag.py
 
-And you can see the new DAG file directory ``~/airflow/dags`` named ``dag-airphin.py`` is created which is the
+And you can see the new DAG file directory ``~/airflow/dags`` named ``dag-air2phin.py`` is created which is the
 migrated result of ``dag.py``.
 
 Use Multiple Custom Rules
 -------------------------
 
-Airphin also supports using multiple custom rules in a single migration, and has directory and scatter files due
+Air2phin also supports using multiple custom rules in a single migration, and has directory and scatter files due
 to different files organized.
 
 In Single File and Directory
@@ -113,27 +113,27 @@ can use them
 .. code-block:: bash
 
     # single file
-    airphin migrate --custom-rules /path/to/MyCustomOperator.yaml ~/airflow/dags/dag.py
+    air2phin migrate --custom-rules /path/to/MyCustomOperator.yaml ~/airflow/dags/dag.py
 
     # single directory
-    airphin migrate --custom-rules /path/to/rules/dir ~/airflow/dags/dag.py
+    air2phin migrate --custom-rules /path/to/rules/dir ~/airflow/dags/dag.py
 
 In Scatter Files or Directories
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Sometimes, our rules will be in the different places, and airphin support the use option argument :code:`--custom-rules` or :code:`-r`
+Sometimes, our rules will be in the different places, and air2phin support the use option argument :code:`--custom-rules` or :code:`-r`
 multiple times in one single migration
 
 .. code-block:: bash
 
     # multiple files
-    airphin migrate --custom-rules /path/to/MyCustomOperator1.yaml --custom-rules /path/to/MyCustomOperator2.yaml ~/airflow/dags/dag.py
+    air2phin migrate --custom-rules /path/to/MyCustomOperator1.yaml --custom-rules /path/to/MyCustomOperator2.yaml ~/airflow/dags/dag.py
 
     # multiple directories
-    airphin migrate --custom-rules /path/to/rules/dir1 --custom-rules /path/to/rules/dir2 ~/airflow/dags/dag.py
+    air2phin migrate --custom-rules /path/to/rules/dir1 --custom-rules /path/to/rules/dir2 ~/airflow/dags/dag.py
 
     # multiple mixed files and directories
-    airphin migrate --custom-rules /path/to/MyCustomOperator1.yaml --custom-rules /path/to/rules/dir1 ~/airflow/dags/dag.py
+    air2phin migrate --custom-rules /path/to/MyCustomOperator1.yaml --custom-rules /path/to/rules/dir1 ~/airflow/dags/dag.py
 
 Use Custom Rule Only Without Built-ins
 ---------------------------------------
@@ -145,7 +145,7 @@ the custom rule to migrate existing files, just like we apply a patch to our cod
 .. code-block:: bash
 
     # Only use custom rules and ignore built-in one
-    airphin migrate --custom-rules /path/to/MyCustomOperator1.yaml --custom-only ~/airflow/dags/dag.py
+    air2phin migrate --custom-rules /path/to/MyCustomOperator1.yaml --custom-only ~/airflow/dags/dag.py
 
 It is useful when you have lots of files to migrate, if you found some code should change again after the first
 migration run, but do not want to apply all the rules which cost lots of time, you can try to use this feature.
@@ -217,12 +217,12 @@ same as the value of built-in on in ``PythonOperator.yaml``)
             type: str
             value: airflow_migrate
 
-in ``CustomPythonOperator.yaml`` to tell airphin add one new argument name ``environment_name`` with default
+in ``CustomPythonOperator.yaml`` to tell air2phin add one new argument name ``environment_name`` with default
 value ``airflow_migrate``, then we can use it by command
 
 .. code-block:: bash
 
-    airphin migrate --custom-rules CustomPythonOperator.yaml ~/airflow/dags/dag.py
+    air2phin migrate --custom-rules CustomPythonOperator.yaml ~/airflow/dags/dag.py
 
 ``PythonOperator.yaml`` will be overridden by ``CustomPythonOperator.yaml`` due to ``CustomPythonOperator.yaml``
 have the same name and ``CustomPythonOperator.yaml`` is the custom rule.

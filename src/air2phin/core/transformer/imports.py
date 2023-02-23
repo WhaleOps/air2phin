@@ -20,8 +20,8 @@ import libcst as cst
 import libcst.matchers as m
 from libcst import FlattenSentinel, RemovalSentinel
 
-from airphin.constants import TOKEN
-from airphin.core.rules.config import Config, ImportConfig
+from air2phin.constants import TOKEN
+from air2phin.core.rules.config import Config, ImportConfig
 
 
 class ImportTransformer(cst.CSTTransformer):

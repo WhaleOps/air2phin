@@ -2,7 +2,7 @@ from typing import Dict, List
 
 import pytest
 
-from airphin.cli.command import build_argparse
+from air2phin.cli.command import build_argparse
 
 
 @pytest.mark.parametrize(

@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-"""The script for setting up airphin."""
+"""The script for setting up air2phin."""
 import logging
 import os
 from distutils.dir_util import remove_tree

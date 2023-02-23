@@ -1,4 +1,4 @@
-from airphin.constants import KEYWORD, NUMBER, TOKEN
+from air2phin.constants import KEYWORD, NUMBER, TOKEN
 
 
 def convert_schedule(val: str) -> str:
