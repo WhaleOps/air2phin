@@ -59,7 +59,6 @@ This code cannot be run in dolphinscheduler python SDK, because :code:``airflow.
 only. There are two ways if you want it successfully run by dolphinscheduler python SDK, one is to rewrite the function
 to make it work with dolphinscheduler, another is to use :code:``air2phin.fake``without any modification.
 
-
 Install
 -------
 
@@ -71,7 +70,6 @@ Air2phin fake module is an option dependency, which means you can install it via
 
 Usage
 -----
-
 
 Basic Usage
 ~~~~~~~~~~~
@@ -118,18 +116,31 @@ Requirement
   :code:``air2phin.fake`` will query the connection information from dolphinscheduler metadata database.
 - The data source named ``postgres_default``(same as airflow's connection) must exist in dolphinscheduler metadata
   database for air2phin.fake to get the connection information.
-- An environment variable named ``AIR2PHIN_FAKE_CONNECTION`` must be set with the connection information of
-  the dolphinscheduler metadata database. It is use
-  `sqlalchemy connection string format <https://docs.sqlalchemy.org/en/20/core/engines.html#database-urls>`_ 
-  for example: :code:``postgresql+psycopg2://scott:tiger@localhost:5432/mydatabase``. We recommend you use
-  dolphinscheduler's `Environmental Management <https://dolphinscheduler.apache.org/en-us/docs/3.1.3/guide/security>`_
-  to do that, all you should do is add a new environment with content like
+- Methods can connect to the dolphinscheduler metabase, any one of the following is acceptable:
+  - Package `pydolphinscheduler <https://pypi.org/project/apache-dolphinscheduler>`_ is installed in the
+    dolphinscheduler worker's python environment, and make sure the
+    `token is correct <https://dolphinscheduler.apache.org/python/main/concept.html#authentication-token>`_.
+  - An environment variable named ``AIR2PHIN_FAKE_CONNECTION`` set with the connection information of the
+    dolphinscheduler metadata database. It is use
+    `sqlalchemy connection string format <https://docs.sqlalchemy.org/en/20/core/engines.html#database-urls>`_ 
+    for example: :code:``postgresql+psycopg2://scott:tiger@localhost:5432/mydatabase``. We recommend you use
+    dolphinscheduler's `Environmental Management <https://dolphinscheduler.apache.org/en-us/docs/3.1.3/guide/security>`_
+    to do that, all you should do is add a new environment with content like
 
     .. code-block:: bash
     
         export AIR2PHIN_FAKE_CONNECTION=postgresql+psycopg2://scott:tiger@localhost:5432/mydatabase
 
-  and use it in your dolphinscheduler's Python task.
+    and use it in your dolphinscheduler's Python task.
+
+  .. note::
+
+      The priority of package ``pydolphinscheduler`` is higher than the environment variables
+      ``AIR2PHIN_FAKE_CONNECTION``. If you want less connections for your dolphinscheduler metadata database,
+      please use package pydolphinscheduler which will reuse the connection pool of dolphinscheduler itself.
+      But if you do not case much of the connections number(such as do not have many tasks using air2phin.fake),
+      or do not want to install pydolphinscheduler dolphinscheduler worker, environment variable ``AIR2PHIN_FAKE_CONNECTION``
+      is a better choice.
 
 With Non-unique Datasource Name 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
