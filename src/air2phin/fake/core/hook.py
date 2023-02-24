@@ -55,7 +55,7 @@ class BaseHook:
         cls, metadata_conn: str, conn_id: str
     ) -> Connection:
         sql_qry_type_name = (
-            "SELECT connection_params FROM t_ds_datasource WHERE type = {type} and"
+            "SELECT connection_params FROM t_ds_datasource WHERE type = {type} and "
             "name = '{name}'"
         )
         sql_qry_name = (
@@ -107,7 +107,10 @@ class BaseHook:
                 )
             result_type_name = conn.execute(
                 text(
-                    sql_qry_type_name.format(type=datasource_type, name=datasource_name)
+                    sql_qry_type_name.format(
+                        type=database_type_map.get(datasource_type),
+                        name=datasource_name,
+                    )
                 )
             )
             if result_type_name.rowcount == 0:
