@@ -33,13 +33,18 @@ class BaseHook:
         """
         data = json.loads(connection_params)
 
-        pattern = re.compile("jdbc:.*://(?P<host>[\\w\\W]+):(?P<port>\\d+)")
-        address_match = pattern.match(data.get("jdbcUrl", None)).groupdict()
+        pattern = re.compile(
+            "jdbc:.*://(?P<host>[\\w\\W]+):(?P<port>\\d+)/(?P<database>[\\w\\W]+)\\?"
+        )
+        # node name change to url when using seatunnel datasource connector
+        pattern_match = pattern.match(
+            data.get("jdbcUrl", data.get("url", None))
+        ).groupdict()
 
         return Connection(
-            host=address_match.get("host", None),
-            port=int(address_match.get("port", None)),
-            schema=data.get("database", None),
+            host=pattern_match.get("host", None),
+            port=int(pattern_match.get("port", None)),
+            schema=pattern_match.get("database", None),
             login=data.get("user", None),
             password=data.get("password", None),
         )
