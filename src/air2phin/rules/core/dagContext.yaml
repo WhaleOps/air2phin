@@ -43,8 +43,8 @@ examples:
           name='dag',
           description='DAG description',
           start_time=datetime(2020, 1, 1),
-          schedule='0 5 4 * * ? *',
-      )
+          release_state="offline",
+          )
   context:
     description: |
       The example of migrating `airflow.DAG` in context mode.
@@ -67,7 +67,7 @@ examples:
           name='dag',
           description='DAG description',
           start_time=datetime(2020, 1, 1),
-          schedule='0 0 0 * * ? *',
-      ) as dag:
+          release_state="offline",
+          ) as dag:
           pass
       dag.submit()

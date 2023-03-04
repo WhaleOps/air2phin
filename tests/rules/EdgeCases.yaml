@@ -82,4 +82,6 @@ test_cases:
       demo = Python(
           name='demo',
           definition=demo,
+      environment_name="airflow_migrate",
+      resource_list=["airflow"],
       )

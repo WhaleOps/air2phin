@@ -49,6 +49,8 @@ examples:
       task = Python(
           name='python',
           definition=foo,
+      environment_name="airflow_migrate",
+      resource_list=["airflow"],
       )
   nested_python:
     description: |
@@ -79,4 +81,6 @@ examples:
       task = Python(
           name='python',
           definition=foo,
+      environment_name="airflow_migrate",
+      resource_list=["airflow"],
       )
