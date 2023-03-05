@@ -34,12 +34,15 @@ class BaseHook:
         data = json.loads(connection_params)
 
         pattern = re.compile(
-            "jdbc:.*://(?P<host>[\\w\\W]+):(?P<port>\\d+)/(?P<database>[\\w\\W]+)\\?"
+            "jdbc:.*://(?P<host>[\\w\\W]+):(?P<port>\\d+)/(?P<database>\\w+)(\\?|$)"
         )
         # node name change to url when using seatunnel datasource connector
-        pattern_match = pattern.match(
-            data.get("jdbcUrl", data.get("url", None))
-        ).groupdict()
+        try:
+            pattern_match = pattern.match(
+                data.get("jdbcUrl", data.get("url", None))
+            ).groupdict()
+        except Exception:
+            raise ValueError(f"Can not parser connection params: {connection_params}.")
 
         return Connection(
             host=pattern_match.get("host", None),
