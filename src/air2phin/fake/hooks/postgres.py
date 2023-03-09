@@ -1,11 +1,6 @@
 from air2phin.fake.core.connection import Connection
 from air2phin.fake.core.hook import BaseHook
 
-try:
-    import psycopg2
-except ImportError:
-    raise ImportError("This psycopg2 module does not seem to be installed.")
-
 
 class PostgresHook(BaseHook):
     """Interact with PostgresSQL.
@@ -19,8 +14,13 @@ class PostgresHook(BaseHook):
     def __init__(self, connection: Connection, *args, **kwargs):
         super().__init__(connection)
 
-    def get_conn(self) -> "psycopg2.extensions.connection":
+    def get_conn(self) -> "psycopg2.extensions.connection":  # noqa: F821
         """Get postgres connection object."""
+        try:
+            import psycopg2
+        except ImportError:
+            raise ImportError("This psycopg2 module does not seem to be installed.")
+
         conn_args = dict(
             host=self.connection.host,
             port=self.connection.port,
