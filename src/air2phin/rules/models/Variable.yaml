@@ -1,0 +1,45 @@
+name: Variable
+description: The configuration for migrating airflow.models.Variable to air2phin.fake.Variable.
+
+migration:
+  module:
+    - action: replace
+      src:
+        - airflow.models.Variable
+        - airflow.models.variable.Variable
+      dest: air2phin.fake.models.Variable
+
+examples:
+  in-init:
+    description: |
+      The example of migrating `airflow.models.Variable` declaration.
+    src: |
+      from airflow.models import Variable
+      var = Variable.get('var')
+    dest: |
+      from air2phin.fake.models import Variable
+      var = Variable.get('var')
+  absolute:
+    description: |
+      The example of migrating `airflow.models.variable.Variable` declaration.
+    src: |
+      from airflow.models.variable import Variable
+      var = Variable.get('var')
+    dest: |
+      from air2phin.fake.models import Variable
+      var = Variable.get('var')
+  class-method:
+    description: |
+      The example of migrating `airflow.models.variable.Variable` declaration.
+    src: |
+      from airflow.models.variable import Variable
+      Variable.set('var')
+      Variable.get('var')
+      Variable.update('var')
+      Variable.delete('var')
+    dest: |
+      from air2phin.fake.models import Variable
+      Variable.set('var')
+      Variable.get('var')
+      Variable.update('var')
+      Variable.delete('var')

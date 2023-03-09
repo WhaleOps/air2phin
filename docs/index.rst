@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Air2phin's Documentation
-=======================
+========================
 
 Air2phin is a tool for migrating Airflow DAGs to DolphinScheduler Python API.
 
@@ -17,7 +17,7 @@ and Yaml file to define the transformation rules.
 
    start
    cli
-   fake
+   fake/index
    howto/index
    arch
    changelog
