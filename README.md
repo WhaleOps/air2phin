@@ -5,7 +5,7 @@
 [![PyPi License](https://img.shields.io/:license-Apache%202-blue.svg?style=flat-square)](https://raw.githubusercontent.com/WhaleOps/air2phin/main/LICENSE)
 [![PyPi Status](https://img.shields.io/pypi/status/air2phin.svg?style=flat-square)](https://pypi.org/project/air2phin/)
 [![Downloads](https://pepy.tech/badge/air2phin/month)](https://pepy.tech/project/air2phin)
-[![Coverage Status](https://img.shields.io/codecov/c/github/WhaleOps/air2phin/main.svg?style=flat-square)](https://codecov.io/github/WhaleOps/air2phin?branch=main)
+[![Coverage Status](https://img.shields.io/codecov/c/github/WhaleOps/air2phin/main.svg?style=flat-square)](https://codecov.io/github/WhaleOps/air2phin?branch=main) <!-- markdown-link-check-disable-line -->
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat-square&labelColor=ef8336)](https://pycqa.github.io/isort)
 [![CI](https://github.com/WhaleOps/air2phin/actions/workflows/ci.yaml/badge.svg)](https://github.com/WhaleOps/air2phin/actions/workflows/ci.yaml)
