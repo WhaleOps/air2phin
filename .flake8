@@ -38,6 +38,10 @@ ignore =
     D100,
     # W503: Line breaks before binary operators
     W503,
+    # First line should end with a period
+    D400,
+    # First line should be in imperative mood
+    D401,
 per-file-ignores =
     # ignore libcst ``visit_*`` or ``leave_*``
     */air2phin/core/transformer/*.py:D102
