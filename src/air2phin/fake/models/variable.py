@@ -8,7 +8,7 @@ class Variable:
     def get(
         cls,
         key: str,
-        default_var: Any,
+        default_var: Any = None,
         *args,
         **kwargs,
     ) -> str:
