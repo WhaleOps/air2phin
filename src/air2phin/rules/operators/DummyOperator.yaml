@@ -24,14 +24,14 @@ examples:
     src: |
       from airflow.operators.dummy_operator import DummyOperator
 
-      bash = DummyOperator(
+      task = DummyOperator(
           task_id='dummy',
       )
     # TODO: We have some indentation issues when add new arguments
     dest: |
       from pydolphinscheduler.tasks.shell import Shell
 
-      bash = Shell(
+      task = Shell(
           name='dummy',
       command="echo 'Airflow DummyOperator'",
       )

@@ -1,0 +1,57 @@
+name: PostgresOperator
+description: The configuration for migrating Airflow PostgresOperator to DolphinScheduler SQL task.
+
+migration:
+  module:
+    - action: replace
+      src: airflow.providers.postgres.operators.postgres.PostgresOperator
+      dest: pydolphinscheduler.tasks.sql.Sql
+  parameter:
+    - action: replace
+      src: task_id
+      dest: name
+    - action: replace
+      src: postgres_conn_id
+      dest: datasource_name
+
+examples:
+  bare_sql:
+    description: |
+      The example of migrating `airflow.providers.postgres.operators.postgres.PostgresOperator` with
+      bare sql statement as parameter ``sql``.
+    src: |
+      from airflow.providers.postgres.operators.postgres import PostgresOperator
+
+      task = PostgresOperator(
+          task_id='postgres-sql',
+          postgres_conn_id='postgres_default_conn',
+          sql='select * from table',
+      )
+    dest: |
+      from pydolphinscheduler.tasks.sql import Sql
+
+      task = Sql(
+          name='postgres-sql',
+          datasource_name='postgres_default_conn',
+          sql='select * from table',
+      )
+  sql_file:
+    description: |
+      The example of migrating `airflow.operators.spark_sql_operator.SparkSqlOperator` with sql file as
+      parameter ``sql``.
+    src: |
+      from airflow.providers.postgres.operators.postgres import PostgresOperator
+
+      task = PostgresOperator(
+          task_id='postgres-sql',
+          postgres_conn_id='postgres_default_conn',
+          sql='test.sql',
+      )
+    dest: |
+      from pydolphinscheduler.tasks.sql import Sql
+
+      task = Sql(
+          name='postgres-sql',
+          datasource_name='postgres_default_conn',
+          sql='test.sql',
+      )
