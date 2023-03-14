@@ -84,4 +84,5 @@ test_cases:
           definition=demo,
       environment_name="airflow_migrate",
       resource_list=["airflow"],
+      input_params={"curdate": "${system.biz.curdate}", "bizdate": "${system.biz.date}", "datetime": "${system.datetime}"},
       )

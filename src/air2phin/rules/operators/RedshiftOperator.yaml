@@ -22,6 +22,11 @@ migration:
       default: 
         type: code
         value: Local(prefix="file://")
+    - action: add
+      arg: input_params
+      default: 
+        type: code
+        value: '{"curdate": "${system.biz.curdate}", "bizdate": "${system.biz.date}", "datetime": "${system.datetime}"}'
 
 examples:
   redshift:
@@ -46,5 +51,6 @@ examples:
           sql="file/sql_file/t3/dwm_spot_trade_first_order.sql",
           check_sql="file/sql_file/t3/check/dwm_spot_trade_first_order.sql", 
       datasource_name="redshift_read_conn", 
-      resource_plugin=Local(prefix="file://")
+      resource_plugin=Local(prefix="file://"), 
+      input_params={"curdate": "${system.biz.curdate}", "bizdate": "${system.biz.date}", "datetime": "${system.datetime}"}
       )

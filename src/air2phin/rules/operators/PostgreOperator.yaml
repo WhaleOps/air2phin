@@ -13,6 +13,11 @@ migration:
     - action: replace
       src: postgres_conn_id
       dest: datasource_name
+    - action: add
+      arg: input_params
+      default: 
+        type: code
+        value: '{"curdate": "${system.biz.curdate}", "bizdate": "${system.biz.date}", "datetime": "${system.datetime}"}'
 
 examples:
   bare_sql:
@@ -34,6 +39,7 @@ examples:
           name='postgres-sql',
           datasource_name='postgres_default_conn',
           sql='select * from table',
+      input_params={"curdate": "${system.biz.curdate}", "bizdate": "${system.biz.date}", "datetime": "${system.datetime}"},
       )
   sql_file:
     description: |
@@ -54,4 +60,5 @@ examples:
           name='postgres-sql',
           datasource_name='postgres_default_conn',
           sql='test.sql',
+      input_params={"curdate": "${system.biz.curdate}", "bizdate": "${system.biz.date}", "datetime": "${system.datetime}"},
       )

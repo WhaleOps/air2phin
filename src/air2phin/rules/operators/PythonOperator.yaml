@@ -25,7 +25,11 @@ migration:
       default: 
         type: code
         value: '["airflow"]'
-        
+    - action: add
+      arg: input_params
+      default: 
+        type: code
+        value: '{"curdate": "${system.biz.curdate}", "bizdate": "${system.biz.date}", "datetime": "${system.datetime}"}'
 
 examples:
   python_operator:
@@ -51,6 +55,7 @@ examples:
           definition=foo,
       environment_name="airflow_migrate",
       resource_list=["airflow"],
+      input_params={"curdate": "${system.biz.curdate}", "bizdate": "${system.biz.date}", "datetime": "${system.datetime}"},
       )
   nested_python:
     description: |
@@ -83,4 +88,5 @@ examples:
           definition=foo,
       environment_name="airflow_migrate",
       resource_list=["airflow"],
+      input_params={"curdate": "${system.biz.curdate}", "bizdate": "${system.biz.date}", "datetime": "${system.datetime}"},
       )
