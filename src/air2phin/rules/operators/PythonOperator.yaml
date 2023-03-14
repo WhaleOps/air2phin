@@ -25,7 +25,7 @@ examples:
       def foo():
           print('Hello World!')
 
-      bash = PythonOperator(
+      task = PythonOperator(
           task_id='python',
           python_callable=foo,
       )
@@ -35,7 +35,7 @@ examples:
       def foo():
           print('Hello World!')
 
-      bash = Python(
+      task = Python(
           name='python',
           definition=foo,
       )
@@ -52,7 +52,7 @@ examples:
       def foo():
           bar()
 
-      bash = PythonOperator(
+      task = PythonOperator(
           task_id='python',
           python_callable=foo,
       )
@@ -65,7 +65,7 @@ examples:
       def foo():
           bar()
 
-      bash = Python(
+      task = Python(
           name='python',
           definition=foo,
       )

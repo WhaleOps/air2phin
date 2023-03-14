@@ -22,7 +22,7 @@ examples:
     src: |
       from airflow.operators.spark_sql_operator import SparkSqlOperator
 
-      bash = SparkSqlOperator(
+      task = SparkSqlOperator(
           task_id='spark-sql',
           conn_id='spark_default_conn',
           sql='select * from table',
@@ -30,7 +30,7 @@ examples:
     dest: |
       from pydolphinscheduler.tasks.sql import Sql
 
-      bash = Sql(
+      task = Sql(
           name='spark-sql',
           datasource_name='spark_default_conn',
           sql='select * from table',
@@ -42,7 +42,7 @@ examples:
     src: |
       from airflow.operators.spark_sql_operator import SparkSqlOperator
 
-      bash = SparkSqlOperator(
+      task = SparkSqlOperator(
           task_id='spark-sql',
           conn_id='spark_default_conn',
           sql='test.sql',
@@ -50,7 +50,7 @@ examples:
     dest: |
       from pydolphinscheduler.tasks.sql import Sql
 
-      bash = Sql(
+      task = Sql(
           name='spark-sql',
           datasource_name='spark_default_conn',
           sql='test.sql',

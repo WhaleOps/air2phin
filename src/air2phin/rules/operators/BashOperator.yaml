@@ -22,14 +22,14 @@ examples:
     src: |
       from airflow.operators.bash import BashOperator
 
-      bash = BashOperator(
+      task = BashOperator(
           task_id='bash',
           bash_command='echo "Hello World!"',
       )
     dest: |
       from pydolphinscheduler.tasks.shell import Shell
 
-      bash = Shell(
+      task = Shell(
           name='bash',
           command='echo "Hello World!"',
       )
@@ -38,14 +38,14 @@ examples:
     src: |
       from airflow.operators.bash_operator import BashOperator
 
-      bash = BashOperator(
+      task = BashOperator(
           task_id='bash',
           bash_command='echo "Hello World!"',
       )
     dest: |
       from pydolphinscheduler.tasks.shell import Shell
 
-      bash = Shell(
+      task = Shell(
           name='bash',
           command='echo "Hello World!"',
       )
