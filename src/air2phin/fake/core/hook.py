@@ -2,7 +2,7 @@ import json
 import os
 import re
 from contextlib import closing
-from typing import Any, Callable, Iterable, Mapping, Optional, Tuple
+from typing import Any, Callable, Iterable, Mapping, Tuple, Union
 
 import sqlparse
 from sqlalchemy import create_engine, text
@@ -176,13 +176,13 @@ class BaseHook:
 
     def run(
         self,
-        sql: Optional[str, Iterable[str]],
+        sql: Union[str, Iterable[str]],
         autocommit: bool = False,
-        parameters: Optional[Iterable, Mapping, None] = None,
-        handler: Optional[Callable, None] = None,
+        parameters: Union[Iterable, Mapping, None] = None,
+        handler: Union[Callable, None] = None,
         split_statements: bool = False,
         return_last: bool = True,
-    ) -> Optional[Any, list[Any], None]:
+    ) -> Union[Any, list[Any], None]:
         """Mock sql run command."""
         if isinstance(sql, str):
             if split_statements:
@@ -215,7 +215,7 @@ class BaseHook:
             return results
 
     @staticmethod
-    def fetch_all_handler(cursor) -> Optional[list[tuple], None]:
+    def fetch_all_handler(cursor) -> Union[list[tuple], None]:
         """Handler for DbApiHook.run() to return results."""
         if cursor.description is not None:
             return cursor.fetchall()
@@ -224,8 +224,8 @@ class BaseHook:
 
     def get_records(
         self,
-        sql: Optional[str, list[str]],
-        parameters: Optional[Iterable, Mapping, None] = None,
+        sql: Union[str, list[str]],
+        parameters: Union[Iterable, Mapping, None] = None,
     ) -> Any:
         """Mock executes sql and returns records."""
         return self.run(sql=sql, parameters=parameters, handler=fetch_all_handler)

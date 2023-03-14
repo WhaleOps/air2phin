@@ -1,0 +1,19 @@
+name: TriggerRule
+description: The configuration for migrating airflow.utils.trigger_rule.TriggerRule to air2phin.fake.utils.trigger_rule.TriggerRule.
+
+migration:
+  module:
+    - action: replace
+      src: airflow.utils.trigger_rule.TriggerRule
+      dest: air2phin.fake.utils.trigger_rule.TriggerRule
+
+examples:
+  in-init:
+    description: |
+      The example of migrating `airflow.models.Variable` declaration.
+    src: |
+      from airflow.utils.trigger_rule import TriggerRule
+      TriggerRule.ALL_SUCCESS
+    dest: |
+      from air2phin.fake.utils.trigger_rule import TriggerRule
+      TriggerRule.ALL_SUCCESS
