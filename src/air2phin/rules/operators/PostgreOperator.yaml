@@ -6,6 +6,8 @@ migration:
     - action: replace
       src: airflow.providers.postgres.operators.postgres.PostgresOperator
       dest: pydolphinscheduler.tasks.sql.Sql
+    - action: add
+      module: pydolphinscheduler.resources_plugin.Local
   parameter:
     - action: replace
       src: task_id
@@ -14,10 +16,10 @@ migration:
       src: postgres_conn_id
       dest: datasource_name
     - action: add
-      arg: input_params
-      default: 
+      arg: resource_plugin
+      default:
         type: code
-        value: '{"curdate": "${system.biz.curdate}", "bizdate": "${system.biz.date}", "datetime": "${system.datetime}"}'
+        value: Local(prefix="/path/to/dir/")
 
 examples:
   bare_sql:
@@ -33,13 +35,13 @@ examples:
           sql='select * from table',
       )
     dest: |
-      from pydolphinscheduler.tasks.sql import Sql
+      from pydolphinscheduler.resources_plugin import Local; from pydolphinscheduler.tasks.sql import Sql
 
       task = Sql(
           name='postgres-sql',
           datasource_name='postgres_default_conn',
           sql='select * from table',
-      input_params={"curdate": "${system.biz.curdate}", "bizdate": "${system.biz.date}", "datetime": "${system.datetime}"},
+      resource_plugin=Local(prefix="/path/to/dir/"),
       )
   sql_file:
     description: |
@@ -54,11 +56,11 @@ examples:
           sql='test.sql',
       )
     dest: |
-      from pydolphinscheduler.tasks.sql import Sql
+      from pydolphinscheduler.resources_plugin import Local; from pydolphinscheduler.tasks.sql import Sql
 
       task = Sql(
           name='postgres-sql',
           datasource_name='postgres_default_conn',
           sql='test.sql',
-      input_params={"curdate": "${system.biz.curdate}", "bizdate": "${system.biz.date}", "datetime": "${system.datetime}"},
+      resource_plugin=Local(prefix="/path/to/dir/"),
       )

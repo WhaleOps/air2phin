@@ -18,5 +18,5 @@ examples:
       from foo import Bar1
       from datetime import datetime
     dest: |
-      from pydolphinscheduler.core.process_definition import ProcessDefinition
+      from air2phin.patch.marco_path import PatchMarco; from pydolphinscheduler.core.process_definition import ProcessDefinition
       from datetime import datetime

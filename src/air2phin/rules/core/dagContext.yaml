@@ -6,6 +6,8 @@ migration:
     - action: replace
       src: airflow.DAG
       dest: pydolphinscheduler.core.process_definition.ProcessDefinition
+    - action: add
+      module: air2phin.patch.marco_path.PatchMarco
   parameter:
     - action: replace
       src: dag_id
@@ -13,8 +15,6 @@ migration:
     - action: replace
       src: start_date
       dest: start_time
-    - action: remove
-      arg: schedule_interval
     - action: add
       arg: release_state
       default: 
@@ -33,18 +33,19 @@ examples:
           dag_id='dag',
           description='DAG description',
           start_date=datetime(2020, 1, 1),
-          schedule_interval='5 4 * * *',
+          schedule_interval='0 5 4 * * ? *',
       )
     dest: |
-      from pydolphinscheduler.core.process_definition import ProcessDefinition
+      from air2phin.patch.marco_path import PatchMarco; from pydolphinscheduler.core.process_definition import ProcessDefinition
       from datetime import datetime
   
       dag = ProcessDefinition(
           name='dag',
           description='DAG description',
           start_time=datetime(2020, 1, 1),
-          release_state="offline",
-          )
+          schedule_interval='0 5 4 * * ? *',
+      release_state="offline",
+      )
   context:
     description: |
       The example of migrating `airflow.DAG` in context mode.
@@ -60,14 +61,16 @@ examples:
       ) as dag:
           pass
     dest: |
-      from pydolphinscheduler.core.process_definition import ProcessDefinition
+      from air2phin.patch.marco_path import PatchMarco; from pydolphinscheduler.core.process_definition import ProcessDefinition
       from datetime import datetime
   
       with ProcessDefinition(
           name='dag',
           description='DAG description',
           start_time=datetime(2020, 1, 1),
-          release_state="offline",
-          ) as dag:
+          schedule_interval='@once',
+      release_state="offline",
+      ) as dag:
           pass
+      PatchMarco(dag).patch()
       dag.submit()

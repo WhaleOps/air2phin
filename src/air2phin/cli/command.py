@@ -30,6 +30,10 @@ common_args: Dict[str, Dict] = {
         "action": "store_true",
         "help": "Show more verbose output.",
     },
+    "specific_arg": {
+        "help": "Whether to handle special variables.",
+        "action": "store_false",
+    },
 }
 
 
@@ -76,6 +80,11 @@ def build_argparse() -> argparse.ArgumentParser:
         **common_args["custom_only"],
     )
     parser_test.add_argument(
+        "-s",
+        "--specific-arg",
+        **common_args["specific_arg"],
+    )
+    parser_test.add_argument(
         "-d",
         "--diff",
         action="store_true",
@@ -106,6 +115,11 @@ def build_argparse() -> argparse.ArgumentParser:
         "-R",
         "--custom-only",
         **common_args["custom_only"],
+    )
+    parser_migrate.add_argument(
+        "-s",
+        "--specific-arg",
+        **common_args["specific_arg"],
     )
     parser_migrate.add_argument(
         "-I",

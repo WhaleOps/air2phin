@@ -17,6 +17,7 @@ class Keyword:
 
     MIGRATE_MARK: str = "-air2phin"
     WORKFLOW_SUBMIT: str = "submit"
+    WORKFLOW_MARCO_PATH_FMT: str = "PatchMarco({wf}).patch()"
     AIRFLOW_DAG_SCHEDULE: str = "schedule_interval"
     AIRFLOW_DAG: str = "airflow.DAG"
     AIRFLOW_DAG_SIMPLE: str = "DAG"

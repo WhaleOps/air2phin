@@ -121,6 +121,12 @@ class Transformer(cst.CSTTransformer):
             for alias in miss_alias
         ]
 
+    def _build_marco_path_exprs(self) -> List[SimpleStatementLine]:
+        return [
+            cst.parse_statement(Keyword.WORKFLOW_MARCO_PATH_FMT.format(wf=alias))
+            for alias in self.workflow_alias
+        ]
+
     def leave_Module(
         self, original_node: cst.Module, updated_node: cst.Module
     ) -> cst.Module:
@@ -129,5 +135,6 @@ class Transformer(cst.CSTTransformer):
 
         # add submit expr when do not have
         body_with_submit = list(updated_node.body)
+        body_with_submit.extend(self._build_marco_path_exprs())
         body_with_submit.extend(self._build_submit_exprs())
         return updated_node.with_changes(body=body_with_submit)

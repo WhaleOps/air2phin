@@ -28,6 +28,10 @@ exclude =
     examples,
     tests,
 ignore = 
+    D101,
+    D102,
+    D103,
+    W292,
     # D107: Don't require docstrings on __init__
     D107,
     # D105: Missing docstring in magic method

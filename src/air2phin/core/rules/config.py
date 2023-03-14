@@ -52,12 +52,14 @@ class Config:
         self,
         customs: Optional[List[Path]] = None,
         customs_only: Optional[bool] = False,
+        handle_special_arg: Optional[bool] = False,
         inplace: Optional[bool] = False,
         imports: Optional[List[Path]] = rule_imports,
         calls: Optional[List[Path]] = rule_calls,
     ):
         self._customs = customs
         self.customs_only = customs_only
+        self.handle_special_arg = handle_special_arg
         if self.customs_only and not self._customs:
             raise ValueError(
                 "Argument `customs` not allow value None, when customs_only is True."

@@ -17,3 +17,7 @@ def convert_schedule(val: str) -> str:
         val_list.insert(-1, Token.QUESTION)
         return Token.SPACE.join(val_list)
     return Keyword.DEFAULT_SCHEDULE
+
+
+def escape_marco_bracket(key: str) -> str:
+    return key.replace("(", "\\(").replace(")", "\\)")

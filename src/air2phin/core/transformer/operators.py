@@ -66,6 +66,8 @@ class OpTransformer(cst.CSTTransformer):
         Including:
         * airflow.DAG.schedule_interval: migrate schedule value
         """
+        if self._config.handle_special_arg is False:
+            return node
         name = node.keyword.value
         if (
             Keyword.AIRFLOW_DAG in self.qualified_name
