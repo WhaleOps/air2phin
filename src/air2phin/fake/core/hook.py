@@ -2,7 +2,7 @@ import json
 import os
 import re
 from contextlib import closing
-from typing import Any, Callable, Iterable, Mapping, Tuple, Union
+from typing import Any, Callable, Iterable, Mapping, Optional, Tuple, Union
 
 import sqlparse
 from sqlalchemy import create_engine, text
@@ -28,12 +28,26 @@ class BaseHook:
     :param connection: specific hook connection. :class:``air2phin.fake.core.connection.Connection`` object.
     """
 
-    def __init__(self, connection: Connection):
+    def __init__(
+        self,
+        conn_name_attr: Optional[str] = None,
+        connection: Optional[Connection] = None,
+    ):
+        self.conn_name_attr = conn_name_attr
         self.connection = connection
 
     def get_conn(self):
         """Get hook connection object, depend on subclass return type."""
-        raise NotImplementedError
+        if self.connection:
+            return self.connection
+        elif self.conn_name_attr:
+            self.connection = self.get_connection(self.conn_name_attr)
+            return self.connection
+        else:
+            raise ValueError(
+                "Can not get connection, nether parameter ``conn_name_attr``"
+                "nor ``connection`` provided."
+            )
 
     @staticmethod
     def parser_conn_namedtuple(connection_params: str) -> Connection:
@@ -184,6 +198,7 @@ class BaseHook:
         return_last: bool = True,
     ) -> Union[Any, list[Any], None]:
         """Mock sql run command."""
+        scalar_return_last = isinstance(sql, str) and return_last
         if isinstance(sql, str):
             if split_statements:
                 splits = sqlparse.split(sqlparse.format(sql, strip_comments=True))
@@ -209,7 +224,7 @@ class BaseHook:
 
         if handler is None:
             return None
-        elif isinstance(sql, str) and return_last:
+        elif scalar_return_last:
             return results[-1]
         else:
             return results
