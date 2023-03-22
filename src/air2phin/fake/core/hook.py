@@ -66,7 +66,11 @@ class BaseHook:
                 data.get("jdbcUrl", data.get("url", None))
             ).groupdict()
         except Exception:
-            raise ValueError(f"Can not parser connection params: {connection_params}.")
+            raise ValueError(
+                f"Can not parser connection params, make sure connection in format "
+                f"`jdbc:dbtype://host:port/database` which is only acceptable by air2phin, "
+                f"currently is : {connection_params}"
+            )
 
         return Connection(
             host=pattern_match.get("host", None),
