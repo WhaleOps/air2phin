@@ -76,12 +76,14 @@ def test_module_action_replace() -> None:
         migration = content["migration"]
         if "module" in migration:
             replace = Config.get_module_action(migration, ConfigKey.KW_REPLACE)
-            assert (
-                "src" in replace
-            ), f"Rule file {rule} migration.module pair key `src` not exists."
-            assert (
-                "dest" in replace
-            ), f"Rule file {rule} migration.module pair key `dest` not exists."
+            remove = Config.get_module_action(migration, ConfigKey.KW_REMOVE)
+            if remove is None:
+                assert (
+                    "src" in replace
+                ), f"Rule file {rule} migration.module pair key `src` not exists."
+                assert (
+                    "dest" in replace
+                ), f"Rule file {rule} migration.module pair key `dest` not exists."
 
 
 def test_module_action_replace_src_list_or_str() -> None:
@@ -90,10 +92,12 @@ def test_module_action_replace_src_list_or_str() -> None:
         migration = content["migration"]
         if "module" in migration:
             replace = Config.get_module_action(migration, ConfigKey.KW_REPLACE)
-            src = replace["src"]
-            assert isinstance(
-                src, (list, str)
-            ), f"Rule file {rule} migration.module.src must be list or str."
+            remove = Config.get_module_action(migration, ConfigKey.KW_REMOVE)
+            if remove is None:
+                src = replace["src"]
+                assert isinstance(
+                    src, (list, str)
+                ), f"Rule file {rule} migration.module.src must be list or str."
 
 
 def test_module_action_replace_src_duplicate() -> None:
@@ -103,18 +107,20 @@ def test_module_action_replace_src_duplicate() -> None:
         migration = content["migration"]
         if "module" in migration:
             replace = Config.get_module_action(migration, ConfigKey.KW_REPLACE)
-            src = replace["src"]
-            if isinstance(src, list):
-                for s in src:
+            remove = Config.get_module_action(migration, ConfigKey.KW_REMOVE)
+            if remove is None:
+                src = replace["src"]
+                if isinstance(src, list):
+                    for s in src:
+                        assert (
+                            s not in exists
+                        ), f"Rule file {rule} migration.module.src {s} duplicate."
+                        exists.add(s)
+                elif isinstance(src, str):
                     assert (
-                        s not in exists
-                    ), f"Rule file {rule} migration.module.src {s} duplicate."
-                    exists.add(s)
-            elif isinstance(src, str):
-                assert (
-                    src not in exists
-                ), f"Rule file {rule} migration.module.src {src} duplicate."
-                exists.add(src)
+                        src not in exists
+                    ), f"Rule file {rule} migration.module.src {src} duplicate."
+                    exists.add(src)
 
 
 def test_example_must_attr() -> None:
