@@ -1,0 +1,22 @@
+name: remove-module
+description: The example to remove qualname in DAGs
+
+migration:
+  module:
+    - action: remove
+      module:
+        - foo.Bar
+        - foo.Bar1
+
+examples:
+  assign:
+    description: |
+      The example to remove qualname in DAGs
+    src: |
+      from airflow import DAG
+      from foo import Bar
+      from foo import Bar1
+      from datetime import datetime
+    dest: |
+      from pydolphinscheduler.core.process_definition import ProcessDefinition
+      from datetime import datetime
