@@ -71,11 +71,18 @@ class ImportTransformer(cst.CSTTransformer):
 
             replaces = []
             adds = set()
+            remove = set()
             for full_ref in src_full_refs:
                 if full_ref in self.config.imports:
                     dest: ImportConfig = self.config.imports[full_ref]
+                    if dest.remove:
+                        remove.update(full_ref)
                     replaces.append(dest.replace)
                     adds.update(dest.add)
+
+            # remove remove statement
+            if remove:
+                return cst.RemoveFromParent()
 
             # get replace statement
             if len(replaces) == 0:

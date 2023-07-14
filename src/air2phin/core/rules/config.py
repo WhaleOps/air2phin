@@ -34,7 +34,7 @@ class ImportConfig(NamedTuple):
 
     replace: str
     add: List[str]
-    remove: List[str]
+    remove: bool
 
 
 class Config:
@@ -126,35 +126,34 @@ class Config:
     def _build_caller(
         src: str, dest: str, parameters: List[Dict[str, Any]]
     ) -> CallConfig:
+        replace = dict()
+        add = dict()
+        remove = []
+
+        if parameters:
+            for p in parameters:
+                if p[ConfigKey.ACTION] == ConfigKey.KW_REPLACE:
+                    replace[p[ConfigKey.SOURCE]] = p[ConfigKey.DESTINATION]
+                elif p[ConfigKey.ACTION] == ConfigKey.KW_ADD:
+                    add[p[ConfigKey.ARGUMENT]] = ParamDefaultConfig(
+                        type=p[ConfigKey.DEFAULT][ConfigKey.TYPE],
+                        value=p[ConfigKey.DEFAULT][ConfigKey.VALUE],
+                    )
+                elif p[ConfigKey.ACTION] == ConfigKey.KW_REMOVE:
+                    remove.append(p[ConfigKey.ARGUMENT])
+                else:
+                    raise ValueError(
+                        f"Unknown action type {p[ConfigKey.ACTION]} in {p}"
+                    )
+
         return CallConfig(
             long=dest,
             short=dest.split(Token.POINT)[-1],
             src_long=src,
             src_short=src.split(Token.POINT)[-1],
-            replace={
-                p[ConfigKey.SOURCE]: p[ConfigKey.DESTINATION]
-                for p in parameters
-                if p[ConfigKey.ACTION] == ConfigKey.KW_REPLACE
-            }
-            if parameters
-            else dict(),
-            add={
-                p[ConfigKey.ARGUMENT]: ParamDefaultConfig(
-                    type=p[ConfigKey.DEFAULT][ConfigKey.TYPE],
-                    value=p[ConfigKey.DEFAULT][ConfigKey.VALUE],
-                )
-                for p in parameters
-                if p[ConfigKey.ACTION] == ConfigKey.KW_ADD
-            }
-            if parameters
-            else dict(),
-            remove=[
-                p[ConfigKey.ARGUMENT]
-                for p in parameters
-                if p[ConfigKey.ACTION] == ConfigKey.KW_REMOVE
-            ]
-            if parameters
-            else [],
+            replace=replace,
+            add=add,
+            remove=remove,
         )
 
     @staticmethod
@@ -206,6 +205,8 @@ class Config:
             migration = rule[ConfigKey.MIGRATION]
             parameters = migration.get(ConfigKey.PARAMETER, None)
             replace = self.get_module_action(migration, ConfigKey.KW_REPLACE)
+            if replace is None:
+                continue
             src = replace[ConfigKey.SOURCE]
             dest = replace[ConfigKey.DESTINATION]
 
@@ -221,13 +222,15 @@ class Config:
         return migrator
 
     @staticmethod
-    def _build_replace_importer(action: Dict[str, Any]) -> str:
+    def _build_replace_importer(action: Dict[str, Any]) -> Optional[str]:
+        if action is None:
+            return None
         dest = action[ConfigKey.DESTINATION]
         module, asname = dest.rsplit(Token.POINT, 1)
         return f"from {module} import {asname}"
 
     @staticmethod
-    def _get_rp_add_action(action: Dict[str, Any]) -> Optional[List[str]]:
+    def _get_rp_add_action(action: Dict[str, Any]) -> List[str]:
         """Get replace and add action list from rules.
 
         :param action: Config migration module action.
@@ -249,6 +252,12 @@ class Config:
                 "Invalid migration.module.action.module type: %s" % type(module)
             )
 
+    @staticmethod
+    def _build_remove_importer(action: Dict[str, Any]) -> bool:
+        if action is None or ConfigKey.MODULE not in action:
+            return False
+        return True
+
     def imp_migrator(self) -> Dict[str, ImportConfig]:
         """Get all import migrator from rules."""
         imps = {}
@@ -262,19 +271,21 @@ class Config:
                 rule[ConfigKey.MIGRATION], ConfigKey.KW_REMOVE
             )
 
-            src = replace[ConfigKey.SOURCE]
-            if isinstance(src, str):
-                imps[src] = ImportConfig(
+            qualname = (
+                replace[ConfigKey.SOURCE] if replace else remove[ConfigKey.MODULE]
+            )
+            if isinstance(qualname, str):
+                imps[qualname] = ImportConfig(
                     replace=self._build_replace_importer(replace),
                     add=self._get_rp_add_action(add),
-                    remove=self._get_rp_add_action(remove),
+                    remove=self._build_remove_importer(remove),
                 )
-            elif isinstance(src, list):
-                for inner_src in src:
+            elif isinstance(qualname, list):
+                for inner_src in qualname:
                     imps[inner_src] = ImportConfig(
                         replace=self._build_replace_importer(replace),
                         add=self._get_rp_add_action(add),
-                        remove=self._get_rp_add_action(remove),
+                        remove=self._build_remove_importer(remove),
                     )
 
         return imps
