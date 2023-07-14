@@ -8,7 +8,7 @@ from typing import List, Optional
 import libcst as cst
 from tqdm import tqdm
 
-from air2phin.constants import KEYWORD, TOKEN
+from air2phin.constants import Keyword, Token
 from air2phin.core.rules.config import Config
 from air2phin.core.transformer.route import Transformer
 from air2phin.utils.file import add_stem_suffix, read, write
@@ -51,7 +51,7 @@ class Runner:
         if self.config.inplace:
             write(path, migrated)
         else:
-            new_path = add_stem_suffix(path, KEYWORD.MIGRATE_MARK)
+            new_path = add_stem_suffix(path, Keyword.MIGRATE_MARK)
             write(new_path, migrated)
 
         logger.debug("End migrate file %s, elapsed time %.5fs", path, timer() - start)
@@ -64,7 +64,7 @@ class Runner:
         logger.info("Start migrate files, total %d files scan.", len(paths))
         logger.debug(
             "Start migrate files, files contain:\n%s",
-            TOKEN.NEW_LINE.join((f"  {p}" for p in paths)),
+            Token.NEW_LINE.join((f"  {p}" for p in paths)),
         )
 
         start = timer()
@@ -89,7 +89,7 @@ class Runner:
         logger.debug(
             "Start migrate files with processes number %d, files contain:\n%s",
             processes,
-            TOKEN.NEW_LINE.join((f"  {p}" for p in paths)),
+            Token.NEW_LINE.join((f"  {p}" for p in paths)),
         )
 
         start = timer()

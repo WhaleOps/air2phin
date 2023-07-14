@@ -22,7 +22,7 @@ import libcst.matchers as m
 from libcst import BaseExpression, FlattenSentinel, RemovalSentinel, SimpleStatementLine
 from libcst.metadata import PositionProvider, QualifiedName, QualifiedNameProvider
 
-from air2phin.constants import KEYWORD
+from air2phin.constants import Keyword
 from air2phin.core.rules.config import Config
 from air2phin.core.transformer.imports import ImportTransformer
 from air2phin.core.transformer.operators import OpTransformer
@@ -90,7 +90,7 @@ class Transformer(cst.CSTTransformer):
         """Get airflow Dags alias names."""
         if m.matches(node.item, m.Call()) and m.matches(
             cst.ensure_type(node.item, cst.Call).func,
-            m.Name(value=KEYWORD.AIRFLOW_DAG_SIMPLE),
+            m.Name(value=Keyword.AIRFLOW_DAG_SIMPLE),
         ):
             self.workflow_alias.add(node.asname.name.value)
 
@@ -107,7 +107,7 @@ class Transformer(cst.CSTTransformer):
             m.Call(
                 func=m.Attribute(
                     value=m.OneOf(*[m.Name(a) for a in self.workflow_alias]),
-                    attr=m.Name(KEYWORD.WORKFLOW_SUBMIT),
+                    attr=m.Name(Keyword.WORKFLOW_SUBMIT),
                 )
             ),
         ):
@@ -117,7 +117,7 @@ class Transformer(cst.CSTTransformer):
     def _build_submit_exprs(self) -> List[SimpleStatementLine]:
         miss_alias = self.workflow_alias.difference(self.have_submit_expr)
         return [
-            cst.parse_statement(f"{alias}.{KEYWORD.WORKFLOW_SUBMIT}()")
+            cst.parse_statement(f"{alias}.{Keyword.WORKFLOW_SUBMIT}()")
             for alias in miss_alias
         ]
 

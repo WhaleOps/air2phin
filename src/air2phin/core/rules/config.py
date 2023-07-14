@@ -3,7 +3,7 @@ import warnings
 from pathlib import Path
 from typing import Any, Dict, List, NamedTuple, Optional
 
-from air2phin.constants import CONFIG, REGEXP, TOKEN
+from air2phin.constants import ConfigKey, Regexp, Token
 from air2phin.core.rules.loader import rule_calls, rule_imports
 from air2phin.utils.file import read_yaml, recurse_files
 
@@ -128,30 +128,30 @@ class Config:
     ) -> CallConfig:
         return CallConfig(
             long=dest,
-            short=dest.split(TOKEN.POINT)[-1],
+            short=dest.split(Token.POINT)[-1],
             src_long=src,
-            src_short=src.split(TOKEN.POINT)[-1],
+            src_short=src.split(Token.POINT)[-1],
             replace={
-                p[CONFIG.SOURCE]: p[CONFIG.DESTINATION]
+                p[ConfigKey.SOURCE]: p[ConfigKey.DESTINATION]
                 for p in parameters
-                if p[CONFIG.ACTION] == CONFIG.KW_REPLACE
+                if p[ConfigKey.ACTION] == ConfigKey.KW_REPLACE
             }
             if parameters
             else dict(),
             add={
-                p[CONFIG.ARGUMENT]: ParamDefaultConfig(
-                    type=p[CONFIG.DEFAULT][CONFIG.TYPE],
-                    value=p[CONFIG.DEFAULT][CONFIG.VALUE],
+                p[ConfigKey.ARGUMENT]: ParamDefaultConfig(
+                    type=p[ConfigKey.DEFAULT][ConfigKey.TYPE],
+                    value=p[ConfigKey.DEFAULT][ConfigKey.VALUE],
                 )
                 for p in parameters
-                if p[CONFIG.ACTION] == CONFIG.KW_ADD
+                if p[ConfigKey.ACTION] == ConfigKey.KW_ADD
             }
             if parameters
             else dict(),
             remove=[
-                p[CONFIG.ARGUMENT]
+                p[ConfigKey.ARGUMENT]
                 for p in parameters
-                if p[CONFIG.ACTION] == CONFIG.KW_REMOVE
+                if p[ConfigKey.ACTION] == ConfigKey.KW_REMOVE
             ]
             if parameters
             else [],
@@ -168,8 +168,8 @@ class Config:
         """
         actions = [
             action
-            for action in migration[CONFIG.MODULE]
-            if action[CONFIG.ACTION] == action_type
+            for action in migration[ConfigKey.MODULE]
+            if action[ConfigKey.ACTION] == action_type
         ]
         if len(actions) > 1:
             raise ValueError("Each type of action can only have one.")
@@ -186,11 +186,11 @@ class Config:
 
         rule_files = []
         for path in rule_paths:
-            rule_files.extend(recurse_files(path, include=REGEXP.PATH_YAML))
+            rule_files.extend(recurse_files(path, include=Regexp.PATH_YAML))
 
         for filename in rule_files:
             content = read_yaml(filename)
-            rule_name = content.get(CONFIG.NAME)
+            rule_name = content.get(ConfigKey.NAME)
             if rule_name in rules_map:
                 logger.info(
                     "Rule name with %s will be override by file %s", rule_name, filename
@@ -203,11 +203,11 @@ class Config:
         migrator = {}
 
         for rule in self.rules_override(self.calls_path):
-            migration = rule[CONFIG.MIGRATION]
-            parameters = migration.get(CONFIG.PARAMETER, None)
-            replace = self.get_module_action(migration, CONFIG.KW_REPLACE)
-            src = replace[CONFIG.SOURCE]
-            dest = replace[CONFIG.DESTINATION]
+            migration = rule[ConfigKey.MIGRATION]
+            parameters = migration.get(ConfigKey.PARAMETER, None)
+            replace = self.get_module_action(migration, ConfigKey.KW_REPLACE)
+            src = replace[ConfigKey.SOURCE]
+            dest = replace[ConfigKey.DESTINATION]
 
             if isinstance(src, str):
                 migrator[src] = self._build_caller(src, dest, parameters)
@@ -222,8 +222,8 @@ class Config:
 
     @staticmethod
     def _build_replace_importer(action: Dict[str, Any]) -> str:
-        dest = action[CONFIG.DESTINATION]
-        module, asname = dest.rsplit(TOKEN.POINT, 1)
+        dest = action[ConfigKey.DESTINATION]
+        module, asname = dest.rsplit(Token.POINT, 1)
         return f"from {module} import {asname}"
 
     @staticmethod
@@ -234,12 +234,12 @@ class Config:
         """
 
         def _build_import_statement(mod: str) -> str:
-            spec = mod.rsplit(TOKEN.POINT, 1)
+            spec = mod.rsplit(Token.POINT, 1)
             return f"from {spec[0]} import {spec[1]}"
 
         if action is None:
             return []
-        module = action[CONFIG.MODULE]
+        module = action[ConfigKey.MODULE]
         if isinstance(module, str):
             return [_build_import_statement(module)]
         elif isinstance(module, list):
@@ -254,11 +254,15 @@ class Config:
         imps = {}
 
         for rule in self.rules_override(self.imports_path):
-            replace = self.get_module_action(rule[CONFIG.MIGRATION], CONFIG.KW_REPLACE)
-            add = self.get_module_action(rule[CONFIG.MIGRATION], CONFIG.KW_ADD)
-            remove = self.get_module_action(rule[CONFIG.MIGRATION], CONFIG.KW_REMOVE)
+            replace = self.get_module_action(
+                rule[ConfigKey.MIGRATION], ConfigKey.KW_REPLACE
+            )
+            add = self.get_module_action(rule[ConfigKey.MIGRATION], ConfigKey.KW_ADD)
+            remove = self.get_module_action(
+                rule[ConfigKey.MIGRATION], ConfigKey.KW_REMOVE
+            )
 
-            src = replace[CONFIG.SOURCE]
+            src = replace[ConfigKey.SOURCE]
             if isinstance(src, str):
                 imps[src] = ImportConfig(
                     replace=self._build_replace_importer(replace),

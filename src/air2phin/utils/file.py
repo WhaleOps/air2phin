@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Optional
 
 import yaml
 
-from air2phin.constants import REGEXP
+from air2phin.constants import Regexp
 
 
 def read(path: Path) -> str:
@@ -54,7 +54,7 @@ def add_stem_suffix(path: Path, suf: str) -> Path:
 
 
 def recurse_files(
-    path: Path, include: Optional[str] = REGEXP.PATH_ALL, exclude: Optional[str] = None
+    path: Path, include: Optional[str] = Regexp.PATH_ALL, exclude: Optional[str] = None
 ) -> List[Path]:
     """Recurse all match pattern files in path.
 
