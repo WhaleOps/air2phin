@@ -1,4 +1,4 @@
-class TOKEN:
+class Token:
     """Constants token for air2phin."""
 
     QUESTION: str = "?"
@@ -12,7 +12,7 @@ class TOKEN:
     NEW_LINE: str = "\n"
 
 
-class KEYWORD:
+class Keyword:
     """Constants keywords for air2phin."""
 
     MIGRATE_MARK: str = "-air2phin"
@@ -23,7 +23,7 @@ class KEYWORD:
     DEFAULT_SCHEDULE: str = "0 0 0 * * ? *"
 
 
-class REGEXP:
+class Regexp:
     """Constants regular expression for air2phin."""
 
     PATH_YAML: str = "*.yaml"
@@ -31,7 +31,7 @@ class REGEXP:
     PATH_ALL: str = "**/*"
 
 
-class CONFIG:
+class ConfigKey:
     """Constants config file for air2phin."""
 
     NAME: str = "name"
@@ -56,7 +56,7 @@ class CONFIG:
     VALUE: str = "value"
 
 
-class NUMBER:
+class Number:
     """Constants number for air2phin."""
 
     SCHEDULE_TOTAL_NUM: int = 9

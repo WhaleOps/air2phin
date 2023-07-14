@@ -1,6 +1,6 @@
 from typing import Any, Dict
 
-from air2phin.constants import CONFIG
+from air2phin.constants import ConfigKey
 from air2phin.core.rules.config import Config
 from air2phin.core.rules.loader import path_rule
 from air2phin.utils.file import read_yaml
@@ -24,7 +24,7 @@ def test_file_must_have_attr() -> None:
 
 
 def module_add_rm(action: Dict[str, Any]) -> bool:
-    return CONFIG.MODULE in action
+    return ConfigKey.MODULE in action
 
 
 def test_module_action_type() -> None:
@@ -33,18 +33,18 @@ def test_module_action_type() -> None:
         migration = content["migration"]
 
         # will raise error if more than one action in :func:``get_module_action``
-        Config.get_module_action(migration, CONFIG.KW_REPLACE)
+        Config.get_module_action(migration, ConfigKey.KW_REPLACE)
 
-        add = Config.get_module_action(migration, CONFIG.KW_ADD)
+        add = Config.get_module_action(migration, ConfigKey.KW_ADD)
         if add:
             assert isinstance(
-                add[CONFIG.MODULE], (str, list)
+                add[ConfigKey.MODULE], (str, list)
             ), f"Rule file {rule} `add` action value must with type str or list."
 
-        remove = Config.get_module_action(migration, CONFIG.KW_REMOVE)
+        remove = Config.get_module_action(migration, ConfigKey.KW_REMOVE)
         if remove:
             assert isinstance(
-                remove[CONFIG.MODULE], (str, list)
+                remove[ConfigKey.MODULE], (str, list)
             ), f"Rule file {rule} `remove` action value must with type str or list."
 
 
@@ -54,13 +54,13 @@ def test_module_action_attr() -> None:
         actions = content["migration"]["module"]
         for action in actions:
             assert (
-                CONFIG.ACTION in action
+                ConfigKey.ACTION in action
             ), "Rule {rule} module each item must have attr action."
-            if action[CONFIG.ACTION] in {CONFIG.KW_REMOVE, CONFIG.KW_ADD}:
+            if action[ConfigKey.ACTION] in {ConfigKey.KW_REMOVE, ConfigKey.KW_ADD}:
                 assert module_add_rm(
                     action
                 ), "Rule {rule} module action `remove` or `add` do not have must exits attr."
-            elif action[CONFIG.ACTION] == CONFIG.KW_REPLACE:
+            elif action[ConfigKey.ACTION] == ConfigKey.KW_REPLACE:
                 assert action_replace(
                     action
                 ), "Rule {rule} parameter action `replace` do not have must exits attr."
@@ -75,7 +75,7 @@ def test_module_action_replace() -> None:
         content = read_yaml(rule)
         migration = content["migration"]
         if "module" in migration:
-            replace = Config.get_module_action(migration, CONFIG.KW_REPLACE)
+            replace = Config.get_module_action(migration, ConfigKey.KW_REPLACE)
             assert (
                 "src" in replace
             ), f"Rule file {rule} migration.module pair key `src` not exists."
@@ -89,7 +89,7 @@ def test_module_action_replace_src_list_or_str() -> None:
         content = read_yaml(rule)
         migration = content["migration"]
         if "module" in migration:
-            replace = Config.get_module_action(migration, CONFIG.KW_REPLACE)
+            replace = Config.get_module_action(migration, ConfigKey.KW_REPLACE)
             src = replace["src"]
             assert isinstance(
                 src, (list, str)
@@ -102,7 +102,7 @@ def test_module_action_replace_src_duplicate() -> None:
         content = read_yaml(rule)
         migration = content["migration"]
         if "module" in migration:
-            replace = Config.get_module_action(migration, CONFIG.KW_REPLACE)
+            replace = Config.get_module_action(migration, ConfigKey.KW_REPLACE)
             src = replace["src"]
             if isinstance(src, list):
                 for s in src:
@@ -134,17 +134,17 @@ def test_param_action_type() -> None:
         parameter = content["migration"].get("parameter", [])
         for params in parameter:
             assert (
-                CONFIG.ACTION in params
+                ConfigKey.ACTION in params
             ), "Rule {rule} all parameter must have attr action."
-            if params[CONFIG.ACTION] == CONFIG.KW_ADD:
+            if params[ConfigKey.ACTION] == ConfigKey.KW_ADD:
                 assert param_action_add(
                     params
                 ), "Rule {rule} parameter action `add` do not have must exits attr."
-            elif params[CONFIG.ACTION] == CONFIG.KW_REMOVE:
+            elif params[ConfigKey.ACTION] == ConfigKey.KW_REMOVE:
                 assert param_action_remove(
                     params
                 ), "Rule {rule} parameter action `remove` do not have must exits attr."
-            elif params[CONFIG.ACTION] == CONFIG.KW_REPLACE:
+            elif params[ConfigKey.ACTION] == ConfigKey.KW_REPLACE:
                 assert action_replace(
                     params
                 ), "Rule {rule} parameter action `replace` do not have must exits attr."
@@ -155,17 +155,17 @@ def test_param_action_type() -> None:
 
 
 def action_replace(param: Dict[str, Any]) -> bool:
-    return CONFIG.SOURCE in param and CONFIG.DESTINATION in param
+    return ConfigKey.SOURCE in param and ConfigKey.DESTINATION in param
 
 
 def param_action_add(param: Dict[str, Any]) -> bool:
     return (
-        CONFIG.ARGUMENT in param
-        and CONFIG.DEFAULT in param
-        and CONFIG.TYPE in param[CONFIG.DEFAULT]
-        and CONFIG.VALUE in param[CONFIG.DEFAULT]
+        ConfigKey.ARGUMENT in param
+        and ConfigKey.DEFAULT in param
+        and ConfigKey.TYPE in param[ConfigKey.DEFAULT]
+        and ConfigKey.VALUE in param[ConfigKey.DEFAULT]
     )
 
 
 def param_action_remove(param: Dict[str, Any]) -> bool:
-    return CONFIG.ARGUMENT in param
+    return ConfigKey.ARGUMENT in param

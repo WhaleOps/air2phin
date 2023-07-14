@@ -20,7 +20,7 @@ import libcst as cst
 import libcst.matchers as m
 from libcst import FlattenSentinel, RemovalSentinel
 
-from air2phin.constants import TOKEN
+from air2phin.constants import Token
 from air2phin.core.rules.config import Config, ImportConfig
 
 
@@ -84,9 +84,9 @@ class ImportTransformer(cst.CSTTransformer):
                 statement = replaces[0]
             else:
                 class_name_only = [
-                    stat.split(f" {TOKEN.IMPORT} ")[1] for stat in replaces[1:]
+                    stat.split(f" {Token.IMPORT} ")[1] for stat in replaces[1:]
                 ]
-                statement = f"{TOKEN.COMMA} ".join(replaces[:1] + class_name_only)
+                statement = f"{Token.COMMA} ".join(replaces[:1] + class_name_only)
 
             # Return replace and add statement
             # TODO, will use ; as separator of multiple statements, we should better use \n in the future

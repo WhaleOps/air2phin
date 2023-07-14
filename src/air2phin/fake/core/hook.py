@@ -7,7 +7,7 @@ from typing import Any, Callable, Iterable, Mapping, Optional, Tuple, Union
 import sqlparse
 from sqlalchemy import create_engine, text
 
-from air2phin.constants import TOKEN
+from air2phin.constants import Token
 from air2phin.fake.core.connection import Connection
 
 
@@ -82,8 +82,8 @@ class BaseHook:
 
     @staticmethod
     def _get_type_name(conn_id) -> Tuple[Any, str]:
-        if TOKEN.POINT in conn_id:
-            return conn_id.strip().split(TOKEN.POINT)
+        if Token.POINT in conn_id:
+            return conn_id.strip().split(Token.POINT)
         return None, conn_id.strip()
 
     @classmethod
@@ -119,7 +119,7 @@ class BaseHook:
 
         with engine.connect() as conn:
             # conn_id not in format of datasource_type.datasource_name
-            if TOKEN.POINT not in conn_id:
+            if Token.POINT not in conn_id:
                 result_name = conn.execute(
                     text(sql_qry_name.format(name=datasource_name))
                 )

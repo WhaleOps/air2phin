@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Dict, Sequence
 
 from air2phin import __project_name__, __version__
-from air2phin.constants import REGEXP, TOKEN
+from air2phin.constants import Regexp, Token
 from air2phin.core.rules.config import Config
 from air2phin.core.rules.loader import build_in_rules, path_rule
 from air2phin.runner import Runner
@@ -110,9 +110,9 @@ def build_argparse() -> argparse.ArgumentParser:
     parser_migrate.add_argument(
         "-I",
         "--include",
-        help=f"Include files based on conditions provided, default '{REGEXP.PATH_PYTHON}'",
+        help=f"Include files based on conditions provided, default '{Regexp.PATH_PYTHON}'",
         action="store",
-        default=REGEXP.PATH_PYTHON,
+        default=Regexp.PATH_PYTHON,
         type=str,
     )
     parser_migrate.add_argument(
@@ -175,7 +175,7 @@ def main(argv: Sequence[str] = None) -> None:
     if logger.level <= logging.DEBUG and customs_rules:
         logger.debug(
             "This migration have custom rules:\n%s",
-            TOKEN.NEW_LINE.join((f"  {r}" for r in customs_rules)),
+            Token.NEW_LINE.join((f"  {r}" for r in customs_rules)),
         )
 
     if args.subcommand == "test":
