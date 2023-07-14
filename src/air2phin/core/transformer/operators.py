@@ -5,7 +5,7 @@ import libcst as cst
 import libcst.matchers as m
 from libcst import Arg, BaseExpression, FlattenSentinel, RemovalSentinel
 
-from air2phin.constants import KEYWORD, TOKEN
+from air2phin.constants import Keyword, Token
 from air2phin.core.rules.config import CallConfig, Config, ParamDefaultConfig
 from air2phin.utils import string
 
@@ -58,7 +58,7 @@ class OpTransformer(cst.CSTTransformer):
             val = cst.ensure_type(node.func, cst.Attribute).attr.value
         else:
             return True
-        return val in self.qualified_name.split(TOKEN.POINT)
+        return val in self.qualified_name.split(Token.POINT)
 
     def _handle_specific_args(self, node: cst.Arg) -> cst.Arg:
         """Handle specific args for custom rule.
@@ -68,15 +68,15 @@ class OpTransformer(cst.CSTTransformer):
         """
         name = node.keyword.value
         if (
-            KEYWORD.AIRFLOW_DAG in self.qualified_name
-            and name == KEYWORD.AIRFLOW_DAG_SCHEDULE
+            Keyword.AIRFLOW_DAG in self.qualified_name
+            and name == Keyword.AIRFLOW_DAG_SCHEDULE
         ):
             if not m.matches(
                 node,
                 m.Arg(value=m.SimpleString()),
             ):
                 return node.with_changes(
-                    value=cst.SimpleString(f"'{KEYWORD.DEFAULT_SCHEDULE}'")
+                    value=cst.SimpleString(f"'{Keyword.DEFAULT_SCHEDULE}'")
                 )
 
             orig_value = cst.ensure_type(node.value, cst.SimpleString).value
@@ -129,9 +129,9 @@ class OpTransformer(cst.CSTTransformer):
         for arg in self.config.add.keys():
             default: ParamDefaultConfig = self.config.add.get(arg)
 
-            if default.type == TOKEN.STRING:
+            if default.type == Token.STRING:
                 value = cst.SimpleString(value=f'"{default.value}"')
-            elif default.type == TOKEN.CODE:
+            elif default.type == Token.CODE:
                 value = cst.parse_expression(default.value)
             else:
                 raise NotImplementedError

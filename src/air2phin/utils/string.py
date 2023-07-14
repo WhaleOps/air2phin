@@ -1,4 +1,4 @@
-from air2phin.constants import KEYWORD, NUMBER, TOKEN
+from air2phin.constants import Keyword, Number, Token
 
 
 def convert_schedule(val: str) -> str:
@@ -9,11 +9,11 @@ def convert_schedule(val: str) -> str:
     * shortcut schedule string like ``@daily`` to ``0 0 0 * * ? *``.
     """
     if (
-        len(val) == NUMBER.SCHEDULE_TOTAL_NUM
-        and val.count(TOKEN.SPACE) == NUMBER.SCHEDULE_SPACE_NUM
+        len(val) == Number.SCHEDULE_TOTAL_NUM
+        and val.count(Token.SPACE) == Number.SCHEDULE_SPACE_NUM
     ):
-        val_list = val.split(TOKEN.SPACE)
-        val_list.insert(0, TOKEN.ZERO)
-        val_list.insert(-1, TOKEN.QUESTION)
-        return TOKEN.SPACE.join(val_list)
-    return KEYWORD.DEFAULT_SCHEDULE
+        val_list = val.split(Token.SPACE)
+        val_list.insert(0, Token.ZERO)
+        val_list.insert(-1, Token.QUESTION)
+        return Token.SPACE.join(val_list)
+    return Keyword.DEFAULT_SCHEDULE
