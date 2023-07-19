@@ -29,7 +29,7 @@ class BaseMacroConvertor:
     def parse_ds_base_date(self) -> None:
         self.ds_base_date = self.MACRO_FUNC_CONVERT.get(self.macro_func)
         if self.ds_base_date is None:
-            log.info(f"get unexpect macro func {self.macro_func}")
+            log.warning(f"get unexpect macro func {self.macro_func}")
 
     def parse_ds_offset(self) -> None:
         pass

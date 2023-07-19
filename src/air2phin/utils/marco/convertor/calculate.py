@@ -62,9 +62,9 @@ class CalculateMacroConvertor(BaseMacroConvertor):
 
         # hint
         if self.offset_unit is not None and self.offset_unit not in day2unit_convert:
-            log.error(f"get unexpect offset unit {self.offset_unit}")
+            log.warning(f"get unexpect offset unit {self.offset_unit}")
         if self.base_date not in base_date_convert:
-            log.error(f"get unexpect macro func {self.base_date}")
+            log.warning(f"get unexpect macro func {self.base_date}")
 
         # parse offset
         offset = base_date_convert.get(self.base_date, self.DEFAULT_OFFSET)
@@ -85,9 +85,9 @@ class CalculateMacroConvertor(BaseMacroConvertor):
 
         # hint
         if self.offset_unit is not None and self.offset_unit not in day2unit_convert:
-            log.error(f"get unexpect offset unit {self.offset_unit}")
+            log.warning(f"get unexpect offset unit {self.offset_unit}")
         if self.base_date not in base_date_convert:
-            log.error(f"get unexpect macro func {self.base_date}")
+            log.warning(f"get unexpect macro func {self.base_date}")
 
         # parse offset
         offset = base_date_convert.get(self.base_date, self.DEFAULT_OFFSET)

@@ -38,7 +38,9 @@ class AirflowMarco:
         if "," in self.macro:
             match = pattern_unit.match(self.macro)
             if match is None:
-                log.error(f"get unexpect macro func {self.macro} and can not parse it")
+                log.warning(
+                    f"get unexpect macro func {self.macro} and can not parse it"
+                )
                 return
             return CalculateMacroConvertor(
                 macro_func=match.group("macro_func"),
@@ -50,7 +52,7 @@ class AirflowMarco:
 
         match = pattern_no_unit.match(self.macro)
         if match is None:
-            log.error(f"get unexpect macro func {self.macro} and can not parse it")
+            log.warning(f"get unexpect macro func {self.macro} and can not parse it")
             return
         return CalculateMacroConvertor(
             macro_func=match.group("macro_func"),
