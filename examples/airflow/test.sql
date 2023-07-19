@@ -67,3 +67,13 @@ select '{{ ds }}',
 '{{ ts_tz_add_ms(execution_date) }}',
 '{{ ts_tz_add_ms(execution_date, hours=-1) }}',
 '{{ ts_tz_add_ms(next_execution_date) }}'
+
+    
+'{{ ts_tz_add_ms(execution_date) }}'
+
+redshift: '2023-01-01 01:01:01'::timestamp
+starrock: '2023-01-01 01:01:01' -> timestamp ?
+
+'{{ ts_tz_add_ms(execution_date) }}'
+
+unix_timestamp('2023-07-19 16:31:00')*1000
