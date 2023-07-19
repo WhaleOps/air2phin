@@ -16,4 +16,4 @@
 # under the License.
 
 __project_name__ = "Air2phin"
-__version__ = "0.0.22a0"
+__version__ = "0.0.22a5"
