@@ -108,8 +108,12 @@ def replace_marco(content: str, schedule: timedelta | None) -> TaskContentWithMa
         ds_marco: DolphinHumanReadMarco | None = parse2ds_marco(trim_key, schedule)
         if ds_marco is None or ds_marco.name is None:
             continue
-        pattern = "\\{\\{ *" + escape_marco_bracket(trim_key) + " *\\}\\}"
-        new_ds_marco = "${" + ds_marco.name + "}"
+        pattern = "'\\{\\{ *" + escape_marco_bracket(trim_key) + " *\\}\\}'"
+
+        if "_timestamp" in ds_marco.name:
+            new_ds_marco = "unix_timestamp('${" + ds_marco.name + "}')*1000"
+        else:
+            new_ds_marco = "'${" + ds_marco.name + "}'"
         content = re.compile(pattern).sub(new_ds_marco, content)
         marcos.add(ds_marco)
     return TaskContentWithMarco(

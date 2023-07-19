@@ -13,6 +13,8 @@ class CalculateMacroConvertor(BaseMacroConvertor):
     MACRO_FUNC_CONVERT = {
         "ts_tz_add": "yyyy-MM-dd HH:mm:ss",
         "dt_tz_add": "yyyy-MM-dd",
+        "ts_tz_add_ms": "yyyy-MM-dd HH:mm:ss",
+        "dt_tz_add_ms": "yyyy-MM-dd",
     }
     DEFAULT_OFFSET = timedelta(seconds=0)
 
@@ -41,11 +43,19 @@ class CalculateMacroConvertor(BaseMacroConvertor):
                 base = "datetime"
             elif self.macro_func == "dt_tz_add":
                 base = "date"
+            elif self.macro_func == "dt_tz_add_ms":
+                base = "date_timestamp"
+            elif self.macro_func == "ts_tz_add_ms":
+                base = "datetime_timestamp"
         elif self.base_date == "next_execution_date":
             if self.macro_func == "ts_tz_add":
                 base = "next_datetime"
             elif self.macro_func == "dt_tz_add":
                 base = "next_date"
+            elif self.macro_func == "dt_tz_add_ms":
+                base = "next_date_timestamp"
+            elif self.macro_func == "ts_tz_add_ms":
+                base = "next_datetime_timestamp"
         else:
             raise ValueError(f"get unexpect base date {self.base_date}")
         if self.offset_unit is None or self.offset_num is None:
