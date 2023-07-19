@@ -103,8 +103,8 @@ def replace_marco(content: str, schedule: timedelta | None) -> TaskContentWithMa
         if find is None:
             continue
         trim_key = find.strip()
-        ds_marco: DolphinHumanReadMarco = parse2ds_marco(trim_key, schedule)
-        if ds_marco.name is None:
+        ds_marco: DolphinHumanReadMarco | None = parse2ds_marco(trim_key, schedule)
+        if ds_marco is None or ds_marco.name is None:
             continue
         pattern = "\\{\\{ *" + escape_marco_bracket(trim_key) + " *\\}\\}"
         new_ds_marco = "${" + ds_marco.name + "}"
