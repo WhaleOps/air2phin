@@ -25,7 +25,7 @@ class PatchMarco:
             if task.ext_attr is not None:
                 render_field = task.ext_attr.lstrip("_")
                 srv_val = getattr(task, render_field)
-                if not isinstance(srv_val, str | bytes):
+                if not isinstance(srv_val, (str, bytes)):
                     continue
                 task_define_marco = helper.replace_marco(srv_val, td)
                 setattr(task, render_field, task_define_marco.content)
