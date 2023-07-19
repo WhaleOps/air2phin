@@ -51,6 +51,8 @@ def timedelta2structure(td: timedelta) -> StructureTimedelta:
 
 
 def schedule2timedelta(schedule: str | timedelta) -> timedelta:
+    if schedule is None:
+        return timedelta(seconds=0)
     if isinstance(schedule, timedelta):
         return schedule
     if schedule.startswith("@"):
