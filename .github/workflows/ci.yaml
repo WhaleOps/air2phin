@@ -45,6 +45,22 @@ jobs:
           for file in $(find . -name "*.md"); do
             markdown-link-check -c .dlc.json -q "$file"
           done
+  docs:
+    runs-on: ubuntu-latest
+    needs: license
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.7
+      - name: Install Dependences
+        run: |
+          python -m pip install --upgrade ${{ env.DEPENDENCES }}
+      - name: Run Build Docs Tests ${{ matrix.env-list }}
+        run: |
+          python -m tox -vv -e doc-build
   lint:
     timeout-minutes: 15
     runs-on: ubuntu-latest
