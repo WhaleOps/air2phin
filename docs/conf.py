@@ -5,7 +5,6 @@
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
-import base64
 import os
 import sys
 
@@ -14,7 +13,7 @@ sys.path.insert(0, os.path.abspath(os.path.join("..", "src")))
 from air2phin import __version__  # noqa
 
 project = "air2phin"
-copyright = "2022, Jay Chung"
+copyright = "2023, Jay Chung"
 author = "Jay Chung"
 release = __version__
 
@@ -38,11 +37,6 @@ autosectionlabel_prefix_document = True
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
-
-# extensions for sphinx_github_changelog, token from Jay Chung with None permission scope. have to encode it
-# due to github will delete token string if it finds in any commit
-token_encode = b"Z2hwX294Mlh0VEpSdUZMWGxuNUVzdlE5YXI3N2dWdUt5dzJxYlN2RQ=="
-sphinx_github_changelog_token = base64.b64decode(token_encode).decode()
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
